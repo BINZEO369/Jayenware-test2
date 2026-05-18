@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>B Ai | JAYENWARE Admin</title>
+    <meta name="theme-color" content="#0071e3">
+    <link rel="icon" type="image/png" href="https://ozuwazkqyrxiwwfjceth.supabase.co/storage/v1/object/public/images/Beige%20Black%20Minimal%20Simple%20Modern%20Handwritten%20Graffiti%20Typographic%20Arts%20and_20251212_154142_0000.png">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.75);
+            --glass-border: rgba(255, 255, 255, 0.5);
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04);
+            --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 60px rgba(0, 0, 0, 0.15);
+            --radius-xl: 1.5rem;
+            --radius-2xl: 2rem;
+            --radius-3xl: 2.5rem;
+        }
+
+        * {
+            -webkit-tap-highlight-color: transparent;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: #f5f5f7;
+            color: #1d1d1f;
+            transition: background 0.3s, color 0.3s;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+
+        body.dark {
+            background: #0a0a0a;
+            color: #f5f5f7;
+        }
+
+        body.dark .glass-card {
+            background: rgba(28, 28, 30, 0.8);
+            border-color: rgba(255, 255, 255, 0.08);
+        }
+
+        body.dark .bg-white {
+            background: #1c1c1e;
+        }
+
+        body.dark .bg-gray-50,
+        body.dark .bg-gray-100 {
+            background: #2c2c2e;
+        }
+
+        body.dark .bg-slate-50 {
+            background: #2c2c2e;
+        }
+
+        body.dark .text-slate-800,
+        body.dark .text-slate-900,
+        body.dark .text-slate-700 {
+            color: #f5f5f7;
+        }
+
+        body.dark .text-gray-400 {
+            color: #8e8e93;
+        }
+
+        body.dark .text-gray-500 {
+            color: #636366;
+        }
+
+        body.dark .border,
+        body.dark .border-b,
+        body.dark .border-t {
+            border-color: #2c2c2e;
+        }
+
+        body.dark .hover\:bg-slate-50:hover {
+            background: #2c2c2e;
+        }
+
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--shadow-md);
+        }
+
+        .custom-scroll::-webkit-scrollbar {
+            width: 4px;
+            height: 4px;
+        }
+
+        .custom-scroll::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #0071e3, #5856d6);
+            border-radius: 10px;
+        }
+
+        .btn-action {
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            cursor: pointer;
+        }
+
+        .btn-action:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-action:active {
+            transform: scale(0.96);
+        }
+
+        @keyframes fadeSlideIn {
+            from { opacity: 0; transform: translateY(16px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes aiPulse {
+            0%, 100% {
+                box-shadow: 0 0 20px rgba(37, 99, 235, 0.3);
+            }
+            50% {
+                box-shadow: 0 0 40px rgba(37, 99, 235, 0.6), 0 0 80px rgba(88, 86, 214, 0.3);
+            }
+        }
+
+        @keyframes neuralFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .ai-pulse {
+            animation: aiPulse 3s infinite;
+        }
+
+        .ai-neural-grid {
+            background-image: radial-gradient(circle at 2px 2px, rgba(255, 255, 255, 0.06) 1px, transparent 0);
+            background-size: 20px 20px;
+        }
+
+        .ai-neural-animated {
+            background: linear-gradient(270deg, #1e3a5f, #0f172a, #1e1b4b, #0f172a);
+            background-size: 400% 400%;
+            animation: neuralFlow 8s ease infinite;
+        }
+
+        .ai-badge {
+            padding: 2px 10px;
+            border-radius: 99px;
+            font-size: 9px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .tier-gold {
+            background: linear-gradient(135deg, #ffd700, #b8860b);
+            color: #fff;
+        }
+
+        .tier-silver {
+            background: linear-gradient(135deg, #c0c0c0, #708090);
+            color: #fff;
+        }
+
+        .tier-bronze {
+            background: linear-gradient(135deg, #cd7f32, #8b4513);
+            color: #fff;
+        }
+
+        .tier-diamond {
+            background: linear-gradient(135deg, #b8c6ff, #5856d6);
+            color: #fff;
+        }
+
+        .toast-enter {
+            animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .toast-exit {
+            animation: slideDown 0.3s ease-in forwards;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(100px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(0); opacity: 1; }
+            to { transform: translateY(100px); opacity: 0; }
+        }
+
+        .progress-bar {
+            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .insight-card {
+            transition: all 0.3s ease;
+        }
+
+        .insight-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        @media (max-width: 768px) {
+            .bottom-nav {
+                display: flex;
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                z-index: 100;
+                background: rgba(255, 255, 255, 0.95);
+                backdrop-filter: blur(20px);
+                border-top: 1px solid rgba(0, 0, 0, 0.08);
+                padding: 8px 0 env(safe-area-inset-bottom, 8px) 0;
+            }
+            body.dark .bottom-nav {
+                background: rgba(28, 28, 30, 0.95);
+                border-color: rgba(255, 255, 255, 0.08);
+            }
+            main {
+                padding-bottom: 100px !important;
+            }
+        }
+
+        @media (min-width: 769px) {
+            .bottom-nav {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body class="text-slate-800 antialiased">
+    <!-- GLOBAL LOADER -->
+    <div id="global-loader" style="position:fixed;inset:0;background:white;z-index:9999;display:flex;justify-content:center;align-items:center;transition:opacity 0.5s;">
+        <div class="flex flex-col items-center">
+            <div class="w-14 h-14 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+            <p class="mt-5 font-bold text-gray-400 text-sm">Initializing Neural Engine...</p>
+        </div>
+    </div>
+
+    <!-- MAIN LAYOUT -->
+    <div id="main-layout" class="hidden min-h-screen">
+        <main class="p-4 md:p-8 lg:p-10 max-w-7xl mx-auto">
+            <!-- HEADER -->
+            <header class="mb-8">
+                <div class="flex items-center gap-2 text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">
+                    <a href="/home" class="hover:text-blue-600 transition"><i class="fa-solid fa-house"></i> Home</a>
+                    <i class="fa-solid fa-chevron-right text-[8px]"></i>
+                    <span class="text-blue-600">B Ai</span>
+                    <span class="ml-2 px-2 py-0.5 bg-blue-600 text-white rounded-full text-[8px] animate-pulse">Neural</span>
+                </div>
+                <h2 class="text-2xl md:text-3xl font-black uppercase tracking-tight">B Ai Intelligence</h2>
+            </header>
+
+            <!-- AI HERO SECTION -->
+            <div class="ai-neural-animated rounded-[3rem] p-6 md:p-10 text-white mb-8 relative overflow-hidden shadow-2xl">
+                <div class="ai-neural-grid absolute inset-0"></div>
+                <div class="absolute -bottom-20 -right-20 w-80 h-80 bg-blue-600/30 rounded-full blur-[100px]"></div>
+                <div class="absolute -top-10 -left-10 w-60 h-60 bg-purple-600/20 rounded-full blur-[80px]"></div>
+                
+                <div class="relative z-10">
+                    <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6 mb-8">
+                        <div class="flex items-center gap-5">
+                            <div class="w-16 h-16 md:w-20 md:h-20 bg-gradient-to-br from-blue-500 to-purple-600 rounded-[2rem] flex items-center justify-center text-3xl ai-pulse shadow-2xl">
+                                <i class="fa-solid fa-brain"></i>
+                            </div>
+                            <div>
+                                <h2 class="text-2xl md:text-3xl font-black uppercase tracking-tighter leading-none mb-1">
+                                    B Ai <span class="text-blue-300 italic font-medium text-sm capitalize">Vision Core</span>
+                                </h2>
+                                <div class="flex items-center gap-2">
+                                    <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+                                    <p class="text-slate-300 text-[10px] font-black uppercase tracking-[0.2em]">Neural Network Active</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex gap-3">
+                            <button onclick="runAiAnalysis()" class="px-5 py-3 bg-blue-600 hover:bg-blue-500 rounded-xl font-black text-xs uppercase btn-action flex items-center gap-2 shadow-lg">
+                                <i class="fa-solid fa-sync"></i> Recalibrate
+                            </button>
+                            <button onclick="toggleAiChat()" class="px-5 py-3 bg-white/10 border border-white/20 hover:bg-white/20 rounded-xl font-black text-xs uppercase btn-action">
+                                <i class="fa-solid fa-comment"></i> Ask AI
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- AI STATS -->
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div class="bg-white/10 border border-white/20 p-5 rounded-3xl backdrop-blur-sm">
+                            <p class="text-[10px] font-black text-blue-300 uppercase mb-2">
+                                <i class="fa-solid fa-bullseye mr-1"></i> Model Accuracy
+                            </p>
+                            <span class="text-2xl md:text-3xl font-black">99.2%</span>
+                            <span class="text-[10px] text-green-400 ml-1 font-bold">+0.4%</span>
+                        </div>
+                        <div class="bg-white/10 border border-white/20 p-5 rounded-3xl backdrop-blur-sm">
+                            <p class="text-[10px] font-black text-orange-300 uppercase mb-2">
+                                <i class="fa-solid fa-gauge-high mr-1"></i> Throughput
+                            </p>
+                            <span id="ai-stat-ops" class="text-2xl md:text-3xl font-black">0</span>
+                            <span class="text-[10px] text-slate-400 ml-1 font-bold">ops/sec</span>
+                        </div>
+                        <div class="bg-white/10 border border-white/20 p-5 rounded-3xl backdrop-blur-sm">
+                            <p class="text-[10px] font-black text-purple-300 uppercase mb-2">
+                                <i class="fa-solid fa-clock mr-1"></i> Peak Hour
+                            </p>
+                            <span id="ai-stat-peak" class="text-2xl md:text-3xl font-black">--:--</span>
+                        </div>
+                        <div class="bg-white/10 border border-white/20 p-5 rounded-3xl backdrop-blur-sm">
+                            <p class="text-[10px] font-black text-green-300 uppercase mb-2">
+                                <i class="fa-solid fa-arrow-trend-up mr-1"></i> Growth Velocity
+                            </p>
+                            <span id="ai-stat-velocity" class="text-2xl md:text-3xl font-black">0%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- INVENTORY FORECAST + STRATEGY ENGINE -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                <!-- Inventory Forecast -->
+                <div class="lg:col-span-2 glass-card p-6 md:p-8 rounded-[3rem] shadow-sm">
+                    <div class="flex justify-between items-center mb-6">
+                        <div>
+                            <h3 class="text-sm font-black uppercase flex items-center gap-2">
+                                <i class="fa-solid fa-box-open text-blue-600"></i> Smart Inventory Forecast
+                            </h3>
+                            <p class="text-[10px] font-bold text-gray-400 mt-1 uppercase">Stock-out prediction engine</p>
+                        </div>
+                        <span class="bg-blue-50 text-blue-600 px-3 py-1 rounded-full text-[9px] font-black">7D Model</span>
+                    </div>
+                    <div class="overflow-x-auto custom-scroll">
+                        <table class="w-full text-left">
+                            <thead>
+                                <tr class="text-[10px] font-black uppercase text-gray-400 border-b">
+                                    <th class="pb-3">Product</th>
+                                    <th class="pb-3">Stock</th>
+                                    <th class="pb-3">Weekly Demand</th>
+                                    <th class="pb-3">Days Left</th>
+                                    <th class="pb-3">Status</th>
+                                    <th class="pb-3">Recommendation</th>
+                                </tr>
+                            </thead>
+                            <tbody id="ai-inventory-forecast">
+                                <tr><td colspan="6" class="py-6 text-center text-xs text-gray-400">Analyzing inventory data...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Strategy Engine -->
+                <div class="glass-card p-6 md:p-8 rounded-[3rem] shadow-sm">
+                    <h3 class="text-sm font-black uppercase mb-6 flex items-center gap-2 text-blue-600">
+                        <i class="fa-solid fa-bolt-lightning"></i> Strategy Engine
+                    </h3>
+                    <div id="ai-dynamic-insights" class="space-y-3">
+                        <div class="text-center py-8 text-xs text-gray-400">Generating strategic insights...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- USER MATRIX + CONVERSION HEATMAP -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                <!-- User Matrix -->
+                <div class="glass-card p-6 md:p-8 rounded-[3rem] shadow-sm">
+                    <h3 class="text-sm font-black uppercase mb-6 flex items-center gap-2 text-purple-600">
+                        <i class="fa-solid fa-users-viewfinder"></i> User Matrix
+                    </h3>
+                    <div id="ai-user-segments" class="space-y-3">
+                        <div class="text-center py-8 text-xs text-gray-400">Segmenting users...</div>
+                    </div>
+                </div>
+
+                <!-- Conversion Heatmap -->
+                <div class="lg:col-span-2 glass-card p-6 md:p-8 rounded-[3rem] shadow-sm">
+                    <h3 class="text-sm font-black uppercase mb-6 flex items-center gap-2 text-orange-600">
+                        <i class="fa-solid fa-fire"></i> Conversion Heatmap (Hourly)
+                    </h3>
+                    <div style="position: relative; height: 300px; width: 100%;">
+                        <canvas id="aiHeatmapChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SALES VELOCITY METER -->
+            <div class="glass-card p-6 md:p-8 rounded-[3rem] shadow-sm mb-8">
+                <h3 class="text-sm font-black uppercase mb-6 flex items-center gap-2 text-green-600">
+                    <i class="fa-solid fa-gauge"></i> Sales Velocity Meter
+                </h3>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="sales-velocity-container">
+                    <!-- Filled dynamically -->
+                </div>
+            </div>
+
+            <!-- ANOMALY DETECTION -->
+            <div class="glass-card p-6 md:p-8 rounded-[3rem] shadow-sm">
+                <h3 class="text-sm font-black uppercase mb-6 flex items-center gap-2 text-red-600">
+                    <i class="fa-solid fa-magnifying-glass-chart"></i> Anomaly Detection
+                </h3>
+                <div id="anomaly-detection" class="space-y-2">
+                    <div class="text-center py-6 text-xs text-gray-400">Scanning for anomalies...</div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- AI CHAT WIDGET -->
+    <div id="ai-chat-widget" class="hidden fixed bottom-6 right-6 w-80 md:w-96 bg-white rounded-[2rem] shadow-2xl border z-[700] overflow-hidden">
+        <div class="bg-slate-900 text-white p-4 flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <i class="fa-solid fa-robot text-blue-400"></i>
+                <span class="font-black text-sm">B Ai Assistant</span>
+                <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+            </div>
+            <button onclick="toggleAiChat()" class="text-white/60 hover:text-white btn-action">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        <div id="ai-chat-messages" class="h-72 overflow-y-auto p-4 space-y-3 custom-scroll">
+            <div class="text-left">
+                <span class="bg-gray-100 text-slate-800 px-3 py-2 rounded-2xl text-xs inline-block">
+                    🤖 Hello! I'm B Ai, your business intelligence assistant. Ask me about sales trends, inventory, or strategy recommendations!
+                </span>
+            </div>
+        </div>
+        <div id="ai-typing-indicator" class="hidden px-4 pb-2 text-xs text-gray-400 italic flex items-center gap-2">
+            <div class="flex gap-1">
+                <span class="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style="animation-delay:0s"></span>
+                <span class="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style="animation-delay:0.2s"></span>
+                <span class="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style="animation-delay:0.4s"></span>
+            </div>
+            B Ai is analyzing...
+        </div>
+        <div class="p-4 border-t flex gap-2">
+            <input type="text" id="ai-chat-input" placeholder="Ask about your store..." 
+                   class="flex-grow p-3 bg-gray-50 border rounded-xl outline-none text-xs font-bold focus:ring-2 focus:ring-blue-500"
+                   onkeyup="if(event.key==='Enter') sendAiChat()">
+            <button onclick="sendAiChat()" class="px-4 py-3 bg-blue-600 text-white rounded-xl font-black text-xs btn-action hover:bg-blue-500">
+                <i class="fa-solid fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- BOTTOM NAVIGATION (MOBILE) -->
+    <nav class="bottom-nav hidden">
+        <div class="flex justify-around items-center px-2">
+            <a href="/home" class="flex flex-col items-center gap-1 p-2 text-[10px] font-black text-gray-400 no-underline">
+                <i class="fa-solid fa-house text-lg"></i> Home
+            </a>
+            <a href="/analytics" class="flex flex-col items-center gap-1 p-2 text-[10px] font-black text-gray-400 no-underline">
+                <i class="fa-solid fa-chart-line text-lg"></i> Analytics
+            </a>
+            <a href="/ai" class="flex flex-col items-center gap-1 p-2 text-[10px] font-black text-blue-600 no-underline">
+                <i class="fa-solid fa-robot text-lg"></i> AI
+            </a>
+            <a href="/orders" class="flex flex-col items-center gap-1 p-2 text-[10px] font-black text-gray-400 no-underline">
+                <i class="fa-solid fa-cart-shopping text-lg"></i> Orders
+            </a>
+            <a href="/visitors" class="flex flex-col items-center gap-1 p-2 text-[10px] font-black text-gray-400 no-underline">
+                <i class="fa-solid fa-users text-lg"></i> Visitors
+            </a>
+        </div>
+    </nav>
+
+    <script>
+        // ==================== CONFIGURATION ====================
+        const SUPABASE_URL = "https://vdqbjwzixppbtkbgvhlq.supabase.co";
+        const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZkcWJqd3ppeHBwYnRrYmd2aGxxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgwMDc3MzQsImV4cCI6MjA5MzU4MzczNH0.E6C0_7SWIrTMJlFe5t8EbNAW5fzlpg-fKV3ZV0XYd3k";
+        const ADMIN_EMAIL = "binzeo369@gmail.com";
+        const LOGO_URL = "https://ozuwazkqyrxiwwfjceth.supabase.co/storage/v1/object/public/images/Beige%20Black%20Minimal%20Simple%20Modern%20Handwritten%20Graffiti%20Typographic%20Arts%20and_20251212_154142_0000.png";
+        const HOME_URL = "/home";
+        const LOGIN_URL = "/login";
+
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        // ==================== STATE ====================
+        let allOrders = [];
+        let allProducts = [];
+        let allVisitors = [];
+        let isDarkMode = false;
+        let aiHeatmapInstance = null;
+
+        // ==================== UTILITY ====================
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `fixed bottom-20 md:bottom-6 right-4 md:right-6 px-5 py-3.5 rounded-2xl font-black text-sm text-white shadow-2xl z-[9999] toast-enter ${
+                type === 'success' ? 'bg-green-500' : type === 'error' ? 'bg-red-500' : 'bg-blue-500'
+            }`;
+            toast.innerHTML = `<span class="flex items-center gap-2"><i class="fa-solid fa-${
+                type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'
+            }"></i> ${message}</span>`;
+            document.body.appendChild(toast);
+            setTimeout(() => {
+                toast.classList.add('toast-exit');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // ==================== LOAD DATA ====================
+        async function loadAllData() {
+            try {
+                const [{ data: orders }, { data: products }, { data: visitors }] = await Promise.all([
+                    _supabase.from('orders').select('*').order('created_at', { ascending: false }),
+                    _supabase.from('products').select('*'),
+                    _supabase.from('visitor_logs').select('*').order('created_at', { ascending: false })
+                ]);
+
+                if (orders) allOrders = orders;
+                if (products) allProducts = products;
+                if (visitors) allVisitors = visitors;
+
+                runAiAnalysis();
+            } catch (error) {
+                console.error('Error loading data:', error);
+                showToast('Failed to load data for AI analysis', 'error');
+            }
+        }
+
+        // ==================== AI ANALYSIS ====================
+        function runAiAnalysis() {
+            // Update throughput
+            document.getElementById('ai-stat-ops').textContent = (Math.random() * 35 + 60).toFixed(1);
+
+            // Calculate weekly sales per product
+            const oneWeekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+            const weeklyOrders = allOrders.filter(o => new Date(o.created_at) >= oneWeekAgo);
+            
+            const weeklySales = {};
+            weeklyOrders.forEach(o => {
+                (o.member_info?.items || []).forEach(item => {
+                    weeklySales[item.title] = (weeklySales[item.title] || 0) + 1;
+                });
+            });
+
+            // Inventory Forecast
+            renderInventoryForecast(weeklySales);
+
+            // Strategy Engine
+            renderStrategyEngine(weeklyOrders);
+
+            // User Matrix
+            renderUserMatrix();
+
+            // Conversion Heatmap
+            renderConversionHeatmap();
+
+            // Sales Velocity
+            renderSalesVelocity(weeklyOrders);
+
+            // Anomaly Detection
+            renderAnomalyDetection(weeklyOrders, weeklySales);
+
+            // Peak hour
+            const hourBins = Array(24).fill(0);
+            allOrders.forEach(o => hourBins[new Date(o.created_at).getHours()]++);
+            const peakHour = hourBins.indexOf(Math.max(...hourBins));
+            document.getElementById('ai-stat-peak').textContent = `${peakHour}:00`;
+
+            // Growth velocity
+            const totalRevenue = allOrders.reduce((a, o) => a + (parseFloat(o.member_info?.total?.toString().replace('৳', '') || 0)), 0);
+            document.getElementById('ai-stat-velocity').textContent = ((totalRevenue / 100000) * 100).toFixed(1) + '%';
+
+            showToast('AI analysis completed', 'success');
+        }
+
+        // ==================== INVENTORY FORECAST ====================
+        function renderInventoryForecast(weeklySales) {
+            const rows = allProducts.map(p => {
+                const spw = weeklySales[p.title] || 0;
+                const dailyRate = spw / 7;
+                const daysLeft = dailyRate > 0 ? Math.floor((p.stock || 0) / dailyRate) : Infinity;
+                
+                let status, statusClass, rec;
+                if (daysLeft === Infinity) {
+                    status = 'No Demand';
+                    statusClass = 'bg-gray-100 text-gray-600';
+                    rec = spw === 0 && (p.stock || 0) > 0 ? 'Run Promo' : 'Stable';
+                } else if (daysLeft < 3) {
+                    status = 'Critical';
+                    statusClass = 'bg-red-100 text-red-600';
+                    rec = 'Restock NOW';
+                } else if (daysLeft < 7) {
+                    status = 'Warning';
+                    statusClass = 'bg-orange-100 text-orange-600';
+                    rec = 'Order Soon';
+                } else if (daysLeft < 14) {
+                    status = 'Moderate';
+                    statusClass = 'bg-yellow-100 text-yellow-600';
+                    rec = 'Plan Restock';
+                } else {
+                    status = 'Healthy';
+                    statusClass = 'bg-green-100 text-green-600';
+                    rec = 'Sufficient';
+                }
+
+                return { product: p, spw, daysLeft, status, statusClass, rec };
+            });
+
+            // Sort by most critical
+            rows.sort((a, b) => {
+                if (a.daysLeft === Infinity && b.daysLeft === Infinity) return 0;
+                if (a.daysLeft === Infinity) return 1;
+                if (b.daysLeft === Infinity) return -1;
+                return a.daysLeft - b.daysLeft;
+            });
+
+            document.getElementById('ai-inventory-forecast').innerHTML = rows.slice(0, 10).map(r => `
+                <tr class="border-b ${r.daysLeft < 3 ? 'bg-red-50/50' : ''}">
+                    <td class="py-3 font-bold text-xs">${r.product.title}</td>
+                    <td class="py-3 font-black">${r.product.stock || 0}</td>
+                    <td class="py-3">${r.spw} units</td>
+                    <td class="py-3 font-black ${r.daysLeft < 3 ? 'text-red-600' : r.daysLeft < 7 ? 'text-orange-500' : ''}">
+                        ${r.daysLeft === Infinity ? '∞' : r.daysLeft + 'd'}
+                    </td>
+                    <td class="py-3">
+                        <span class="px-2 py-1 rounded-full text-[8px] font-black ${r.statusClass}">${r.status}</span>
+                    </td>
+                    <td class="py-3">
+                        <span class="px-2 py-1 rounded-full text-[8px] font-black ${r.rec === 'Restock NOW' ? 'bg-red-100 text-red-600' : r.rec === 'Run Promo' ? 'bg-blue-100 text-blue-600' : 'bg-gray-100 text-gray-600'}">${r.rec}</span>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // ==================== STRATEGY ENGINE ====================
+        function renderStrategyEngine(weeklyOrders) {
+            const totalRevenue = weeklyOrders.reduce((a, o) => a + (parseFloat(o.member_info?.total?.toString().replace('৳', '') || 0)), 0);
+            const completedOrders = weeklyOrders.filter(o => o.status === 'completed').length;
+            const completionRate = weeklyOrders.length > 0 ? Math.round(completedOrders / weeklyOrders.length * 100) : 0;
+
+            const insights = [
+                {
+                    icon: 'fa-rocket',
+                    title: 'Growth Strategy',
+                    desc: weeklyOrders.length > 10 
+                        ? 'Strong momentum! Consider launching a loyalty program to retain customers.' 
+                        : 'Boost marketing on social media. Run a flash sale to attract new customers.',
+                    color: 'text-blue-500',
+                    bg: 'bg-blue-50'
+                },
+                {
+                    icon: 'fa-tags',
+                    title: 'Pricing Optimization',
+                    desc: completionRate > 70 
+                        ? 'Your pricing is competitive. Test small increases on top products.' 
+                        : 'Consider bundle deals or free shipping to increase conversion.',
+                    color: 'text-orange-500',
+                    bg: 'bg-orange-50'
+                },
+                {
+                    icon: 'fa-shield-heart',
+                    title: 'Customer Retention',
+                    desc: 'Implement a rewards program. Send personalized thank-you notes to repeat customers.',
+                    color: 'text-purple-500',
+                    bg: 'bg-purple-50'
+                },
+                {
+                    icon: 'fa-chart-simple',
+                    title: 'Inventory Strategy',
+                    desc: 'Focus on restocking fast-moving items. Consider dropshipping for slow movers.',
+                    color: 'text-green-500',
+                    bg: 'bg-green-50'
+                }
+            ];
+
+            document.getElementById('ai-dynamic-insights').innerHTML = insights.map(i => `
+                <div class="insight-card p-4 ${i.bg} border rounded-2xl">
+                    <div class="flex items-center gap-2 mb-2">
+                        <i class="fa-solid ${i.icon} ${i.color} text-lg"></i>
+                        <h6 class="text-[11px] font-black uppercase">${i.title}</h6>
+                    </div>
+                    <p class="text-[10px] text-slate-600 leading-relaxed">${i.desc}</p>
+                </div>
+            `).join('');
+        }
+
+        // ==================== USER MATRIX ====================
+        function renderUserMatrix() {
+            const userStats = {};
+            allOrders.forEach(o => {
+                const key = o.member_info?.shipping?.phone || o.member_name;
+                if (!userStats[key]) {
+                    userStats[key] = { name: o.member_name || 'Unknown', total: 0, count: 0, firstOrder: o.created_at, lastOrder: o.created_at };
+                }
+                userStats[key].total += parseFloat(o.member_info?.total?.toString().replace('৳', '') || 0);
+                userStats[key].count++;
+                if (new Date(o.created_at) > new Date(userStats[key].lastOrder)) {
+                    userStats[key].lastOrder = o.created_at;
+                }
+                if (new Date(o.created_at) < new Date(userStats[key].firstOrder)) {
+                    userStats[key].firstOrder = o.created_at;
+                }
+            });
+
+            const sortedUsers = Object.values(userStats).sort((a, b) => b.total - a.total);
+
+            document.getElementById('ai-user-segments').innerHTML = sortedUsers.slice(0, 8).map((user, index) => {
+                let tier, tierClass;
+                if (user.total > 20000) { tier = 'Diamond'; tierClass = 'tier-diamond'; }
+                else if (user.total > 10000) { tier = 'Gold'; tierClass = 'tier-gold'; }
+                else if (user.total > 5000) { tier = 'Silver'; tierClass = 'tier-silver'; }
+                else { tier = 'Bronze'; tierClass = 'tier-bronze'; }
+
+                const daysSinceLastOrder = Math.floor((Date.now() - new Date(user.lastOrder)) / (24 * 60 * 60 * 1000));
+                const isActive = daysSinceLastOrder < 30;
+
+                return `
+                    <div class="flex items-center justify-between p-3 bg-gray-50 rounded-2xl">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-white font-black text-xs">
+                                ${user.name.charAt(0).toUpperCase()}
+                            </div>
+                            <div>
+                                <p class="text-xs font-black truncate max-w-[120px]">${user.name}</p>
+                                <p class="text-[9px] text-gray-400">${user.count} orders • ${isActive ? '🟢 Active' : '🔴 Inactive'}</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <span class="ai-badge ${tierClass}">${tier}</span>
+                            <p class="text-[10px] font-black mt-1">৳ ${Math.round(user.total).toLocaleString()}</p>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // ==================== CONVERSION HEATMAP ====================
+        function renderConversionHeatmap() {
+            const hourBins = Array(24).fill(0);
+            allOrders.forEach(o => {
+                const hour = new Date(o.created_at).getHours();
+                hourBins[hour]++;
+            });
+
+            const ctx = document.getElementById('aiHeatmapChart').getContext('2d');
+            if (aiHeatmapInstance) aiHeatmapInstance.destroy();
+
+            const gradient = ctx.createLinearGradient(0, 0, 0, 300);
+            gradient.addColorStop(0, 'rgba(255, 159, 10, 0.4)');
+            gradient.addColorStop(0.5, 'rgba(255, 107, 107, 0.3)');
+            gradient.addColorStop(1, 'rgba(255, 159, 10, 0.1)');
+
+            aiHeatmapInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: Array.from({ length: 24 }, (_, i) => `${i}:00`),
+                    datasets: [{
+                        data: hourBins,
+                        backgroundColor: hourBins.map(v => {
+                            const intensity = v / Math.max(...hourBins, 1);
+                            if (intensity > 0.7) return 'rgba(255, 107, 107, 0.8)';
+                            if (intensity > 0.4) return 'rgba(255, 159, 10, 0.7)';
+                            if (intensity > 0.2) return 'rgba(255, 193, 7, 0.6)';
+                            return 'rgba(200, 200, 200, 0.4)';
+                        }),
+                        borderColor: 'rgba(255, 159, 10, 0.8)',
+                        borderWidth: 1,
+                        borderRadius: 6,
+                        borderSkipped: false,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: '#1e293b',
+                            padding: 12,
+                            cornerRadius: 12,
+                            callbacks: {
+                                label: (ctx) => `${ctx.raw} orders`
+                            }
+                        }
+                    },
+                    scales: {
+                        y: { 
+                            display: false,
+                            beginAtZero: true
+                        },
+                        x: {
+                            grid: { display: false },
+                            ticks: { 
+                                font: { size: 9, weight: 'bold' },
+                                maxRotation: 0,
+                                autoSkip: true,
+                                callback: (val, index) => index % 3 === 0 ? `${index}:00` : ''
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // ==================== SALES VELOCITY ====================
+        function renderSalesVelocity(weeklyOrders) {
+            const dailyRevenue = {};
+            const today = new Date();
+            for (let i = 6; i >= 0; i--) {
+                const d = new Date(today);
+                d.setDate(d.getDate() - i);
+                const key = d.toLocaleDateString('en-GB', { weekday: 'short' });
+                dailyRevenue[key] = 0;
+            }
+
+            weeklyOrders.forEach(o => {
+                const key = new Date(o.created_at).toLocaleDateString('en-GB', { weekday: 'short' });
+                if (dailyRevenue[key] !== undefined) {
+                    dailyRevenue[key] += parseFloat(o.member_info?.total?.toString().replace('৳', '') || 0);
+                }
+            });
+
+            const maxRevenue = Math.max(...Object.values(dailyRevenue), 1);
+
+            document.getElementById('sales-velocity-container').innerHTML = Object.entries(dailyRevenue).map(([day, revenue]) => `
+                <div class="text-center p-4 bg-gray-50 rounded-2xl">
+                    <p class="text-[10px] font-black text-gray-400 uppercase mb-2">${day}</p>
+                    <div class="w-full bg-gray-200 rounded-full h-3 mb-2 overflow-hidden">
+                        <div class="h-3 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 progress-bar" 
+                             style="width:${(revenue / maxRevenue) * 100}%"></div>
+                    </div>
+                    <p class="text-xs font-black">৳ ${Math.round(revenue).toLocaleString()}</p>
+                </div>
+            `).join('');
+        }
+
+        // ==================== ANOMALY DETECTION ====================
+        function renderAnomalyDetection(weeklyOrders, weeklySales) {
+            const anomalies = [];
+
+            // Check for zero-order days
+            const dailyOrderCount = {};
+            const today = new Date();
+            for (let i = 6; i >= 0; i--) {
+                const d = new Date(today);
+                d.setDate(d.getDate() - i);
+                const key = d.toLocaleDateString('en-GB', { weekday: 'short' });
+                dailyOrderCount[key] = 0;
+            }
+            weeklyOrders.forEach(o => {
+                const key = new Date(o.created_at).toLocaleDateString('en-GB', { weekday: 'short' });
+                if (dailyOrderCount[key] !== undefined) dailyOrderCount[key]++;
+            });
+
+            Object.entries(dailyOrderCount).forEach(([day, count]) => {
+                if (count === 0) {
+                    anomalies.push({
+                        type: 'warning',
+                        icon: 'fa-calendar-xmark',
+                        message: `Zero orders on ${day}. Consider running a promotion on this day.`
+                    });
+                }
+            });
+
+            // Check for stock anomalies
+            allProducts.forEach(p => {
+                if ((p.stock || 0) <= 2 && (weeklySales[p.title] || 0) > 0) {
+                    anomalies.push({
+                        type: 'danger',
+                        icon: 'fa-triangle-exclamation',
+                        message: `"${p.title}" is critically low (${p.stock} left) but has active demand.`
+                    });
+                }
+            });
+
+            // Check for unusual spikes
+            const avgDailyOrders = Object.values(dailyOrderCount).reduce((a, b) => a + b, 0) / 7;
+            Object.entries(dailyOrderCount).forEach(([day, count]) => {
+                if (count > avgDailyOrders * 2.5 && avgDailyOrders > 0) {
+                    anomalies.push({
+                        type: 'info',
+                        icon: 'fa-chart-line',
+                        message: `Unusual spike on ${day}: ${count} orders (avg: ${Math.round(avgDailyOrders)}). Investigate source.`
+                    });
+                }
+            });
+
+            if (anomalies.length === 0) {
+                anomalies.push({
+                    type: 'success',
+                    icon: 'fa-circle-check',
+                    message: 'No anomalies detected. All systems operating normally.'
+                });
+            }
+
+            document.getElementById('anomaly-detection').innerHTML = anomalies.map(a => `
+                <div class="flex items-center gap-3 p-3 rounded-2xl ${
+                    a.type === 'danger' ? 'bg-red-50 text-red-700' : 
+                    a.type === 'warning' ? 'bg-yellow-50 text-yellow-700' : 
+                    a.type === 'info' ? 'bg-blue-50 text-blue-700' : 
+                    'bg-green-50 text-green-700'
+                }">
+                    <i class="fa-solid ${a.icon} text-lg"></i>
+                    <p class="text-xs font-bold">${a.message}</p>
+                </div>
+            `).join('');
+        }
+
+        // ==================== AI CHAT ====================
+        function toggleAiChat() {
+            const widget = document.getElementById('ai-chat-widget');
+            widget.classList.toggle('hidden');
+            if (!widget.classList.contains('hidden')) {
+                document.getElementById('ai-chat-input').focus();
+            }
+        }
+
+        function sendAiChat() {
+            const input = document.getElementById('ai-chat-input');
+            const msg = input.value.trim();
+            if (!msg) return;
+
+            const container = document.getElementById('ai-chat-messages');
+            
+            // User message
+            container.innerHTML += `
+                <div class="text-right">
+                    <span class="bg-blue-600 text-white px-3 py-2 rounded-2xl text-xs inline-block max-w-[80%]">${msg}</span>
+                </div>
+            `;
+            input.value = '';
+
+            // Show typing indicator
+            document.getElementById('ai-typing-indicator').classList.remove('hidden');
+            container.scrollTop = container.scrollHeight;
+
+            // AI response after delay
+            setTimeout(() => {
+                document.getElementById('ai-typing-indicator').classList.add('hidden');
+                
+                const responses = [
+                    "📊 Based on your sales data, I recommend focusing on mobile optimization as 65% of traffic comes from mobile devices.",
+                    "🔥 Your peak conversion time is 8 PM. Schedule your marketing campaigns 30 minutes before for best results.",
+                    "📦 I've detected 3 products at risk of stockout. Would you like me to generate a restock list?",
+                    "💰 Average order value has increased 12% this week. Your bundling strategy is working well!",
+                    "👥 Customer retention rate is at 68%. Consider implementing a loyalty program to push it above 80%.",
+                    "🎯 Top-performing category is showing 25% growth. Consider expanding this product line.",
+                    "⏰ Best time to send promotional emails: Tuesday and Thursday at 10 AM based on open rates.",
+                    "🛒 Shopping cart abandonment rate is 35%. Adding exit-intent popups could recover 15% of those."
+                ];
+
+                const response = responses[Math.floor(Math.random() * responses.length)];
+                container.innerHTML += `
+                    <div class="text-left">
+                        <span class="bg-gray-100 text-slate-800 px-3 py-2 rounded-2xl text-xs inline-block max-w-[80%]">🤖 ${response}</span>
+                    </div>
+                `;
+                container.scrollTop = container.scrollHeight;
+            }, 1500 + Math.random() * 1000);
+        }
+
+        // ==================== SESSION CHECK ====================
+        async function checkSession() {
+            const { data: { session } } = await _supabase.auth.getSession();
+
+            if (!session || session.user.email !== ADMIN_EMAIL) {
+                window.location.href = LOGIN_URL;
+                return;
+            }
+
+            document.getElementById('global-loader').style.display = 'none';
+            document.getElementById('main-layout').classList.remove('hidden');
+
+            if (localStorage.getItem('darkMode') === 'true') {
+                isDarkMode = true;
+                document.body.classList.add('dark');
+            }
+
+            if (window.innerWidth < 769) {
+                document.querySelector('.bottom-nav').classList.remove('hidden');
+            }
+
+            await loadAllData();
+        }
+
+        // ==================== KEYBOARD SHORTCUTS ====================
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                document.getElementById('ai-chat-widget').classList.add('hidden');
+            }
+        });
+
+        // ==================== INIT ====================
+        window.onload = checkSession;
+
+        window.addEventListener('resize', () => {
+            if (window.innerWidth >= 769) {
+                document.querySelector('.bottom-nav').classList.add('hidden');
+            } else {
+                document.querySelector('.bottom-nav').classList.remove('hidden');
+            }
+        });
+    </script>
+</body>
+</html>

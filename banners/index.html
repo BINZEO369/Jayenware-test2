@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Banners | JAYENWARE Admin</title>
+    <meta name="theme-color" content="#6366f1">
+    <link rel="icon" type="image/png" href="https://ozuwazkqyrxiwwfjceth.supabase.co/storage/v1/object/public/images/Beige%20Black%20Minimal%20Simple%20Modern%20Handwritten%20Graffiti%20Typographic%20Arts%20and_20251212_154142_0000.png">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.75); --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.1); --radius-3xl: 2.5rem;
+        }
+        * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: #f5f5f7; color: #1d1d1f; margin: 0; padding: 0; min-height: 100vh;
+            transition: background 0.3s, color 0.3s;
+        }
+        body.dark { background: #0a0a0a; color: #f5f5f7; }
+        body.dark .glass-card { background: rgba(28, 28, 30, 0.8); border-color: rgba(255, 255, 255, 0.08); }
+        body.dark .bg-white { background: #1c1c1e; }
+        body.dark .bg-gray-50, body.dark .bg-gray-100 { background: #2c2c2e; }
+        body.dark .text-slate-800, body.dark .text-slate-900 { color: #f5f5f7; }
+        body.dark .text-gray-400 { color: #8e8e93; }
+        body.dark .text-gray-500 { color: #636366; }
+        body.dark .border, body.dark .border-b { border-color: #2c2c2e; }
+        body.dark input, body.dark textarea { background: #1c1c1e; border-color: #2c2c2e; color: #fff; }
+
+        .glass-card {
+            background: var(--glass-bg); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255,255,255,0.5); box-shadow: var(--shadow-md);
+        }
+        .custom-scroll::-webkit-scrollbar { width: 4px; height: 4px; }
+        .custom-scroll::-webkit-scrollbar-track { background: transparent; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #6366f1, #8b5cf6); border-radius: 10px; }
+
+        .btn-action { transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); cursor: pointer; }
+        .btn-action:hover { transform: translateY(-2px); }
+        .btn-action:active { transform: scale(0.96); }
+
+        @keyframes fadeSlideIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideUp { from { transform: translateY(100px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes slideDown { from { transform: translateY(0); opacity: 1; } to { transform: translateY(100px); opacity: 0; } }
+        @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+        @keyframes gentlePulse { 0%,100% { opacity: 1; } 50% { opacity: 0.85; } }
+
+        .toast-enter { animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .toast-exit { animation: slideDown 0.3s ease-in forwards; }
+
+        .banner-preview-card {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); position: relative; overflow: hidden;
+            border-radius: 2rem;
+        }
+        .banner-preview-card:hover { transform: translateY(-4px); box-shadow: 0 20px 50px rgba(99, 102, 241, 0.2); }
+        .banner-preview-card:hover .banner-overlay { opacity: 1; }
+
+        .banner-overlay {
+            position: absolute; inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.2) 50%, transparent 100%);
+            opacity: 0.7; transition: opacity 0.4s ease;
+            display: flex; flex-direction: column; justify-content: flex-end; padding: 24px;
+        }
+
+        .skeleton-shimmer {
+            background: linear-gradient(90deg, #e5e7eb 25%, #f3f4f6 50%, #e5e7eb 75%);
+            background-size: 200% 100%; animation: shimmer 1.5s infinite; border-radius: 16px;
+        }
+        body.dark .skeleton-shimmer { background: linear-gradient(90deg, #2c2c2e 25%, #3a3a3c 50%, #2c2c2e 75%); background-size: 200% 100%; }
+
+        @media (max-width: 768px) {
+            .bottom-nav {
+                display: flex; position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
+                background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px);
+                border-top: 1px solid rgba(0,0,0,0.08); padding: 8px 0 env(safe-area-inset-bottom,8px) 0;
+            }
+            body.dark .bottom-nav { background: rgba(28, 28, 30, 0.95); border-color: rgba(255,255,255,0.08); }
+            main { padding-bottom: 100px !important; }
+        }
+        @media (min-width: 769px) { .bottom-nav { display: none; } }
+    </style>
+</head>
+<body class="text-slate-800 antialiased">
+    <div id="global-loader" style="position:fixed;inset:0;background:white;z-index:9999;display:flex;justify-content:center;align-items:center;">
+        <div class="flex flex-col items-center"><div class="w-14 h-14 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div><p class="mt-5 font-bold text-gray-400 text-sm">Loading Banners...</p></div>
+    </div>
+
+    <div id="main-layout" class="hidden min-h-screen">
+        <main class="p-4 md:p-8 lg:p-10 max-w-7xl mx-auto">
+            <header class="mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                    <div class="flex items-center gap-2 text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">
+                        <a href="/home" class="hover:text-indigo-600"><i class="fa-solid fa-house"></i> Home</a>
+                        <i class="fa-solid fa-chevron-right text-[8px]"></i> <span class="text-indigo-600">Banners</span>
+                    </div>
+                    <h2 class="text-2xl md:text-3xl font-black uppercase tracking-tight">Hero Banners</h2>
+                    <p class="text-[10px] font-bold text-gray-400 uppercase mt-1">Manage homepage hero section</p>
+                </div>
+            </header>
+
+            <div class="grid grid-cols-1 lg:grid-cols-5 gap-6">
+                <!-- FORM -->
+                <div class="lg:col-span-2 glass-card p-6 md:p-8 rounded-[3rem] shadow-sm h-fit">
+                    <h3 class="text-sm font-black uppercase mb-6 flex items-center gap-2 text-indigo-600">
+                        <i class="fa-solid fa-pen-to-square"></i> <span id="form-title">Add Banner</span>
+                    </h3>
+                    <div class="space-y-4">
+                        <input type="text" id="ah-title" placeholder="Banner Title *" class="w-full p-4 bg-gray-50 border rounded-2xl outline-none font-bold focus:ring-2 focus:ring-indigo-500 text-sm">
+                        <input type="text" id="ah-subtitle" placeholder="Subtitle" class="w-full p-4 bg-gray-50 border rounded-2xl outline-none font-bold focus:ring-2 focus:ring-indigo-500 text-sm">
+                        <div class="p-4 border-2 border-dashed rounded-3xl bg-gray-50">
+                            <p class="text-[10px] font-bold text-gray-400 mb-3 uppercase"><i class="fa-solid fa-image mr-1"></i> Banner Image</p>
+                            <input type="text" id="ah-url" placeholder="Image URL" class="w-full p-3 bg-white border rounded-xl mb-3 outline-none text-sm font-bold" oninput="previewBanner()">
+                            <div class="text-center text-[10px] text-gray-400 font-bold mb-2">OR</div>
+                            <input type="file" id="ah-file" class="w-full text-xs text-gray-500" accept="image/*" onchange="previewFileBanner()">
+                        </div>
+                        <button id="btn-banner-save" onclick="saveBanner()" class="w-full py-4 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-2xl font-black text-sm uppercase btn-action shadow-lg">
+                            <i class="fa-solid fa-check mr-2"></i> Save Banner
+                        </button>
+                        <button id="btn-banner-cancel" onclick="resetForm()" class="hidden w-full py-3 bg-gray-100 text-gray-600 rounded-2xl font-black text-xs uppercase btn-action">
+                            Cancel Edit
+                        </button>
+                    </div>
+                </div>
+
+                <!-- PREVIEW + LIST -->
+                <div class="lg:col-span-3 space-y-6">
+                    <!-- Live Preview -->
+                    <div class="glass-card p-6 md:p-8 rounded-[3rem] shadow-sm">
+                        <h3 class="text-sm font-black uppercase mb-4 flex items-center gap-2 text-purple-600">
+                            <i class="fa-solid fa-eye"></i> Live Preview
+                        </h3>
+                        <div id="banner-preview" class="banner-preview-card w-full h-48 md:h-64 bg-gray-200 flex items-center justify-center relative overflow-hidden">
+                            <div class="banner-overlay">
+                                <h3 id="preview-title" class="text-white text-xl md:text-3xl font-black">Banner Title</h3>
+                                <p id="preview-subtitle" class="text-white/80 text-xs md:text-sm font-bold mt-1">Subtitle text</p>
+                            </div>
+                            <i class="fa-solid fa-image text-gray-400 text-4xl" id="preview-placeholder"></i>
+                        </div>
+                    </div>
+
+                    <!-- Banner List -->
+                    <div class="glass-card p-6 md:p-8 rounded-[3rem] shadow-sm">
+                        <h3 class="text-sm font-black uppercase mb-4 flex items-center gap-2 text-indigo-600">
+                            <i class="fa-solid fa-list"></i> All Banners <span id="banner-count" class="text-[10px] bg-indigo-100 text-indigo-600 px-2 py-0.5 rounded-full">0</span>
+                        </h3>
+                        <div id="banner-list" class="space-y-3">
+                            <div class="text-center py-8 text-xs text-gray-400">No banners yet</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- MOBILE NAV -->
+    <nav class="bottom-nav hidden">
+        <div class="flex justify-around items-center px-2">
+            <a href="/home" class="flex flex-col items-center gap-1 p-2 text-[10px] font-black text-gray-400 no-underline"><i class="fa-solid fa-house text-lg"></i> Home</a>
+            <a href="/banners" class="flex flex-col items-center gap-1 p-2 text-[10px] font-black text-indigo-600 no-underline"><i class="fa-solid fa-image text-lg"></i> Banners</a>
+            <a href="/products" class="flex flex-col items-center gap-1 p-2 text-[10px] font-black text-gray-400 no-underline"><i class="fa-solid fa-box text-lg"></i> Products</a>
+            <a href="/orders" class="flex flex-col items-center gap-1 p-2 text-[10px] font-black text-gray-400 no-underline"><i class="fa-solid fa-cart-shopping text-lg"></i> Orders</a>
+            <a href="/ai" class="flex flex-col items-center gap-1 p-2 text-[10px] font-black text-gray-400 no-underline"><i class="fa-solid fa-robot text-lg"></i> AI</a>
+        </div>
+    </nav>
+
+    <script>
+        const SUPABASE_URL = "https://vdqbjwzixppbtkbgvhlq.supabase.co";
+        const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZkcWJqd3ppeHBwYnRrYmd2aGxxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgwMDc3MzQsImV4cCI6MjA5MzU4MzczNH0.E6C0_7SWIrTMJlFe5t8EbNAW5fzlpg-fKV3ZV0XYd3k";
+        const ADMIN_EMAIL = "binzeo369@gmail.com";
+        const LOGO_URL = "https://ozuwazkqyrxiwwfjceth.supabase.co/storage/v1/object/public/images/Beige%20Black%20Minimal%20Simple%20Modern%20Handwritten%20Graffiti%20Typographic%20Arts%20and_20251212_154142_0000.png";
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        let allBanners = [], isDarkMode = false, editingId = null;
+
+        function showToast(m, t = 'success') {
+            const el = document.createElement('div');
+            el.className = `fixed bottom-20 md:bottom-6 right-6 px-5 py-3.5 rounded-2xl font-black text-sm text-white shadow-2xl z-[9999] toast-enter ${t==='success'?'bg-green-500':t==='error'?'bg-red-500':'bg-blue-500'}`;
+            el.innerHTML = `<span><i class="fa-solid fa-${t==='success'?'check-circle':'exclamation-circle'} mr-2"></i>${m}</span>`;
+            document.body.appendChild(el); setTimeout(() => { el.classList.add('toast-exit'); setTimeout(() => el.remove(), 300); }, 3000);
+        }
+
+        async function uploadFile(inputId) {
+            const f = document.getElementById(inputId).files[0]; if (!f) return null;
+            const name = `binzeo_${Date.now()}_${f.name.replace(/\s+/g,'_')}`;
+            try {
+                const { error } = await _supabase.storage.from('images').upload(name, f, { cacheControl: '3600', upsert: false });
+                if (error) { showToast('Upload failed', 'error'); return null; }
+                return _supabase.storage.from('images').getPublicUrl(name).data.publicUrl;
+            } catch (e) { return null; }
+        }
+
+        function previewBanner() {
+            const url = document.getElementById('ah-url').value.trim();
+            const title = document.getElementById('ah-title').value || 'Banner Title';
+            const subtitle = document.getElementById('ah-subtitle').value || 'Subtitle text';
+            updatePreview(url, title, subtitle);
+        }
+
+        function previewFileBanner() {
+            const file = document.getElementById('ah-file').files[0];
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = (e) => updatePreview(e.target.result, document.getElementById('ah-title').value || 'Banner Title', document.getElementById('ah-subtitle').value || 'Subtitle text');
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function updatePreview(imgUrl, title, subtitle) {
+            const preview = document.getElementById('banner-preview');
+            const placeholder = document.getElementById('preview-placeholder');
+            document.getElementById('preview-title').textContent = title;
+            document.getElementById('preview-subtitle').textContent = subtitle;
+            if (imgUrl) {
+                preview.style.backgroundImage = `url(${imgUrl})`;
+                preview.style.backgroundSize = 'cover';
+                preview.style.backgroundPosition = 'center';
+                if (placeholder) placeholder.style.display = 'none';
+            } else {
+                preview.style.backgroundImage = '';
+                preview.style.background = ''; // Reset to default gray
+                if (placeholder) placeholder.style.display = 'block';
+            }
+        }
+
+        async function loadData() {
+            const { data } = await _supabase.from('hero').select('*').order('created_at', { ascending: false });
+            if (data) { allBanners = data; renderBanners(); }
+        }
+
+        function renderBanners() {
+            document.getElementById('banner-count').textContent = allBanners.length;
+            const list = document.getElementById('banner-list');
+            if (allBanners.length === 0) {
+                list.innerHTML = '<div class="text-center py-8 text-xs text-gray-400">No banners yet</div>';
+                return;
+            }
+            list.innerHTML = allBanners.map(b => `
+                <div class="flex items-center gap-4 p-4 bg-gray-50 rounded-2xl hover:bg-indigo-50 transition cursor-pointer group" onclick="editBanner(${b.id})">
+                    <img src="${b.img || LOGO_URL}" class="w-16 h-12 rounded-xl object-cover border" onerror="this.src='${LOGO_URL}'">
+                    <div class="flex-grow">
+                        <h4 class="text-xs font-black truncate">${b.title || 'Untitled'}</h4>
+                        <p class="text-[9px] text-gray-400 truncate">${b.subtitle || 'No subtitle'}</p>
+                    </div>
+                    <button onclick="event.stopPropagation(); deleteBanner(${b.id})" class="p-2.5 bg-red-50 text-red-500 rounded-xl text-xs btn-action opacity-0 group-hover:opacity-100 transition">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function resetForm() {
+            editingId = null;
+            document.getElementById('form-title').textContent = 'Add Banner';
+            document.getElementById('btn-banner-save').innerHTML = '<i class="fa-solid fa-check mr-2"></i> Save Banner';
+            document.getElementById('btn-banner-cancel').classList.add('hidden');
+            ['ah-title','ah-subtitle','ah-url'].forEach(id => document.getElementById(id).value = '');
+            document.getElementById('ah-file').value = '';
+            updatePreview('', 'Banner Title', 'Subtitle text');
+            document.getElementById('banner-preview').style.background = '#e5e7eb';
+        }
+
+        function editBanner(id) {
+            const b = allBanners.find(x => x.id === id); if (!b) return;
+            editingId = id;
+            document.getElementById('form-title').textContent = 'Edit Banner';
+            document.getElementById('btn-banner-save').innerHTML = '<i class="fa-solid fa-save mr-2"></i> Update Banner';
+            document.getElementById('btn-banner-cancel').classList.remove('hidden');
+            document.getElementById('ah-title').value = b.title || '';
+            document.getElementById('ah-subtitle').value = b.subtitle || '';
+            document.getElementById('ah-url').value = b.img || '';
+            updatePreview(b.img, b.title || 'Banner Title', b.subtitle || 'Subtitle text');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        async function saveBanner() {
+            const title = document.getElementById('ah-title').value.trim();
+            if (!title) { showToast('Banner title is required', 'error'); return; }
+            const btn = document.getElementById('btn-banner-save');
+            btn.disabled = true; btn.innerHTML = '<div class="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mx-auto"></div>';
+
+            try {
+                let img = document.getElementById('ah-url').value.trim() || await uploadFile('ah-file');
+                const obj = { title, subtitle: document.getElementById('ah-subtitle').value.trim() };
+                if (img) obj.img = img;
+
+                if (editingId) {
+                    await _supabase.from('hero').update(obj).eq('id', editingId);
+                    showToast('Banner updated! 🎉', 'success');
+                } else {
+                    const { error } = await _supabase.from('hero').insert([obj]);
+                    if (error) throw error;
+                    showToast('Banner added! 🎉', 'success');
+                }
+                resetForm(); await loadData();
+            } catch (e) { showToast('Error saving banner', 'error'); }
+            finally { btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-check mr-2"></i> Save Banner'; }
+        }
+
+        async function deleteBanner(id) {
+            if (!confirm('Delete this banner?')) return;
+            await _supabase.from('hero').delete().eq('id', id);
+            showToast('Banner deleted', 'error');
+            if (editingId === id) resetForm();
+            await loadData();
+        }
+
+        async function checkSession() {
+            const { data: { session } } = await _supabase.auth.getSession();
+            if (!session || session.user.email !== ADMIN_EMAIL) { window.location.href = '/login'; return; }
+            document.getElementById('global-loader').style.display = 'none';
+            document.getElementById('main-layout').classList.remove('hidden');
+            if (localStorage.getItem('darkMode') === 'true') { isDarkMode = true; document.body.classList.add('dark'); }
+            if (window.innerWidth < 769) document.querySelector('.bottom-nav').classList.remove('hidden');
+            await loadData();
+        }
+
+        window.onload = checkSession;
+        window.addEventListener('resize', () => { document.querySelector('.bottom-nav').classList.toggle('hidden', window.innerWidth >= 769); });
+    </script>
+</body>
+</html>

@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Quick Panel | JAYENWARE Admin</title>
+    <meta name="theme-color" content="#0f172a">
+    <link rel="icon" type="image/png" href="https://ozuwazkqyrxiwwfjceth.supabase.co/storage/v1/object/public/images/Beige%20Black%20Minimal%20Simple%20Modern%20Handwritten%20Graffiti%20Typographic%20Arts%20and_20251212_154142_0000.png">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.75); --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.1); --radius-3xl: 2.5rem;
+        }
+        * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: #f5f5f7; color: #1d1d1f; margin: 0; padding: 0; min-height: 100vh;
+            transition: background 0.3s, color 0.3s;
+        }
+        body.dark { background: #0a0a0a; color: #f5f5f7; }
+        body.dark .glass-card { background: rgba(28, 28, 30, 0.8); border-color: rgba(255, 255, 255, 0.08); }
+        body.dark .bg-white { background: #1c1c1e; }
+        body.dark .bg-gray-50, body.dark .bg-gray-100 { background: #2c2c2e; }
+        body.dark .bg-slate-900 { background: #0f172a; }
+        body.dark .text-slate-800, body.dark .text-slate-900 { color: #f5f5f7; }
+        body.dark .text-gray-400 { color: #8e8e93; }
+        body.dark .text-gray-500 { color: #636366; }
+        body.dark .border, body.dark .border-b, body.dark .border-t { border-color: #2c2c2e; }
+        body.dark .hover\:bg-slate-50:hover { background: #2c2c2e; }
+
+        .glass-card {
+            background: var(--glass-bg); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255,255,255,0.5); box-shadow: var(--shadow-md);
+        }
+        .custom-scroll::-webkit-scrollbar { width: 4px; height: 4px; }
+        .custom-scroll::-webkit-scrollbar-track { background: transparent; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #0f172a, #334155); border-radius: 10px; }
+
+        .btn-action { transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); cursor: pointer; }
+        .btn-action:hover { transform: translateY(-2px); }
+        .btn-action:active { transform: scale(0.96); }
+
+        @keyframes fadeSlideIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideUp { from { transform: translateY(100px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes slideDown { from { transform: translateY(0); opacity: 1; } to { transform: translateY(100px); opacity: 0; } }
+        @keyframes gradientFlow { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        @keyframes pingPong { 0%,100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+        @keyframes spinSlow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+        .toast-enter { animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .toast-exit { animation: slideDown 0.3s ease-in forwards; }
+
+        .hero-gradient {
+            background: linear-gradient(135deg, #0f172a, #1e293b, #334155, #0f172a);
+            background-size: 300% 300%; animation: gradientFlow 8s ease infinite;
+        }
+
+        .action-card {
+            transition: all 0.3s ease; position: relative; overflow: hidden; cursor: pointer;
+        }
+        .action-card:hover { transform: translateY(-4px); box-shadow: 0 15px 40px rgba(0,0,0,0.12); }
+        .action-card:active { transform: scale(0.97); }
+        .action-card .card-glow {
+            position: absolute; inset: 0; opacity: 0; transition: opacity 0.3s;
+            background: radial-gradient(circle at center, rgba(255,255,255,0.1) 0%, transparent 70%);
+        }
+        .action-card:hover .card-glow { opacity: 1; }
+
+        .shortcut-key {
+            display: inline-block; background: #e2e8f0; color: #475569;
+            padding: 2px 8px; border-radius: 6px; font-size: 9px; font-weight: 800;
+            font-family: 'Courier New', monospace; letter-spacing: 0.05em;
+        }
+        body.dark .shortcut-key { background: #334155; color: #cbd5e1; }
+
+        .status-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+        .status-dot.online { background: #22c55e; animation: pingPong 2s infinite; }
+        .status-dot.warning { background: #f59e0b; }
+        .status-dot.offline { background: #ef4444; }
+
+        @media (max-width: 768px) {
+            .bottom-nav {
+                display: flex; position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
+                background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px);
+                border-top: 1px solid rgba(0,0,0,0.08); padding: 8px 0 env(safe-area-inset-bottom,8px) 0;
+            }
+            body.dark .bottom-nav { background: rgba(28, 28, 30, 0.95); border-color: rgba(255,255,255,0.08); }
+            main { padding-bottom: 100px !important; }
+        }
+        @media (min-width: 769px) { .bottom-nav { display: none; } }
+    </style>
+</head>
+<body class="text-slate-800 antialiased">
+    <div id="global-loader" style="position:fixed;inset:0;background:white;z-index:9999;display:flex;justify-content:center;align-items:center;">
+        <div class="flex flex-col items-center"><div class="w-14 h-14 border-4 border-slate-800 border-t-transparent rounded-full animate-spin"></div><p class="mt-5 font-bold text-gray-400 text-sm">Loading Quick Panel...</p></div>
+    </div>
+
+    <div id="main-layout" class="hidden min-h-screen">
+        <main class="p-4 md:p-8 lg:p-10 max-w-7xl mx-auto">
+            <!-- HERO HEADER -->
+            <div class="hero-gradient rounded-[3rem] p-6 md:p-10 text-white mb-8 relative overflow-hidden shadow-2xl">
+                <div class="absolute -top-20 -right-20 w-80 h-80 bg-white/5 rounded-full blur-[80px]"></div>
+                <div class="absolute -bottom-20 -left-20 w-60 h-60 bg-white/5 rounded-full blur-[60px]"></div>
+                <div class="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                    <div>
+                        <div class="flex items-center gap-2 text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">
+                            <i class="fa-solid fa-bolt text-yellow-400"></i> Quick Panel
+                        </div>
+                        <h2 class="text-2xl md:text-3xl font-black uppercase tracking-tight">Command Center</h2>
+                        <p class="text-slate-400 text-xs mt-1 font-medium">Rapid actions & system overview</p>
+                    </div>
+                    <div class="flex items-center gap-4 bg-white/10 backdrop-blur-sm px-5 py-3 rounded-2xl">
+                        <div class="text-center">
+                            <p class="text-[8px] font-black text-slate-400 uppercase">Today</p>
+                            <p class="text-lg font-black" id="header-date">--</p>
+                        </div>
+                        <div class="w-px h-10 bg-white/20"></div>
+                        <div class="text-center">
+                            <p class="text-[8px] font-black text-slate-400 uppercase">Time</p>
+                            <p class="text-lg font-black" id="header-time">--:--</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SYSTEM STATUS -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                <div class="glass-card p-5 rounded-[2rem] text-center">
+                    <span class="status-dot online mb-2"></span>
+                    <p class="text-[10px] font-black text-gray-400 uppercase">Supabase</p>
+                    <p class="text-xs font-bold text-green-600">Connected</p>
+                </div>
+                <div class="glass-card p-5 rounded-[2rem] text-center">
+                    <span class="status-dot online mb-2"></span>
+                    <p class="text-[10px] font-black text-gray-400 uppercase">Pathao API</p>
+                    <p class="text-xs font-bold text-green-600" id="status-pathao">Checking...</p>
+                </div>
+                <div class="glass-card p-5 rounded-[2rem] text-center">
+                    <span class="status-dot online mb-2"></span>
+                    <p class="text-[10px] font-black text-gray-400 uppercase">Storage</p>
+                    <p class="text-xs font-bold text-green-600" id="status-storage">Active</p>
+                </div>
+                <div class="glass-card p-5 rounded-[2rem] text-center">
+                    <span class="status-dot online mb-2"></span>
+                    <p class="text-[10px] font-black text-gray-400 uppercase">Auth</p>
+                    <p class="text-xs font-bold text-green-600" id="status-auth">Secure</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- QUICK ACTIONS -->
+                <div class="glass-card p-6 md:p-8 rounded-[3rem] shadow-sm">
+                    <h3 class="text-sm font-black uppercase mb-6 flex items-center gap-2">
+                        <i class="fa-solid fa-wand-magic-sparkles text-yellow-500"></i> Quick Actions
+                    </h3>
+                    <div class="grid grid-cols-2 gap-3" id="quick-actions-grid"></div>
+                </div>
+
+                <!-- KEYBOARD SHORTCUTS -->
+                <div class="glass-card p-6 md:p-8 rounded-[3rem] shadow-sm">
+                    <h3 class="text-sm font-black uppercase mb-6 flex items-center gap-2">
+                        <i class="fa-solid fa-keyboard text-blue-500"></i> Shortcuts
+                    </h3>
+                    <div class="space-y-2" id="shortcuts-list"></div>
+                </div>
+
+                <!-- DATABASE STATS -->
+                <div class="glass-card p-6 md:p-8 rounded-[3rem] shadow-sm">
+                    <h3 class="text-sm font-black uppercase mb-6 flex items-center gap-2">
+                        <i class="fa-solid fa-database text-purple-500"></i> Database Stats
+                    </h3>
+                    <div class="space-y-3" id="db-stats"></div>
+                </div>
+            </div>
+
+            <!-- RECENT ACTIVITY -->
+            <div class="glass-card p-6 md:p-8 rounded-[3rem] shadow-sm mt-8">
+                <h3 class="text-sm font-black uppercase mb-6 flex items-center gap-2">
+                    <i class="fa-solid fa-clock-rotate-left text-orange-500"></i> Recent Activity Feed
+                </h3>
+                <div id="activity-feed" class="space-y-3">
+                    <div class="text-center py-6 text-xs text-gray-400">Loading activity...</div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- MOBILE NAV -->
+    <nav class="bottom-nav hidden">
+        <div class="flex justify-around items-center px-2">
+            <a href="/home" class="flex flex-col items-center gap-1 p-2 text-[10px] font-black text-gray-400 no-underline"><i class="fa-solid fa-house text-lg"></i> Home</a>
+            <a href="/quick" class="flex flex-col items-center gap-1 p-2 text-[10px] font-black text-slate-800 no-underline"><i class="fa-solid fa-bolt text-lg"></i> Quick</a>
+            <a href="/orders" class="flex flex-col items-center gap-1 p-2 text-[10px] font-black text-gray-400 no-underline"><i class="fa-solid fa-cart-shopping text-lg"></i> Orders</a>
+            <a href="/products" class="flex flex-col items-center gap-1 p-2 text-[10px] font-black text-gray-400 no-underline"><i class="fa-solid fa-box text-lg"></i> Products</a>
+            <a href="/ai" class="flex flex-col items-center gap-1 p-2 text-[10px] font-black text-gray-400 no-underline"><i class="fa-solid fa-robot text-lg"></i> AI</a>
+        </div>
+    </nav>
+
+    <script>
+        const SUPABASE_URL = "https://vdqbjwzixppbtkbgvhlq.supabase.co";
+        const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZkcWJqd3ppeHBwYnRrYmd2aGxxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgwMDc3MzQsImV4cCI6MjA5MzU4MzczNH0.E6C0_7SWIrTMJlFe5t8EbNAW5fzlpg-fKV3ZV0XYd3k";
+        const ADMIN_EMAIL = "binzeo369@gmail.com";
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        let isDarkMode = false;
+
+        function showToast(m, t = 'success') {
+            const el = document.createElement('div');
+            el.className = `fixed bottom-20 md:bottom-6 right-6 px-5 py-3.5 rounded-2xl font-black text-sm text-white shadow-2xl z-[9999] toast-enter ${t==='success'?'bg-green-500':t==='error'?'bg-red-500':'bg-blue-500'}`;
+            el.innerHTML = `<span><i class="fa-solid fa-${t==='success'?'check-circle':'exclamation-circle'} mr-2"></i>${m}</span>`;
+            document.body.appendChild(el); setTimeout(() => { el.classList.add('toast-exit'); setTimeout(() => el.remove(), 300); }, 3000);
+        }
+
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('header-date').textContent = now.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+            document.getElementById('header-time').textContent = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
+        }
+
+        function renderQuickActions() {
+            const actions = [
+                { label: 'New Order', icon: 'fa-cart-plus', color: 'bg-orange-500', url: '/orders' },
+                { label: 'Add Product', icon: 'fa-box', color: 'bg-blue-500', url: '/products' },
+                { label: 'Create Promo', icon: 'fa-ticket', color: 'bg-purple-500', url: '/promo' },
+                { label: 'View Analytics', icon: 'fa-chart-line', color: 'bg-green-500', url: '/analytics' },
+                { label: 'Check Visitors', icon: 'fa-users', color: 'bg-cyan-500', url: '/visitors' },
+                { label: 'AI Insights', icon: 'fa-robot', color: 'bg-pink-500', url: '/ai' },
+                { label: 'Send Courier', icon: 'fa-truck-fast', color: 'bg-yellow-500', url: '/courier' },
+                { label: 'Add Banner', icon: 'fa-image', color: 'bg-indigo-500', url: '/banners' },
+            ];
+
+            document.getElementById('quick-actions-grid').innerHTML = actions.map(a => `
+                <div onclick="window.location.href='${a.url}'" class="action-card bg-gray-50 rounded-2xl p-4 text-center border relative overflow-hidden">
+                    <div class="card-glow"></div>
+                    <div class="w-10 h-10 ${a.color} text-white rounded-xl flex items-center justify-center mx-auto mb-2 text-sm relative z-10">
+                        <i class="fa-solid ${a.icon}"></i>
+                    </div>
+                    <p class="text-[10px] font-black uppercase relative z-10">${a.label}</p>
+                </div>
+            `).join('');
+        }
+
+        function renderShortcuts() {
+            const shortcuts = [
+                { keys: ['Ctrl', 'K'], action: 'Global Search' },
+                { keys: ['Esc'], action: 'Close Modal/Drawer' },
+                { keys: ['Enter'], action: 'Submit Form' },
+                { keys: ['Ctrl', 'D'], action: 'Toggle Dark Mode' },
+                { keys: ['Ctrl', 'R'], action: 'Refresh Data' },
+                { keys: ['Ctrl', 'H'], action: 'Go to Home' },
+                { keys: ['Ctrl', 'O'], action: 'Go to Orders' },
+                { keys: ['Ctrl', 'P'], action: 'Go to Products' },
+            ];
+
+            document.getElementById('shortcuts-list').innerHTML = shortcuts.map(s => `
+                <div class="flex justify-between items-center py-2.5 border-b last:border-0">
+                    <span class="text-[10px] font-bold text-gray-500">${s.action}</span>
+                    <span>${s.keys.map(k => `<span class="shortcut-key">${k}</span>`).join(' + ')}</span>
+                </div>
+            `).join('');
+        }
+
+        async function loadDbStats() {
+            try {
+                const [{ count: orders }, { count: products }, { count: visitors }, { count: promos }] = await Promise.all([
+                    _supabase.from('orders').select('*', { count: 'exact', head: true }),
+                    _supabase.from('products').select('*', { count: 'exact', head: true }),
+                    _supabase.from('visitor_logs').select('*', { count: 'exact', head: true }),
+                    _supabase.from('promo_codes').select('*', { count: 'exact', head: true }),
+                ]);
+
+                const stats = [
+                    { label: 'Orders', count: orders || 0, icon: 'fa-cart-shopping', color: 'text-orange-500' },
+                    { label: 'Products', count: products || 0, icon: 'fa-box', color: 'text-blue-500' },
+                    { label: 'Visitors', count: visitors || 0, icon: 'fa-users', color: 'text-green-500' },
+                    { label: 'Promo Codes', count: promos || 0, icon: 'fa-ticket', color: 'text-purple-500' },
+                ];
+
+                document.getElementById('db-stats').innerHTML = stats.map(s => `
+                    <div class="flex justify-between items-center p-3 bg-gray-50 rounded-2xl">
+                        <span class="text-xs font-bold flex items-center gap-2">
+                            <i class="fa-solid ${s.icon} ${s.color}"></i> ${s.label}
+                        </span>
+                        <span class="text-sm font-black">${s.count.toLocaleString()}</span>
+                    </div>
+                `).join('');
+
+                // Activity feed
+                const { data: recentOrders } = await _supabase.from('orders').select('*').order('created_at', { ascending: false }).limit(5);
+                const { data: recentVisitors } = await _supabase.from('visitor_logs').select('*').order('created_at', { ascending: false }).limit(3);
+
+                let feed = [];
+                if (recentOrders) {
+                    recentOrders.forEach(o => {
+                        feed.push({
+                            type: 'order',
+                            icon: 'fa-cart-shopping',
+                            color: 'text-orange-500 bg-orange-50',
+                            text: `New order #${o.id} by ${o.member_name || 'Customer'}`,
+                            time: new Date(o.created_at)
+                        });
+                    });
+                }
+                if (recentVisitors) {
+                    recentVisitors.forEach(v => {
+                        feed.push({
+                            type: 'visitor',
+                            icon: 'fa-eye',
+                            color: 'text-green-500 bg-green-50',
+                            text: `Visitor from ${v.ip_address || 'Unknown'} viewed ${v.page_visited || 'Home'}`,
+                            time: new Date(v.created_at)
+                        });
+                    });
+                }
+
+                feed.sort((a, b) => b.time - a.time);
+                feed = feed.slice(0, 8);
+
+                document.getElementById('activity-feed').innerHTML = feed.length > 0 ? feed.map(f => {
+                    const timeAgo = Math.floor((Date.now() - f.time) / 60000);
+                    const timeStr = timeAgo < 1 ? 'Just now' : timeAgo < 60 ? `${timeAgo}m ago` : timeAgo < 1440 ? `${Math.floor(timeAgo/60)}h ago` : `${Math.floor(timeAgo/1440)}d ago`;
+                    return `
+                    <div class="flex items-center gap-3 p-3 ${f.color.split(' ')[1]} rounded-2xl">
+                        <i class="fa-solid ${f.icon} ${f.color.split(' ')[0]}"></i>
+                        <span class="text-[10px] font-bold flex-grow">${f.text}</span>
+                        <span class="text-[8px] text-gray-400">${timeStr}</span>
+                    </div>`;
+                }).join('') : '<div class="text-center py-4 text-xs text-gray-400">No recent activity</div>';
+
+            } catch (e) {
+                console.error('Error loading stats:', e);
+            }
+        }
+
+        async function checkPathaoStatus() {
+            try {
+                const res = await fetch("https://api-hermes.pathao.com/aladdin/api/v1/issue-token", {
+                    method: "POST", headers: { "content-type": "application/json" },
+                    body: JSON.stringify({
+                        client_id: "8mep20QbMy", client_secret: "YrXvPYHPDrjFbLrNgDTMmYwExsKTkqi9RWdhW1Uk",
+                        username: "binzeo369@gmail.com", password: "jayen@369", grant_type: "password"
+                    })
+                });
+                const data = await res.json();
+                document.getElementById('status-pathao').textContent = data.access_token ? 'Connected' : 'Failed';
+                if (!data.access_token) {
+                    document.getElementById('status-pathao').className = 'text-xs font-bold text-red-600';
+                }
+            } catch (e) {
+                document.getElementById('status-pathao').textContent = 'Offline';
+                document.getElementById('status-pathao').className = 'text-xs font-bold text-red-600';
+            }
+        }
+
+        async function checkSession() {
+            const { data: { session } } = await _supabase.auth.getSession();
+            if (!session || session.user.email !== ADMIN_EMAIL) { window.location.href = '/login'; return; }
+            document.getElementById('global-loader').style.display = 'none';
+            document.getElementById('main-layout').classList.remove('hidden');
+            if (localStorage.getItem('darkMode') === 'true') { isDarkMode = true; document.body.classList.add('dark'); }
+            if (window.innerWidth < 769) document.querySelector('.bottom-nav').classList.remove('hidden');
+
+            updateClock();
+            setInterval(updateClock, 1000);
+            renderQuickActions();
+            renderShortcuts();
+            await loadDbStats();
+            await checkPathaoStatus();
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'd') { e.preventDefault(); document.body.classList.toggle('dark'); }
+            if ((e.ctrlKey || e.metaKey) && e.key === 'h') { e.preventDefault(); window.location.href = '/home'; }
+            if ((e.ctrlKey || e.metaKey) && e.key === 'o') { e.preventDefault(); window.location.href = '/orders'; }
+            if ((e.ctrlKey || e.metaKey) && e.key === 'p') { e.preventDefault(); window.location.href = '/products'; }
+            if ((e.ctrlKey || e.metaKey) && e.key === 'r') { e.preventDefault(); location.reload(); }
+        });
+
+        window.onload = checkSession;
+        window.addEventListener('resize', () => { document.querySelector('.bottom-nav').classList.toggle('hidden', window.innerWidth >= 769); });
+    </script>
+</body>
+</html>

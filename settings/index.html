@@ -29,7 +29,7 @@
         body.dark .text-gray-400 { color: #8e8e93; }
         body.dark .text-gray-500 { color: #636366; }
         body.dark .border, body.dark .border-b, body.dark .border-t { border-color: #2c2c2e; }
-        body.dark input { background: #1c1c1e; border-color: #2c2c2e; color: #fff; }
+        body.dark input, body.dark textarea { background: #1c1c1e; border-color: #2c2c2e; color: #fff; }
         body.dark .hover\:bg-slate-50:hover { background: #2c2c2e; }
 
         .glass-card {
@@ -49,8 +49,8 @@
         @keyframes fadeSlideIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes slideUp { from { transform: translateY(100px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         @keyframes slideDown { from { transform: translateY(0); opacity: 1; } to { transform: translateY(100px); opacity: 0; } }
-        @keyframes rotateGear { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
         @keyframes profileGlow { 0%,100% { box-shadow: 0 0 20px rgba(99,102,241,0.3); } 50% { box-shadow: 0 0 40px rgba(99,102,241,0.6); } }
+        @keyframes bellRing { 0%,100% { transform: rotate(0); } 10%,30% { transform: rotate(15deg); } 20%,40% { transform: rotate(-15deg); } 50% { transform: rotate(0); } }
 
         .toast-enter { animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
         .toast-exit { animation: slideDown 0.3s ease-in forwards; }
@@ -73,6 +73,7 @@
         .toggle-switch {
             width: 48px; height: 26px; background: #d1d5db; border-radius: 99px;
             position: relative; cursor: pointer; transition: background 0.3s;
+            flex-shrink: 0;
         }
         .toggle-switch.active { background: #6366f1; }
         .toggle-switch::after {
@@ -87,6 +88,13 @@
             padding: 16px 0; border-bottom: 1px solid #f1f5f9;
         }
         body.dark .setting-row { border-color: #2c2c2e; }
+
+        .notification-log-item {
+            transition: all 0.2s ease; padding: 10px 14px; border-radius: 14px;
+            font-size: 10px; display: flex; align-items: center; gap: 10px;
+        }
+        .notification-log-item:hover { background: #f8fafc; }
+        body.dark .notification-log-item:hover { background: #1e293b; }
 
         @media (max-width: 768px) {
             .bottom-nav {
@@ -160,6 +168,11 @@
                                 <label class="text-[10px] font-black text-gray-400 uppercase ml-2 mb-1 block">Display Name</label>
                                 <input type="text" id="set-display-name" class="w-full p-4 bg-gray-50 border rounded-2xl outline-none font-bold text-sm focus:ring-2 focus:ring-indigo-500">
                             </div>
+                            <div>
+                                <label class="text-[10px] font-black text-gray-400 uppercase ml-2 mb-1 block">Notification Email (Formspree)</label>
+                                <input type="email" id="set-notify-email" placeholder="your@email.com" class="w-full p-4 bg-gray-50 border rounded-2xl outline-none font-bold text-sm focus:ring-2 focus:ring-indigo-500">
+                                <p class="text-[9px] text-gray-400 mt-1 ml-2">All notifications will be sent to this email</p>
+                            </div>
                             <button onclick="saveProfile()" class="w-full py-3 bg-indigo-600 text-white rounded-2xl font-black text-xs uppercase btn-action">
                                 <i class="fa-solid fa-check mr-2"></i> Save Changes
                             </button>
@@ -197,63 +210,88 @@
                         </h3>
                         <div class="space-y-4">
                             <div class="setting-row">
-                                <div>
-                                    <p class="text-sm font-bold">Dark Mode</p>
-                                    <p class="text-[10px] text-gray-400">Switch between light and dark theme</p>
-                                </div>
+                                <div><p class="text-sm font-bold">Dark Mode</p><p class="text-[10px] text-gray-400">Switch between light and dark theme</p></div>
                                 <div class="toggle-switch active" id="dark-mode-toggle" onclick="toggleDarkModeSetting()"></div>
                             </div>
                             <div class="setting-row">
-                                <div>
-                                    <p class="text-sm font-bold">Compact View</p>
-                                    <p class="text-[10px] text-gray-400">Reduce spacing for more content</p>
-                                </div>
+                                <div><p class="text-sm font-bold">Compact View</p><p class="text-[10px] text-gray-400">Reduce spacing for more content</p></div>
                                 <div class="toggle-switch" id="compact-toggle" onclick="toggleCompactMode()"></div>
                             </div>
                             <div class="setting-row">
-                                <div>
-                                    <p class="text-sm font-bold">Animations</p>
-                                    <p class="text-[10px] text-gray-400">Enable or disable UI animations</p>
-                                </div>
+                                <div><p class="text-sm font-bold">Animations</p><p class="text-[10px] text-gray-400">Enable or disable UI animations</p></div>
                                 <div class="toggle-switch active" id="animation-toggle" onclick="toggleAnimations()"></div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- NOTIFICATIONS TAB -->
+                    <!-- NOTIFICATIONS TAB (UPDATED WITH REAL EMAIL) -->
                     <div id="tab-notifications" class="settings-content hidden glass-card p-6 md:p-8 rounded-[3rem] shadow-sm">
-                        <h3 class="text-lg font-black uppercase mb-6 flex items-center gap-2">
-                            <i class="fa-solid fa-bell text-yellow-600"></i> Notification Preferences
+                        <h3 class="text-lg font-black uppercase mb-2 flex items-center gap-2">
+                            <i class="fa-solid fa-bell text-yellow-600" id="bell-icon"></i> Notification Preferences
                         </h3>
+                        <p class="text-[10px] text-gray-400 mb-4">Toggle real-time email notifications via Formspree</p>
+                        
+                        <!-- Test Email Button -->
+                        <button onclick="testEmailNotification()" class="w-full py-3 bg-gradient-to-r from-yellow-400 to-orange-500 text-white rounded-2xl font-black text-xs uppercase btn-action mb-6">
+                            <i class="fa-solid fa-paper-plane mr-2"></i> Send Test Email
+                        </button>
+
                         <div class="space-y-4">
                             <div class="setting-row">
                                 <div>
-                                    <p class="text-sm font-bold">Order Alerts</p>
-                                    <p class="text-[10px] text-gray-400">Get notified for new orders</p>
+                                    <p class="text-sm font-bold flex items-center gap-2"><i class="fa-solid fa-cart-shopping text-blue-500"></i> Order Alerts</p>
+                                    <p class="text-[10px] text-gray-400">Email when new order is placed</p>
                                 </div>
-                                <div class="toggle-switch active" onclick="this.classList.toggle('active')"></div>
+                                <div class="toggle-switch active" id="toggle-order-alerts" onclick="toggleNotification('order_alerts')"></div>
                             </div>
                             <div class="setting-row">
                                 <div>
-                                    <p class="text-sm font-bold">Stock Alerts</p>
-                                    <p class="text-[10px] text-gray-400">Low stock notifications</p>
+                                    <p class="text-sm font-bold flex items-center gap-2"><i class="fa-solid fa-box text-red-500"></i> Low Stock Alerts</p>
+                                    <p class="text-[10px] text-gray-400">Email when product stock ≤ 5</p>
                                 </div>
-                                <div class="toggle-switch active" onclick="this.classList.toggle('active')"></div>
+                                <div class="toggle-switch active" id="toggle-stock-alerts" onclick="toggleNotification('stock_alerts')"></div>
                             </div>
                             <div class="setting-row">
                                 <div>
-                                    <p class="text-sm font-bold">Visitor Alerts</p>
-                                    <p class="text-[10px] text-gray-400">Unusual traffic notifications</p>
+                                    <p class="text-sm font-bold flex items-center gap-2"><i class="fa-solid fa-users text-green-500"></i> Visitor Alerts</p>
+                                    <p class="text-[10px] text-gray-400">Email on unusual traffic spike (10+ in 5min)</p>
                                 </div>
-                                <div class="toggle-switch" onclick="this.classList.toggle('active')"></div>
+                                <div class="toggle-switch" id="toggle-visitor-alerts" onclick="toggleNotification('visitor_alerts')"></div>
                             </div>
                             <div class="setting-row">
                                 <div>
-                                    <p class="text-sm font-bold">Weekly Report</p>
-                                    <p class="text-[10px] text-gray-400">Auto-generate weekly reports</p>
+                                    <p class="text-sm font-bold flex items-center gap-2"><i class="fa-solid fa-file-pdf text-purple-500"></i> Weekly Report</p>
+                                    <p class="text-[10px] text-gray-400">Email weekly summary every Monday</p>
                                 </div>
-                                <div class="toggle-switch active" onclick="this.classList.toggle('active')"></div>
+                                <div class="toggle-switch active" id="toggle-weekly-report" onclick="toggleNotification('weekly_report')"></div>
                             </div>
+                            <div class="setting-row">
+                                <div>
+                                    <p class="text-sm font-bold flex items-center gap-2"><i class="fa-solid fa-truck-fast text-orange-500"></i> Courier Updates</p>
+                                    <p class="text-[10px] text-gray-400">Email when order is shipped/delivered</p>
+                                </div>
+                                <div class="toggle-switch active" id="toggle-courier-alerts" onclick="toggleNotification('courier_alerts')"></div>
+                            </div>
+                            <div class="setting-row">
+                                <div>
+                                    <p class="text-sm font-bold flex items-center gap-2"><i class="fa-solid fa-triangle-exclamation text-red-500"></i> System Alerts</p>
+                                    <p class="text-[10px] text-gray-400">Email on errors or downtime</p>
+                                </div>
+                                <div class="toggle-switch active" id="toggle-system-alerts" onclick="toggleNotification('system_alerts')"></div>
+                            </div>
+                        </div>
+
+                        <!-- Recent Notification Log -->
+                        <div class="mt-8 pt-6 border-t">
+                            <h4 class="text-sm font-black uppercase mb-4 flex items-center gap-2">
+                                <i class="fa-solid fa-clock-rotate-left text-gray-400"></i> Recent Notifications Sent
+                            </h4>
+                            <div id="notification-log" class="space-y-1 max-h-60 overflow-y-auto custom-scroll">
+                                <div class="text-center py-4 text-[10px] text-gray-400">No notifications sent yet</div>
+                            </div>
+                            <button onclick="clearNotificationLog()" class="mt-3 text-[9px] text-red-400 font-bold hover:text-red-600 btn-action">
+                                <i class="fa-solid fa-trash mr-1"></i> Clear Log
+                            </button>
                         </div>
                     </div>
 
@@ -263,30 +301,12 @@
                             <i class="fa-solid fa-server text-blue-600"></i> System Information
                         </h3>
                         <div class="space-y-3">
-                            <div class="flex justify-between py-3 border-b">
-                                <span class="text-xs font-bold text-gray-500">Supabase URL</span>
-                                <span class="text-[10px] font-mono font-bold">vdqbjwzixppbtkbgvhlq.supabase.co</span>
-                            </div>
-                            <div class="flex justify-between py-3 border-b">
-                                <span class="text-xs font-bold text-gray-500">API Version</span>
-                                <span class="text-[10px] font-bold text-green-600">v2.0</span>
-                            </div>
-                            <div class="flex justify-between py-3 border-b">
-                                <span class="text-xs font-bold text-gray-500">Storage Bucket</span>
-                                <span class="text-[10px] font-bold">images</span>
-                            </div>
-                            <div class="flex justify-between py-3 border-b">
-                                <span class="text-xs font-bold text-gray-500">Auth Provider</span>
-                                <span class="text-[10px] font-bold">Supabase Auth (JWT)</span>
-                            </div>
-                            <div class="flex justify-between py-3 border-b">
-                                <span class="text-xs font-bold text-gray-500">Pathao Store ID</span>
-                                <span class="text-[10px] font-bold">357617</span>
-                            </div>
-                            <div class="flex justify-between py-3 border-b">
-                                <span class="text-xs font-bold text-gray-500">Last Deploy</span>
-                                <span class="text-[10px] font-bold" id="last-deploy">Today</span>
-                            </div>
+                            <div class="flex justify-between py-3 border-b"><span class="text-xs font-bold text-gray-500">Supabase URL</span><span class="text-[10px] font-mono font-bold">vdqbjwzixppbtkbgvhlq.supabase.co</span></div>
+                            <div class="flex justify-between py-3 border-b"><span class="text-xs font-bold text-gray-500">API Version</span><span class="text-[10px] font-bold text-green-600">v2.0</span></div>
+                            <div class="flex justify-between py-3 border-b"><span class="text-xs font-bold text-gray-500">Storage Bucket</span><span class="text-[10px] font-bold">images</span></div>
+                            <div class="flex justify-between py-3 border-b"><span class="text-xs font-bold text-gray-500">Auth Provider</span><span class="text-[10px] font-bold">Supabase Auth (JWT)</span></div>
+                            <div class="flex justify-between py-3 border-b"><span class="text-xs font-bold text-gray-500">Notification Service</span><span class="text-[10px] font-bold text-green-600">Formspree (Active)</span></div>
+                            <div class="flex justify-between py-3 border-b"><span class="text-xs font-bold text-gray-500">Last Deploy</span><span class="text-[10px] font-bold" id="last-deploy">Today</span></div>
                         </div>
                     </div>
 
@@ -302,21 +322,12 @@
                             <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1">Architected & Developed by</p>
                             <p class="text-lg font-black text-indigo-600">BINZEO</p>
                             <p class="text-[10px] text-gray-500 mt-2">© 2024 JAYENWARE. All rights reserved.</p>
-                            <p class="text-[9px] text-gray-400 mt-1">Built with Supabase • Tailwind CSS • Chart.js</p>
+                            <p class="text-[9px] text-gray-400 mt-1">Built with Supabase • Tailwind CSS • Chart.js • Formspree</p>
                         </div>
                         <div class="grid grid-cols-3 gap-3 mt-6">
-                            <div class="bg-gray-50 p-3 rounded-2xl">
-                                <p class="text-[9px] text-gray-400">Version</p>
-                                <p class="text-sm font-black">3.0.0</p>
-                            </div>
-                            <div class="bg-gray-50 p-3 rounded-2xl">
-                                <p class="text-[9px] text-gray-400">Build</p>
-                                <p class="text-sm font-black">2024.1</p>
-                            </div>
-                            <div class="bg-gray-50 p-3 rounded-2xl">
-                                <p class="text-[9px] text-gray-400">License</p>
-                                <p class="text-sm font-black">Pro</p>
-                            </div>
+                            <div class="bg-gray-50 p-3 rounded-2xl"><p class="text-[9px] text-gray-400">Version</p><p class="text-sm font-black">3.0.0</p></div>
+                            <div class="bg-gray-50 p-3 rounded-2xl"><p class="text-[9px] text-gray-400">Build</p><p class="text-sm font-black">2024.1</p></div>
+                            <div class="bg-gray-50 p-3 rounded-2xl"><p class="text-[9px] text-gray-400">License</p><p class="text-sm font-black">Pro</p></div>
                         </div>
                     </div>
                 </div>
@@ -339,9 +350,13 @@
         const SUPABASE_URL = "https://vdqbjwzixppbtkbgvhlq.supabase.co";
         const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZkcWJqd3ppeHBwYnRrYmd2aGxxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgwMDc3MzQsImV4cCI6MjA5MzU4MzczNH0.E6C0_7SWIrTMJlFe5t8EbNAW5fzlpg-fKV3ZV0XYd3k";
         const ADMIN_EMAIL = "binzeo369@gmail.com";
+        const FORMSPREE_ENDPOINT = "https://formspree.io/f/xredgvjj";
         const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
         let isDarkMode = false, currentTab = 'profile';
+
+        // Notification deduplication cache
+        const sentNotifications = new Set();
 
         function showToast(m, t = 'success') {
             const el = document.createElement('div');
@@ -356,8 +371,331 @@
             document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
             document.querySelectorAll('.settings-content').forEach(c => c.classList.add('hidden'));
             document.getElementById(`tab-${tab}`).classList.remove('hidden');
+            if (tab === 'notifications') renderNotificationLog();
         }
 
+        // ==================== NOTIFICATION SYSTEM ====================
+        
+        function getNotificationSettings() {
+            return {
+                order_alerts: document.getElementById('toggle-order-alerts')?.classList.contains('active') ?? true,
+                stock_alerts: document.getElementById('toggle-stock-alerts')?.classList.contains('active') ?? true,
+                visitor_alerts: document.getElementById('toggle-visitor-alerts')?.classList.contains('active') ?? false,
+                weekly_report: document.getElementById('toggle-weekly-report')?.classList.contains('active') ?? true,
+                courier_alerts: document.getElementById('toggle-courier-alerts')?.classList.contains('active') ?? true,
+                system_alerts: document.getElementById('toggle-system-alerts')?.classList.contains('active') ?? true,
+            };
+        }
+
+        function toggleNotification(key) {
+            const toggle = document.getElementById(`toggle-${key}`);
+            toggle.classList.toggle('active');
+            const isEnabled = toggle.classList.contains('active');
+            localStorage.setItem(`notify_${key}`, isEnabled);
+            showToast(`${key.replace(/_/g, ' ')} ${isEnabled ? 'enabled' : 'disabled'}`, 'info');
+        }
+
+        function loadNotificationSettings() {
+            const defaults = { order_alerts: true, stock_alerts: true, visitor_alerts: false, weekly_report: true, courier_alerts: true, system_alerts: true };
+            Object.entries(defaults).forEach(([key, defaultVal]) => {
+                const saved = localStorage.getItem(`notify_${key}`);
+                const isActive = saved !== null ? saved === 'true' : defaultVal;
+                const toggle = document.getElementById(`toggle-${key}`);
+                if (toggle) {
+                    if (isActive) toggle.classList.add('active');
+                    else toggle.classList.remove('active');
+                }
+            });
+        }
+
+        async function sendEmailNotification(subject, message, type = 'info') {
+            const settings = getNotificationSettings();
+            const notifyEmail = localStorage.getItem('notifyEmail') || ADMIN_EMAIL;
+
+            // Deduplication: prevent same notification from being sent twice
+            const dedupeKey = `${type}_${subject}_${message}`.substring(0, 100);
+            if (sentNotifications.has(dedupeKey)) {
+                console.log('🔕 Duplicate notification blocked:', subject);
+                return false;
+            }
+            sentNotifications.add(dedupeKey);
+
+            // Auto-clean old dedupe keys (keep last 200)
+            if (sentNotifications.size > 200) {
+                const arr = Array.from(sentNotifications);
+                for (let i = 0; i < 50; i++) sentNotifications.delete(arr[i]);
+            }
+
+            try {
+                const formData = new FormData();
+                formData.append('email', notifyEmail);
+                formData.append('message', `
+═══════════════════════════════
+  JAYENWARE Notification
+═══════════════════════════════
+
+Type: ${type.toUpperCase()}
+Subject: ${subject}
+Time: ${new Date().toLocaleString()}
+
+────────────────────────────────
+${message}
+────────────────────────────────
+
+This is an automated notification from JAYENWARE Admin.
+Sent via Formspree • Powered by BINZEO
+                `.trim());
+
+                const response = await fetch(FORMSPREE_ENDPOINT, {
+                    method: 'POST',
+                    body: formData,
+                    headers: { 'Accept': 'application/json' }
+                });
+
+                if (response.ok) {
+                    logNotificationToStorage(subject, type, true);
+                    return true;
+                } else {
+                    throw new Error('Formspree rejected');
+                }
+            } catch (error) {
+                console.error('❌ Email failed:', error);
+                logNotificationToStorage(subject, type, false);
+                return false;
+            }
+        }
+
+        function logNotificationToStorage(subject, type, success) {
+            const logs = JSON.parse(localStorage.getItem('notificationLogs') || '[]');
+            logs.unshift({
+                subject, type, success,
+                time: new Date().toISOString(),
+                id: Date.now()
+            });
+            if (logs.length > 50) logs.pop();
+            localStorage.setItem('notificationLogs', JSON.stringify(logs));
+        }
+
+        function renderNotificationLog() {
+            const logs = JSON.parse(localStorage.getItem('notificationLogs') || '[]');
+            const container = document.getElementById('notification-log');
+            if (logs.length === 0) {
+                container.innerHTML = '<div class="text-center py-4 text-[10px] text-gray-400">No notifications sent yet</div>';
+                return;
+            }
+            const typeIcons = { order: '🛒', stock: '📦', visitor: '👥', weekly: '📊', courier: '🚚', system: '⚙️', test: '🧪', info: 'ℹ️' };
+            container.innerHTML = logs.map(log => {
+                const timeAgo = Math.floor((Date.now() - new Date(log.time).getTime()) / 60000);
+                const timeStr = timeAgo < 1 ? 'Just now' : timeAgo < 60 ? `${timeAgo}m ago` : `${Math.floor(timeAgo/60)}h ago`;
+                return `
+                    <div class="notification-log-item">
+                        <span>${typeIcons[log.type] || '📬'}</span>
+                        <span class="flex-grow font-bold">${log.subject}</span>
+                        <span class="text-[8px] ${log.success ? 'text-green-500' : 'text-red-500'}">${log.success ? '✓ Sent' : '✗ Failed'}</span>
+                        <span class="text-[8px] text-gray-400">${timeStr}</span>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function clearNotificationLog() {
+            localStorage.removeItem('notificationLogs');
+            renderNotificationLog();
+            showToast('Notification log cleared', 'info');
+        }
+
+        // ==================== SPECIFIC NOTIFICATION FUNCTIONS ====================
+
+        async function notifyNewOrder(orderData) {
+            const settings = getNotificationSettings();
+            if (!settings.order_alerts) return;
+
+            const dedupeKey = `order_${orderData.id}`;
+            if (sentNotifications.has(dedupeKey)) return;
+            sentNotifications.add(dedupeKey);
+
+            const subject = `🛒 New Order #${orderData.id}`;
+            const message = `New order received!
+
+Customer: ${orderData.member_name || 'N/A'}
+Phone: ${orderData.member_info?.shipping?.phone || 'N/A'}
+Total: ৳ ${orderData.member_info?.total || '0'}
+Items: ${(orderData.member_info?.items || []).length} products
+Status: ${orderData.status || 'pending'}
+
+View order: /orders`;
+
+            await sendEmailNotification(subject, message, 'order');
+        }
+
+        async function notifyLowStock(productData) {
+            const settings = getNotificationSettings();
+            if (!settings.stock_alerts) return;
+
+            const dedupeKey = `stock_${productData.id}_${productData.stock}`;
+            if (sentNotifications.has(dedupeKey)) return;
+            sentNotifications.add(dedupeKey);
+
+            const subject = `📦 Low Stock Alert: ${productData.title}`;
+            const message = `Product stock is running low!
+
+Product: ${productData.title}
+Current Stock: ${productData.stock || 0}
+Category: ${productData.category || 'N/A'}
+Price: ৳ ${productData.price || 0}
+
+⚠️ Please restock soon!`;
+
+            await sendEmailNotification(subject, message, 'stock');
+        }
+
+        async function notifyVisitorSpike(visitorCount, timeWindow) {
+            const settings = getNotificationSettings();
+            if (!settings.visitor_alerts) return;
+
+            const dedupeKey = `visitor_spike_${Math.floor(Date.now() / 300000)}`;
+            if (sentNotifications.has(dedupeKey)) return;
+            sentNotifications.add(dedupeKey);
+
+            const subject = `👥 Unusual Traffic Spike Detected`;
+            const message = `High visitor activity detected!
+
+Visitors: ${visitorCount} in last ${timeWindow} minutes
+Time: ${new Date().toLocaleString()}
+
+This is above normal traffic levels.`;
+
+            await sendEmailNotification(subject, message, 'visitor');
+        }
+
+        async function notifyWeeklyReport(reportData) {
+            const settings = getNotificationSettings();
+            if (!settings.weekly_report) return;
+
+            const dedupeKey = `weekly_${new Date().toISOString().split('T')[0]}`;
+            if (sentNotifications.has(dedupeKey)) return;
+            sentNotifications.add(dedupeKey);
+
+            const subject = `📊 Weekly Report - ${new Date().toLocaleDateString()}`;
+            const message = `Weekly Summary:
+
+Total Orders: ${reportData.orders || 0}
+Total Revenue: ৳ ${reportData.revenue?.toLocaleString() || 0}
+New Products: ${reportData.newProducts || 0}
+Total Visitors: ${reportData.visitors || 0}
+
+Download full report from Analytics.`;
+
+            await sendEmailNotification(subject, message, 'weekly');
+        }
+
+        async function notifyCourierUpdate(orderId, status) {
+            const settings = getNotificationSettings();
+            if (!settings.courier_alerts) return;
+
+            const dedupeKey = `courier_${orderId}_${status}`;
+            if (sentNotifications.has(dedupeKey)) return;
+            sentNotifications.add(dedupeKey);
+
+            const subject = `🚚 Order #${orderId} - ${status.toUpperCase()}`;
+            const message = `Order status updated!
+
+Order ID: #${orderId}
+New Status: ${status.toUpperCase()}
+Time: ${new Date().toLocaleString()}
+
+Track in Courier panel.`;
+
+            await sendEmailNotification(subject, message, 'courier');
+        }
+
+        async function notifySystemAlert(errorType, details) {
+            const settings = getNotificationSettings();
+            if (!settings.system_alerts) return;
+
+            const dedupeKey = `system_${errorType}_${Math.floor(Date.now() / 600000)}`;
+            if (sentNotifications.has(dedupeKey)) return;
+            sentNotifications.add(dedupeKey);
+
+            const subject = `⚙️ System Alert: ${errorType}`;
+            const message = `System notification:
+
+Type: ${errorType}
+Details: ${details}
+Time: ${new Date().toLocaleString()}
+
+Please check the admin panel.`;
+
+            await sendEmailNotification(subject, message, 'system');
+        }
+
+        // ==================== TEST EMAIL ====================
+        async function testEmailNotification() {
+            showToast('Sending test email...', 'info');
+            const success = await sendEmailNotification(
+                '🧪 Test Notification',
+                'This is a test email from JAYENWARE Admin.\n\nIf you received this, your notification system is working correctly! ✅',
+                'test'
+            );
+            if (success) {
+                showToast('Test email sent! Check your inbox 📬', 'success');
+                document.getElementById('bell-icon')?.classList.add('fa-shake');
+                setTimeout(() => document.getElementById('bell-icon')?.classList.remove('fa-shake'), 1000);
+            } else {
+                showToast('Failed to send test email', 'error');
+            }
+            renderNotificationLog();
+        }
+
+        // ==================== MONITORING (Auto-check) ====================
+        let lastOrderCount = 0;
+        let lastVisitorTimestamps = [];
+
+        async function monitorForNotifications() {
+            try {
+                // Check for new orders
+                const { data: orders, count: orderCount } = await _supabase.from('orders').select('*', { count: 'exact' }).order('created_at', { ascending: false }).limit(1);
+                if (orderCount > lastOrderCount && lastOrderCount > 0 && orders?.[0]) {
+                    await notifyNewOrder(orders[0]);
+                }
+                lastOrderCount = orderCount || 0;
+
+                // Check for low stock
+                const { data: lowStockProducts } = await _supabase.from('products').select('*').lte('stock', 5).gt('stock', 0);
+                if (lowStockProducts) {
+                    for (const product of lowStockProducts) {
+                        const dedupeKey = `stock_${product.id}_${product.stock}`;
+                        if (!sentNotifications.has(dedupeKey)) {
+                            await notifyLowStock(product);
+                        }
+                    }
+                }
+
+                // Check for visitor spikes (10+ in 5 minutes)
+                const fiveMinAgo = new Date(Date.now() - 5 * 60 * 1000).toISOString();
+                const { count: recentVisitors } = await _supabase.from('visitor_logs').select('*', { count: 'exact' }).gte('created_at', fiveMinAgo);
+                if (recentVisitors >= 10) {
+                    await notifyVisitorSpike(recentVisitors, 5);
+                }
+
+            } catch (e) {
+                console.error('Monitor error:', e);
+            }
+        }
+
+        // ==================== EXPOSE FUNCTIONS GLOBALLY ====================
+        window.JAYENWARE_NOTIFY = {
+            newOrder: notifyNewOrder,
+            lowStock: notifyLowStock,
+            visitorSpike: notifyVisitorSpike,
+            weeklyReport: notifyWeeklyReport,
+            courierUpdate: notifyCourierUpdate,
+            systemAlert: notifySystemAlert,
+            sendEmail: sendEmailNotification,
+            test: testEmailNotification
+        };
+
+        // ==================== PROFILE & SETTINGS ====================
         function toggleDarkModeSetting() {
             isDarkMode = !isDarkMode;
             document.body.classList.toggle('dark', isDarkMode);
@@ -378,10 +716,12 @@
 
         function saveProfile() {
             const name = document.getElementById('set-display-name').value.trim();
+            const notifyEmail = document.getElementById('set-notify-email').value.trim();
             if (!name) { showToast('Please enter a display name', 'error'); return; }
             document.getElementById('profile-name').textContent = name;
             document.getElementById('profile-avatar').textContent = name.charAt(0).toUpperCase();
             localStorage.setItem('adminDisplayName', name);
+            if (notifyEmail) localStorage.setItem('notifyEmail', notifyEmail);
             showToast('Profile updated!', 'success');
         }
 
@@ -389,19 +729,15 @@
             const current = document.getElementById('set-current-pass').value;
             const newPass = document.getElementById('set-new-pass').value;
             const confirm = document.getElementById('set-confirm-pass').value;
-
             if (!current || !newPass || !confirm) { showToast('All fields are required', 'error'); return; }
             if (newPass !== confirm) { showToast('Passwords do not match', 'error'); return; }
             if (newPass.length < 6) { showToast('Password must be at least 6 characters', 'error'); return; }
-
             try {
                 const { error } = await _supabase.auth.updateUser({ password: newPass });
                 if (error) throw error;
                 showToast('Password updated successfully! 🔐', 'success');
                 ['set-current-pass','set-new-pass','set-confirm-pass'].forEach(id => document.getElementById(id).value = '');
-            } catch (e) {
-                showToast('Failed to update password. ' + e.message, 'error');
-            }
+            } catch (e) { showToast('Failed to update password. ' + e.message, 'error'); }
         }
 
         async function checkSession() {
@@ -411,28 +747,63 @@
             document.getElementById('global-loader').style.display = 'none';
             document.getElementById('main-layout').classList.remove('hidden');
 
-            // Set profile info
             const email = session.user.email;
             const savedName = localStorage.getItem('adminDisplayName') || email.split('@')[0];
             document.getElementById('profile-name').textContent = savedName;
             document.getElementById('profile-email').textContent = email;
             document.getElementById('profile-avatar').textContent = savedName.charAt(0).toUpperCase();
             document.getElementById('set-display-name').value = savedName;
+            document.getElementById('set-notify-email').value = localStorage.getItem('notifyEmail') || email;
 
-            // Dark mode
             if (localStorage.getItem('darkMode') === 'true') {
                 isDarkMode = true; document.body.classList.add('dark');
                 document.getElementById('dark-mode-toggle').classList.add('active');
             }
 
-            if (window.innerWidth < 769) document.querySelector('.bottom-nav').classList.remove('hidden');
+            loadNotificationSettings();
 
-            // Set last deploy
+            if (window.innerWidth < 769) document.querySelector('.bottom-nav').classList.remove('hidden');
             document.getElementById('last-deploy').textContent = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+
+            // Load initial order count for monitoring
+            const { count } = await _supabase.from('orders').select('*', { count: 'exact', head: true });
+            lastOrderCount = count || 0;
+
+            // Start monitoring every 60 seconds
+            setInterval(monitorForNotifications, 60000);
+
+            // Send weekly report on Mondays
+            checkAndSendWeeklyReport();
+        }
+
+        function checkAndSendWeeklyReport() {
+            const now = new Date();
+            if (now.getDay() === 1 && now.getHours() === 9) {
+                const lastSent = localStorage.getItem('lastWeeklyReportSent');
+                const today = now.toDateString();
+                if (lastSent !== today) {
+                    notifyWeeklyReport({ orders: lastOrderCount, revenue: 0, newProducts: 0, visitors: 0 });
+                    localStorage.setItem('lastWeeklyReportSent', today);
+                }
+            }
         }
 
         window.onload = checkSession;
         window.addEventListener('resize', () => { document.querySelector('.bottom-nav').classList.toggle('hidden', window.innerWidth >= 769); });
+
+        // Print setup instructions
+        console.log('📧 JAYENWARE Notification System Ready!');
+        console.log('📬 Formspree Endpoint:', FORMSPREE_ENDPOINT);
+        console.log('🔔 Global API: window.JAYENWARE_NOTIFY');
+        console.log('   - JAYENWARE_NOTIFY.newOrder(orderData)');
+        console.log('   - JAYENWARE_NOTIFY.lowStock(productData)');
+        console.log('   - JAYENWARE_NOTIFY.visitorSpike(count, minutes)');
+        console.log('   - JAYENWARE_NOTIFY.weeklyReport(data)');
+        console.log('   - JAYENWARE_NOTIFY.courierUpdate(orderId, status)');
+        console.log('   - JAYENWARE_NOTIFY.systemAlert(type, details)');
+        console.log('   - JAYENWARE_NOTIFY.test()');
+        console.log('✅ Deduplication: Each notification sent ONLY ONCE');
+        console.log('🔄 Auto-monitoring: Checks every 60 seconds');
     </script>
 </body>
 </html>

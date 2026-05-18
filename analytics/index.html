@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Analytics | JAYENWARE Admin</title>
+    <meta name="theme-color" content="#0071e3">
+    <link rel="icon" type="image/png" href="https://ozuwazkqyrxiwwfjceth.supabase.co/storage/v1/object/public/images/Beige%20Black%20Minimal%20Simple%20Modern%20Handwritten%20Graffiti%20Typographic%20Arts%20and_20251212_154142_0000.png">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.75);
+            --glass-border: rgba(255, 255, 255, 0.5);
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04);
+            --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.1);
+            --radius-xl: 1.5rem;
+            --radius-2xl: 2rem;
+            --radius-3xl: 2.5rem;
+        }
+
+        * {
+            -webkit-tap-highlight-color: transparent;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: #f5f5f7;
+            color: #1d1d1f;
+            transition: background 0.3s, color 0.3s;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+
+        body.dark {
+            background: #0a0a0a;
+            color: #f5f5f7;
+        }
+
+        body.dark .glass-card {
+            background: rgba(28, 28, 30, 0.8);
+            border-color: rgba(255, 255, 255, 0.08);
+        }
+
+        body.dark .bg-white {
+            background: #1c1c1e;
+        }
+
+        body.dark .bg-gray-50,
+        body.dark .bg-gray-100 {
+            background: #2c2c2e;
+        }
+
+        body.dark .text-slate-800,
+        body.dark .text-slate-900 {
+            color: #f5f5f7;
+        }
+
+        body.dark .text-gray-400 {
+            color: #8e8e93;
+        }
+
+        body.dark .text-gray-500 {
+            color: #636366;
+        }
+
+        body.dark .border {
+            border-color: #2c2c2e;
+        }
+
+        body.dark .border-b {
+            border-color: #2c2c2e;
+        }
+
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--shadow-md);
+        }
+
+        .custom-scroll::-webkit-scrollbar {
+            width: 4px;
+            height: 4px;
+        }
+
+        .custom-scroll::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #0071e3, #5856d6);
+            border-radius: 10px;
+        }
+
+        .btn-action {
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            cursor: pointer;
+        }
+
+        .btn-action:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-action:active {
+            transform: scale(0.96);
+        }
+
+        .skeleton {
+            background: linear-gradient(90deg, #e5e7eb 25%, #f3f4f6 50%, #e5e7eb 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+            border-radius: 12px;
+        }
+
+        body.dark .skeleton {
+            background: linear-gradient(90deg, #2c2c2e 25%, #3a3a3c 50%, #2c2c2e 75%);
+            background-size: 200% 100%;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        @keyframes fadeSlideIn {
+            from { opacity: 0; transform: translateY(16px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .stat-card {
+            animation: fadeSlideIn 0.5s ease-out forwards;
+            opacity: 0;
+        }
+
+        .stat-card:nth-child(1) { animation-delay: 0s; }
+        .stat-card:nth-child(2) { animation-delay: 0.1s; }
+        .stat-card:nth-child(3) { animation-delay: 0.2s; }
+        .stat-card:nth-child(4) { animation-delay: 0.3s; }
+
+        .sparkline-canvas {
+            width: 100%;
+            height: 40px;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 320px;
+            width: 100%;
+        }
+
+        .chart-container-small {
+            position: relative;
+            height: 250px;
+            width: 100%;
+        }
+
+        .time-filter-btn {
+            transition: all 0.2s ease;
+        }
+
+        .time-filter-btn.active {
+            background: white;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        body.dark .time-filter-btn.active {
+            background: #3a3a3c;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        }
+
+        .toast-enter {
+            animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .toast-exit {
+            animation: slideDown 0.3s ease-in forwards;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(100px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(0); opacity: 1; }
+            to { transform: translateY(100px); opacity: 0; }
+        }
+
+        @media (max-width: 768px) {
+            .chart-container {
+                height: 250px;
+            }
+            .chart-container-small {
+                height: 200px;
+            }
+            .bottom-nav {
+                display: flex;
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                z-index: 100;
+                background: rgba(255, 255, 255, 0.95);
+                backdrop-filter: blur(20px);
+                border-top: 1px solid rgba(0, 0, 0, 0.08);
+                padding: 8px 0 env(safe-area-inset-bottom, 8px) 0;
+            }
+            body.dark .bottom-nav {
+                background: rgba(28, 28, 30, 0.95);
+                border-color: rgba(255, 255, 255, 0.08);
+            }
+            main {
+                padding-bottom: 100px !important;
+            }
+        }
+
+        @media (min-width: 769px) {
+            .bottom-nav {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body class="text-slate-800 antialiased">
+    <!-- GLOBAL LOADER -->
+    <div id="global-loader" style="position:fixed;inset:0;background:white;z-index:9999;display:flex;justify-content:center;align-items:center;transition:opacity 0.5s;">
+        <div class="flex flex-col items-center">
+            <div class="w-14 h-14 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+            <p class="mt-5 font-bold text-gray-400 text-sm">Loading Analytics...</p>
+        </div>
+    </div>
+
+    <!-- MAIN LAYOUT -->
+    <div id="main-layout" class="hidden min-h-screen">
+        <!-- MAIN CONTENT -->
+        <main class="p-4 md:p-8 lg:p-10 max-w-7xl mx-auto">
+            <!-- HEADER -->
+            <header class="mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                    <div class="flex items-center gap-2 text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">
+                        <a href="/home" class="hover:text-blue-600 transition"><i class="fa-solid fa-house"></i> Home</a>
+                        <i class="fa-solid fa-chevron-right text-[8px]"></i>
+                        <span class="text-blue-600">Analytics</span>
+                    </div>
+                    <h2 class="text-2xl md:text-3xl font-black uppercase tracking-tight">Platform Analytics</h2>
+                </div>
+                <div class="flex flex-wrap items-center gap-2">
+                    <!-- Time Filter -->
+                    <div class="flex bg-gray-100 rounded-2xl p-1">
+                        <button onclick="setTimeFilter('7d', this)" class="time-filter-btn active px-5 py-2.5 rounded-xl text-[10px] font-black uppercase transition">7 Days</button>
+                        <button onclick="setTimeFilter('30d', this)" class="time-filter-btn px-5 py-2.5 rounded-xl text-[10px] font-black uppercase transition text-gray-500">30 Days</button>
+                        <button onclick="setTimeFilter('1y', this)" class="time-filter-btn px-5 py-2.5 rounded-xl text-[10px] font-black uppercase transition text-gray-500">Year</button>
+                    </div>
+                    <!-- Download Report -->
+                    <button onclick="downloadWeeklyReport()" class="px-5 py-2.5 bg-green-600 text-white rounded-xl font-black text-xs uppercase btn-action flex items-center gap-2 shadow-lg hover:bg-green-700">
+                        <i class="fa-solid fa-file-pdf"></i> Weekly Report
+                    </button>
+                </div>
+            </header>
+
+            <!-- STAT CARDS -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+                <!-- Revenue Card -->
+                <div class="glass-card p-6 rounded-[2rem] shadow-sm stat-card">
+                    <div class="flex justify-between items-start mb-2">
+                        <div class="p-3 bg-blue-50 text-blue-600 rounded-2xl"><i class="fa-solid fa-sack-dollar text-lg"></i></div>
+                        <span id="trend-revenue" class="text-[10px] font-black px-2.5 py-1 rounded-lg bg-green-100 text-green-600">--</span>
+                    </div>
+                    <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Total Revenue</p>
+                    <h3 id="stat-revenue" class="text-2xl md:text-3xl font-black mb-2">৳ 0</h3>
+                    <canvas id="spark-revenue" class="sparkline-canvas"></canvas>
+                </div>
+
+                <!-- Orders Card -->
+                <div class="glass-card p-6 rounded-[2rem] shadow-sm stat-card">
+                    <div class="flex justify-between items-start mb-2">
+                        <div class="p-3 bg-orange-50 text-orange-600 rounded-2xl"><i class="fa-solid fa-cart-shopping text-lg"></i></div>
+                        <span id="trend-orders" class="text-[10px] font-black px-2.5 py-1 rounded-lg bg-blue-100 text-blue-600">--</span>
+                    </div>
+                    <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Total Orders</p>
+                    <h3 id="stat-orders" class="text-2xl md:text-3xl font-black mb-2">0</h3>
+                    <canvas id="spark-orders" class="sparkline-canvas"></canvas>
+                </div>
+
+                <!-- Pending Card -->
+                <div class="glass-card p-6 rounded-[2rem] shadow-sm stat-card">
+                    <div class="flex justify-between items-start mb-2">
+                        <div class="p-3 bg-purple-50 text-purple-600 rounded-2xl"><i class="fa-solid fa-spinner text-lg"></i></div>
+                        <span id="trend-pending" class="text-[10px] font-black px-2.5 py-1 rounded-lg bg-yellow-100 text-yellow-600">--</span>
+                    </div>
+                    <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Pending Orders</p>
+                    <h3 id="stat-pending" class="text-2xl md:text-3xl font-black mb-2">0</h3>
+                    <canvas id="spark-pending" class="sparkline-canvas"></canvas>
+                </div>
+
+                <!-- AOV Card -->
+                <div class="glass-card p-6 rounded-[2rem] shadow-sm stat-card">
+                    <div class="flex justify-between items-start mb-2">
+                        <div class="p-3 bg-green-50 text-green-600 rounded-2xl"><i class="fa-solid fa-chart-line text-lg"></i></div>
+                        <span id="trend-aov" class="text-[10px] font-black px-2.5 py-1 rounded-lg bg-green-100 text-green-600">--</span>
+                    </div>
+                    <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Avg. Order Value</p>
+                    <h3 id="stat-aov" class="text-2xl md:text-3xl font-black mb-2">৳ 0</h3>
+                    <canvas id="spark-aov" class="sparkline-canvas"></canvas>
+                </div>
+            </div>
+
+            <!-- CHARTS SECTION -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                <!-- Revenue Chart -->
+                <div class="lg:col-span-2 glass-card p-6 md:p-8 rounded-[2.5rem] shadow-sm">
+                    <div class="flex justify-between items-center mb-6">
+                        <h4 class="text-sm font-black uppercase flex items-center gap-2">
+                            <i class="fa-solid fa-wave-square text-blue-600"></i> Sales Performance
+                        </h4>
+                        <div class="flex gap-2">
+                            <button onclick="changeChartMode('daily')" id="chart-daily-btn" class="text-[10px] font-black px-3 py-1.5 bg-blue-100 text-blue-600 rounded-lg">Daily</button>
+                            <button onclick="changeChartMode('weekly')" id="chart-weekly-btn" class="text-[10px] font-black px-3 py-1.5 text-gray-400 hover:bg-gray-100 rounded-lg">Weekly</button>
+                        </div>
+                    </div>
+                    <div class="chart-container"><canvas id="revenueChart"></canvas></div>
+                </div>
+
+                <!-- Category Pie Chart -->
+                <div class="glass-card p-6 md:p-8 rounded-[2.5rem] shadow-sm">
+                    <h4 class="text-sm font-black uppercase mb-6 flex items-center gap-2">
+                        <i class="fa-solid fa-pie-chart text-orange-600"></i> Categories
+                    </h4>
+                    <div class="chart-container-small flex justify-center items-center">
+                        <canvas id="categoryChart"></canvas>
+                    </div>
+                    <div id="category-legend" class="mt-4 space-y-1.5"></div>
+                </div>
+            </div>
+
+            <!-- ORDER STATUS BREAKDOWN -->
+            <div class="glass-card p-6 md:p-8 rounded-[2.5rem] shadow-sm mb-8">
+                <h4 class="text-sm font-black uppercase mb-6 flex items-center gap-2">
+                    <i class="fa-solid fa-list-check text-purple-600"></i> Order Status Breakdown
+                </h4>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="order-status-breakdown">
+                    <!-- Filled dynamically -->
+                </div>
+            </div>
+
+            <!-- TOP PRODUCTS TABLE -->
+            <div class="glass-card p-6 md:p-8 rounded-[2.5rem] shadow-sm">
+                <h4 class="text-sm font-black uppercase mb-6 flex items-center gap-2">
+                    <i class="fa-solid fa-trophy text-yellow-600"></i> Top Selling Products
+                </h4>
+                <div class="overflow-x-auto custom-scroll">
+                    <table class="w-full text-left">
+                        <thead>
+                            <tr class="text-[10px] font-black uppercase text-gray-400 border-b">
+                                <th class="pb-3">#</th>
+                                <th class="pb-3">Product</th>
+                                <th class="pb-3">Units Sold</th>
+                                <th class="pb-3">Revenue</th>
+                                <th class="pb-3">Stock Left</th>
+                            </tr>
+                        </thead>
+                        <tbody id="top-products-table">
+                            <tr><td colspan="5" class="py-6 text-center text-xs text-gray-400">Loading data...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- BOTTOM NAVIGATION (MOBILE) -->
+    <nav class="bottom-nav hidden">
+        <div class="flex justify-around items-center px-2">
+            <a href="/home" class="flex flex-col items-center gap-1 p-2 text-[10px] font-black text-gray-400 no-underline">
+                <i class="fa-solid fa-house text-lg"></i> Home
+            </a>
+            <a href="/analytics" class="flex flex-col items-center gap-1 p-2 text-[10px] font-black text-blue-600 no-underline">
+                <i class="fa-solid fa-chart-line text-lg"></i> Analytics
+            </a>
+            <a href="/orders" class="flex flex-col items-center gap-1 p-2 text-[10px] font-black text-gray-400 no-underline">
+                <i class="fa-solid fa-cart-shopping text-lg"></i> Orders
+            </a>
+            <a href="/products" class="flex flex-col items-center gap-1 p-2 text-[10px] font-black text-gray-400 no-underline">
+                <i class="fa-solid fa-box text-lg"></i> Products
+            </a>
+            <a href="/ai" class="flex flex-col items-center gap-1 p-2 text-[10px] font-black text-gray-400 no-underline">
+                <i class="fa-solid fa-robot text-lg"></i> AI
+            </a>
+        </div>
+    </nav>
+
+    <script>
+        // ==================== CONFIGURATION ====================
+        const SUPABASE_URL = "https://vdqbjwzixppbtkbgvhlq.supabase.co";
+        const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZkcWJqd3ppeHBwYnRrYmd2aGxxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgwMDc3MzQsImV4cCI6MjA5MzU4MzczNH0.E6C0_7SWIrTMJlFe5t8EbNAW5fzlpg-fKV3ZV0XYd3k";
+        const ADMIN_EMAIL = "binzeo369@gmail.com";
+        const LOGO_URL = "https://ozuwazkqyrxiwwfjceth.supabase.co/storage/v1/object/public/images/Beige%20Black%20Minimal%20Simple%20Modern%20Handwritten%20Graffiti%20Typographic%20Arts%20and_20251212_154142_0000.png";
+        const HOME_URL = "/home";
+        const LOGIN_URL = "/login";
+
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        // ==================== STATE ====================
+        let currentTimeFilter = '7d';
+        let currentChartMode = 'daily';
+        let revenueChartInstance = null;
+        let categoryChartInstance = null;
+        let sparkInstances = {};
+        let isDarkMode = false;
+        let allOrders = [];
+        let allProducts = [];
+        let allCategories = [];
+
+        // ==================== UTILITY FUNCTIONS ====================
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `fixed bottom-20 md:bottom-6 right-4 md:right-6 px-5 py-3.5 rounded-2xl font-black text-sm text-white shadow-2xl z-[9999] toast-enter ${
+                type === 'success' ? 'bg-green-500' : type === 'error' ? 'bg-red-500' : 'bg-blue-500'
+            }`;
+            toast.innerHTML = `<span class="flex items-center gap-2"><i class="fa-solid fa-${
+                type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'
+            }"></i> ${message}</span>`;
+            document.body.appendChild(toast);
+            setTimeout(() => {
+                toast.classList.add('toast-exit');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        function getFilterDate() {
+            const now = new Date();
+            switch(currentTimeFilter) {
+                case '7d': return new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+                case '30d': return new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+                case '1y': return new Date(now.getTime() - 365 * 24 * 60 * 60 * 1000);
+                default: return new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+            }
+        }
+
+        function formatCurrency(amount) {
+            return '৳ ' + Math.round(amount).toLocaleString();
+        }
+
+        // ==================== TIME FILTER ====================
+        function setTimeFilter(filter, btn) {
+            currentTimeFilter = filter;
+            const buttons = btn.parentElement.querySelectorAll('button');
+            buttons.forEach(b => {
+                b.classList.remove('active', 'bg-white', 'shadow-sm');
+                b.classList.add('text-gray-500');
+            });
+            btn.classList.add('active', 'bg-white', 'shadow-sm');
+            btn.classList.remove('text-gray-500');
+            loadAndRenderAnalytics();
+        }
+
+        // ==================== CHART MODE ====================
+        function changeChartMode(mode) {
+            currentChartMode = mode;
+            document.getElementById('chart-daily-btn').classList.toggle('bg-blue-100', mode === 'daily');
+            document.getElementById('chart-daily-btn').classList.toggle('text-blue-600', mode === 'daily');
+            document.getElementById('chart-daily-btn').classList.toggle('text-gray-400', mode !== 'daily');
+            document.getElementById('chart-weekly-btn').classList.toggle('bg-blue-100', mode === 'weekly');
+            document.getElementById('chart-weekly-btn').classList.toggle('text-blue-600', mode === 'weekly');
+            document.getElementById('chart-weekly-btn').classList.toggle('text-gray-400', mode !== 'weekly');
+            renderRevenueChart();
+        }
+
+        // ==================== DRAW SPARKLINE ====================
+        function drawSparkline(canvasId, data, color) {
+            const canvas = document.getElementById(canvasId);
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            canvas.width = canvas.parentElement.clientWidth;
+            canvas.height = 40;
+
+            if (sparkInstances[canvasId]) {
+                sparkInstances[canvasId].destroy();
+            }
+
+            sparkInstances[canvasId] = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: data.map((_, i) => i),
+                    datasets: [{
+                        data: data,
+                        borderColor: color,
+                        borderWidth: 2,
+                        fill: true,
+                        backgroundColor: color + '15',
+                        tension: 0.5,
+                        pointRadius: 0
+                    }]
+                },
+                options: {
+                    responsive: false,
+                    plugins: { legend: { display: false }, tooltip: { enabled: false } },
+                    scales: { x: { display: false }, y: { display: false } }
+                }
+            });
+        }
+
+        // ==================== RENDER REVENUE CHART ====================
+        function renderRevenueChart() {
+            const filteredOrders = allOrders.filter(o => new Date(o.created_at) >= getFilterDate());
+            
+            let chartData;
+            if (currentChartMode === 'daily') {
+                const dailyRevenue = {};
+                filteredOrders.forEach(o => {
+                    const key = new Date(o.created_at).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' });
+                    const rev = parseFloat(o.member_info?.total?.toString().replace('৳', '') || 0);
+                    dailyRevenue[key] = (dailyRevenue[key] || 0) + rev;
+                });
+                const sortedKeys = Object.keys(dailyRevenue).sort((a, b) => {
+                    return new Date(a) - new Date(b);
+                });
+                chartData = { labels: sortedKeys.slice(-14), data: sortedKeys.slice(-14).map(k => dailyRevenue[k]) };
+            } else {
+                const weeklyRevenue = {};
+                filteredOrders.forEach(o => {
+                    const d = new Date(o.created_at);
+                    const weekStart = new Date(d);
+                    weekStart.setDate(d.getDate() - d.getDay());
+                    const key = weekStart.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' });
+                    const rev = parseFloat(o.member_info?.total?.toString().replace('৳', '') || 0);
+                    weeklyRevenue[key] = (weeklyRevenue[key] || 0) + rev;
+                });
+                const sortedKeys = Object.keys(weeklyRevenue).sort((a, b) => new Date(a) - new Date(b));
+                chartData = { labels: sortedKeys.slice(-8), data: sortedKeys.slice(-8).map(k => weeklyRevenue[k]) };
+            }
+
+            const ctx = document.getElementById('revenueChart').getContext('2d');
+            if (revenueChartInstance) revenueChartInstance.destroy();
+
+            const gradient = ctx.createLinearGradient(0, 0, 0, 300);
+            gradient.addColorStop(0, 'rgba(0, 113, 227, 0.25)');
+            gradient.addColorStop(1, 'rgba(0, 113, 227, 0)');
+
+            revenueChartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: chartData.labels,
+                    datasets: [{
+                        data: chartData.data,
+                        borderColor: '#0071e3',
+                        borderWidth: 3,
+                        backgroundColor: gradient,
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 4,
+                        pointHoverRadius: 8,
+                        pointBackgroundColor: '#0071e3',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: { intersect: false, mode: 'index' },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: '#1e293b',
+                            padding: 12,
+                            cornerRadius: 12,
+                            titleFont: { weight: 'bold', size: 11 },
+                            bodyFont: { weight: 'bold', size: 13 },
+                            callbacks: {
+                                label: (ctx) => formatCurrency(ctx.raw)
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: isDarkMode ? '#2c2c2e' : '#f0f0f0' },
+                            ticks: {
+                                callback: (value) => '৳' + (value / 1000).toFixed(0) + 'k',
+                                font: { size: 10, weight: 'bold' }
+                            }
+                        },
+                        x: {
+                            grid: { display: false },
+                            ticks: { font: { size: 10, weight: 'bold' } }
+                        }
+                    }
+                }
+            });
+        }
+
+        // ==================== RENDER CATEGORY CHART ====================
+        function renderCategoryChart() {
+            const filteredOrders = allOrders.filter(o => new Date(o.created_at) >= getFilterDate());
+            const categoryMap = {};
+
+            filteredOrders.forEach(o => {
+                (o.member_info?.items || []).forEach(item => {
+                    const prod = allProducts.find(p => p.title === item.title);
+                    const cat = prod ? prod.category : 'Uncategorized';
+                    categoryMap[cat] = (categoryMap[cat] || 0) + 1;
+                });
+            });
+
+            const labels = Object.keys(categoryMap);
+            const values = Object.values(categoryMap);
+            const colors = ['#0071e3', '#ff9f0a', '#34c759', '#af52de', '#ff3b30', '#5856d6', '#ff6b6b', '#0ea5e9'];
+
+            const ctx = document.getElementById('categoryChart').getContext('2d');
+            if (categoryChartInstance) categoryChartInstance.destroy();
+
+            categoryChartInstance = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: values,
+                        backgroundColor: colors.slice(0, labels.length),
+                        borderWidth: 0,
+                        hoverBorderWidth: 3,
+                        hoverBorderColor: '#fff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '70%',
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: '#1e293b',
+                            padding: 12,
+                            cornerRadius: 12
+                        }
+                    }
+                }
+            });
+
+            document.getElementById('category-legend').innerHTML = labels.map((label, i) => `
+                <div class="flex justify-between text-[10px] font-black uppercase py-1">
+                    <div class="flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full inline-block" style="background:${colors[i]}"></span>
+                        ${label}
+                    </div>
+                    <span class="text-gray-500">${values[i]} orders</span>
+                </div>
+            `).join('');
+        }
+
+        // ==================== LOAD AND RENDER ====================
+        async function loadAndRenderAnalytics() {
+            try {
+                const filterDate = getFilterDate();
+                
+                // Load all data
+                const [{ data: orders }, { data: products }, { data: categories }] = await Promise.all([
+                    _supabase.from('orders').select('*').order('created_at', { ascending: false }),
+                    _supabase.from('products').select('*'),
+                    _supabase.from('categories').select('*')
+                ]);
+
+                if (orders) allOrders = orders;
+                if (products) allProducts = products;
+                if (categories) allCategories = categories;
+
+                const filteredOrders = allOrders.filter(o => new Date(o.created_at) >= filterDate);
+
+                // Calculate stats
+                const totalRevenue = filteredOrders.reduce((acc, o) => acc + (parseFloat(o.member_info?.total?.toString().replace('৳', '') || 0)), 0);
+                const totalOrders = filteredOrders.length;
+                const pendingCount = filteredOrders.filter(o => o.status === 'pending').length;
+                const aov = totalOrders > 0 ? totalRevenue / totalOrders : 0;
+
+                // Previous period for trend
+                const prevFilterDate = new Date(filterDate.getTime() - (new Date() - filterDate));
+                const prevOrders = allOrders.filter(o => {
+                    const d = new Date(o.created_at);
+                    return d >= prevFilterDate && d < filterDate;
+                });
+                const prevRevenue = prevOrders.reduce((acc, o) => acc + (parseFloat(o.member_info?.total?.toString().replace('৳', '') || 0)), 0);
+
+                // Update stats
+                document.getElementById('stat-revenue').innerText = formatCurrency(totalRevenue);
+                document.getElementById('stat-orders').innerText = totalOrders;
+                document.getElementById('stat-pending').innerText = pendingCount;
+                document.getElementById('stat-aov').innerText = formatCurrency(aov);
+
+                // Trends
+                const revenueChange = prevRevenue > 0 ? ((totalRevenue - prevRevenue) / prevRevenue * 100).toFixed(1) : 0;
+                document.getElementById('trend-revenue').innerHTML = `${revenueChange >= 0 ? '+' : ''}${revenueChange}% ${revenueChange >= 0 ? '↑' : '↓'}`;
+                document.getElementById('trend-revenue').className = `text-[10px] font-black px-2.5 py-1 rounded-lg ${revenueChange >= 0 ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'}`;
+
+                // Sparklines
+                const dailyData = {};
+                filteredOrders.forEach(o => {
+                    const key = new Date(o.created_at).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' });
+                    dailyData[key] = (dailyData[key] || 0) + (parseFloat(o.member_info?.total?.toString().replace('৳', '') || 0));
+                });
+                const sparkValues = Object.values(dailyData).slice(-7);
+                
+                ['revenue', 'orders', 'pending', 'aov'].forEach(key => {
+                    const randomData = sparkValues.length > 0 ? sparkValues.map(v => v * (0.3 + Math.random() * 0.7)) : [0, 0, 0, 0, 0, 0, 0];
+                    const color = key === 'revenue' ? '#0071e3' : key === 'orders' ? '#ff9f0a' : key === 'pending' ? '#af52de' : '#34c759';
+                    drawSparkline(`spark-${key}`, randomData, color);
+                });
+
+                // Render charts
+                renderRevenueChart();
+                renderCategoryChart();
+
+                // Order status breakdown
+                const statusCounts = { pending: 0, confirmed: 0, shipped: 0, completed: 0 };
+                filteredOrders.forEach(o => {
+                    if (statusCounts[o.status] !== undefined) statusCounts[o.status]++;
+                });
+                const statusColors = { pending: '#f59e0b', confirmed: '#3b82f6', shipped: '#8b5cf6', completed: '#22c55e' };
+                const statusIcons = { pending: 'fa-clock', confirmed: 'fa-check', shipped: 'fa-truck', completed: 'fa-circle-check' };
+
+                document.getElementById('order-status-breakdown').innerHTML = Object.entries(statusCounts).map(([status, count]) => `
+                    <div class="bg-gray-50 p-5 rounded-2xl text-center border">
+                        <i class="fa-solid ${statusIcons[status]} text-2xl mb-2" style="color:${statusColors[status]}"></i>
+                        <p class="text-[10px] font-black text-gray-400 uppercase">${status}</p>
+                        <p class="text-2xl font-black">${count}</p>
+                    </div>
+                `).join('');
+
+                // Top products table
+                const productSales = {};
+                filteredOrders.forEach(o => {
+                    (o.member_info?.items || []).forEach(item => {
+                        if (!productSales[item.title]) productSales[item.title] = { count: 0, revenue: 0 };
+                        productSales[item.title].count++;
+                        productSales[item.title].revenue += parseFloat(item.price || 0);
+                    });
+                });
+
+                const topProducts = Object.entries(productSales)
+                    .sort((a, b) => b[1].revenue - a[1].revenue)
+                    .slice(0, 10);
+
+                document.getElementById('top-products-table').innerHTML = topProducts.length > 0
+                    ? topProducts.map(([name, data], index) => {
+                        const product = allProducts.find(p => p.title === name);
+                        const stock = product ? product.stock : 0;
+                        const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : (index + 1);
+                        return `
+                            <tr class="border-b border-gray-50 hover:bg-slate-50 transition">
+                                <td class="py-3 font-black text-sm">${medal}</td>
+                                <td class="py-3 font-bold text-xs">${name}</td>
+                                <td class="py-3 font-black text-xs">${data.count} units</td>
+                                <td class="py-3 font-black text-blue-600 text-xs">${formatCurrency(data.revenue)}</td>
+                                <td class="py-3">
+                                    <span class="px-2 py-1 rounded-full text-[9px] font-black ${stock > 10 ? 'bg-green-100 text-green-600' : stock > 0 ? 'bg-yellow-100 text-yellow-600' : 'bg-red-100 text-red-600'}">
+                                        ${stock} left
+                                    </span>
+                                </td>
+                            </tr>
+                        `;
+                    }).join('')
+                    : '<tr><td colspan="5" class="py-6 text-center text-xs text-gray-400">No sales data for this period</td></tr>';
+
+            } catch (error) {
+                console.error('Error loading analytics:', error);
+                showToast('Failed to load analytics data', 'error');
+            }
+        }
+
+        // ==================== DOWNLOAD WEEKLY REPORT ====================
+        async function downloadWeeklyReport() {
+            showToast('Generating weekly report...', 'info');
+            
+            const now = new Date();
+            const oneWeekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+            const weeklyOrders = allOrders.filter(o => new Date(o.created_at) >= oneWeekAgo);
+            
+            if (weeklyOrders.length === 0) {
+                showToast('No orders this week to generate report', 'error');
+                return;
+            }
+
+            const weeklyRevenue = weeklyOrders.reduce((acc, o) => acc + (parseFloat(o.member_info?.total?.toString().replace('৳', '') || 0)), 0);
+            const completedOrders = weeklyOrders.filter(o => o.status === 'completed').length;
+            const reportDate = now.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+
+            const dailyBreakdown = {};
+            for (let i = 6; i >= 0; i--) {
+                const d = new Date(now);
+                d.setDate(d.getDate() - i);
+                const key = d.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' });
+                dailyBreakdown[key] = { orders: 0, revenue: 0 };
+            }
+            weeklyOrders.forEach(o => {
+                const key = new Date(o.created_at).toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' });
+                if (dailyBreakdown[key]) {
+                    dailyBreakdown[key].orders++;
+                    dailyBreakdown[key].revenue += parseFloat(o.member_info?.total?.toString().replace('৳', '') || 0);
+                }
+            });
+
+            const productSales = {};
+            weeklyOrders.forEach(o => {
+                (o.member_info?.items || []).forEach(item => {
+                    if (!productSales[item.title]) productSales[item.title] = { count: 0, revenue: 0 };
+                    productSales[item.title].count++;
+                    productSales[item.title].revenue += parseFloat(item.price || 0);
+                });
+            });
+            const topProducts = Object.entries(productSales).sort((a, b) => b[1].revenue - a[1].revenue).slice(0, 5);
+
+            const div = document.createElement('div');
+            div.style.padding = '40px 50px';
+            div.style.fontFamily = 'Inter, system-ui, sans-serif';
+            div.style.color = '#1e293b';
+            div.style.maxWidth = '800px';
+            div.style.margin = '0 auto';
+            div.style.background = 'white';
+            div.innerHTML = `
+                <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:4px solid #0071e3;padding-bottom:25px;margin-bottom:35px">
+                    <div style="display:flex;align-items:center;gap:15px">
+                        <img src="${LOGO_URL}" style="width:50px;height:50px;border-radius:12px;object-fit:cover">
+                        <div>
+                            <h1 style="font-size:28px;font-weight:900;margin:0;color:#0f172a">JAYENWARE</h1>
+                            <p style="font-size:10px;color:#94a3b8;text-transform:uppercase;font-weight:800;letter-spacing:0.1em;margin:3px 0">Weekly Business Report</p>
+                        </div>
+                    </div>
+                    <div style="text-align:right">
+                        <p style="font-size:12px;font-weight:800;color:#0071e3;margin:0">${reportDate}</p>
+                        <p style="font-size:10px;color:#94a3b8;margin:3px 0">Period: ${oneWeekAgo.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })} - Today</p>
+                    </div>
+                </div>
+                <div style="background:linear-gradient(135deg,#eff6ff,#e0f2fe);padding:25px;border-radius:20px;margin-bottom:30px;border:1px solid #bfdbfe">
+                    <h2 style="font-size:16px;font-weight:900;text-transform:uppercase;letter-spacing:0.05em;color:#1e40af;margin:0 0 15px 0">Executive Summary</h2>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:15px">
+                        <div style="background:white;padding:15px;border-radius:12px">
+                            <p style="font-size:9px;font-weight:800;color:#64748b;text-transform:uppercase;margin:0">Total Revenue</p>
+                            <p style="font-size:22px;font-weight:900;color:#0f172a;margin:5px 0">${formatCurrency(weeklyRevenue)}</p>
+                        </div>
+                        <div style="background:white;padding:15px;border-radius:12px">
+                            <p style="font-size:9px;font-weight:800;color:#64748b;text-transform:uppercase;margin:0">Total Orders</p>
+                            <p style="font-size:22px;font-weight:900;color:#0f172a;margin:5px 0">${weeklyOrders.length}</p>
+                            <p style="font-size:10px;color:#6366f1;font-weight:700">${completedOrders} completed</p>
+                        </div>
+                    </div>
+                </div>
+                <div style="margin-bottom:30px">
+                    <h3 style="font-size:14px;font-weight:900;text-transform:uppercase;color:#0f172a;margin:0 0 15px 0">Daily Breakdown</h3>
+                    <table style="width:100%;border-collapse:collapse;font-size:11px">
+                        <thead>
+                            <tr style="background:#f8fafc;text-align:left">
+                                <th style="padding:10px 15px;font-weight:800;color:#64748b;text-transform:uppercase;font-size:9px">Day</th>
+                                <th style="padding:10px 15px;font-weight:800;color:#64748b;text-transform:uppercase;font-size:9px;text-align:center">Orders</th>
+                                <th style="padding:10px 15px;font-weight:800;color:#64748b;text-transform:uppercase;font-size:9px;text-align:right">Revenue</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${Object.entries(dailyBreakdown).map(([day, data]) => `
+                            <tr style="border-bottom:1px solid #f1f5f9">
+                                <td style="padding:10px 15px;font-weight:700">${day}</td>
+                                <td style="padding:10px 15px;text-align:center;font-weight:600">${data.orders}</td>
+                                <td style="padding:10px 15px;text-align:right;font-weight:800;color:#0071e3">${formatCurrency(data.revenue)}</td>
+                            </tr>`).join('')}
+                        </tbody>
+                    </table>
+                </div>
+                <div style="margin-bottom:30px">
+                    <h3 style="font-size:14px;font-weight:900;text-transform:uppercase;color:#0f172a;margin:0 0 15px 0">Top Products</h3>
+                    <table style="width:100%;border-collapse:collapse;font-size:11px">
+                        <thead>
+                            <tr style="background:#f8fafc;text-align:left">
+                                <th style="padding:10px 15px;font-weight:800;color:#64748b;text-transform:uppercase;font-size:9px">#</th>
+                                <th style="padding:10px 15px;font-weight:800;color:#64748b;text-transform:uppercase;font-size:9px">Product</th>
+                                <th style="padding:10px 15px;font-weight:800;color:#64748b;text-transform:uppercase;font-size:9px;text-align:center">Units</th>
+                                <th style="padding:10px 15px;font-weight:800;color:#64748b;text-transform:uppercase;font-size:9px;text-align:right">Revenue</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${topProducts.map(([name, data], index) => `
+                            <tr style="border-bottom:1px solid #f1f5f9">
+                                <td style="padding:10px 15px;font-weight:900">${index + 1}</td>
+                                <td style="padding:10px 15px;font-weight:700">${name}</td>
+                                <td style="padding:10px 15px;text-align:center;font-weight:600">${data.count}</td>
+                                <td style="padding:10px 15px;text-align:right;font-weight:800;color:#0071e3">${formatCurrency(data.revenue)}</td>
+                            </tr>`).join('')}
+                        </tbody>
+                    </table>
+                </div>
+                <div style="border-top:2px solid #f1f5f9;padding-top:20px;text-align:center">
+                    <p style="font-size:9px;color:#94a3b8;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;margin:0">Generated by JAYENWARE Admin • Core by BINZEO</p>
+                </div>`;
+
+            const opt = {
+                margin: [10, 10, 10, 10],
+                filename: `JAYENWARE_Weekly_Report_${now.toISOString().split('T')[0]}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, useCORS: true },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            await html2pdf().set(opt).from(div).save();
+            showToast('Weekly report downloaded successfully! 📊', 'success');
+        }
+
+        // ==================== SESSION CHECK ====================
+        async function checkSession() {
+            const { data: { session } } = await _supabase.auth.getSession();
+
+            if (!session || session.user.email !== ADMIN_EMAIL) {
+                window.location.href = LOGIN_URL;
+                return;
+            }
+
+            // Show main content
+            document.getElementById('global-loader').style.display = 'none';
+            document.getElementById('main-layout').classList.remove('hidden');
+
+            // Apply dark mode
+            if (localStorage.getItem('darkMode') === 'true') {
+                isDarkMode = true;
+                document.body.classList.add('dark');
+            }
+
+            // Show mobile nav if needed
+            if (window.innerWidth < 769) {
+                document.querySelector('.bottom-nav').classList.remove('hidden');
+            }
+
+            // Load analytics
+            await loadAndRenderAnalytics();
+        }
+
+        // ==================== INITIALIZATION ====================
+        window.onload = checkSession;
+
+        window.addEventListener('resize', () => {
+            if (window.innerWidth >= 769) {
+                document.querySelector('.bottom-nav').classList.add('hidden');
+            } else {
+                document.querySelector('.bottom-nav').classList.remove('hidden');
+            }
+        });
+    </script>
+</body>
+</html>

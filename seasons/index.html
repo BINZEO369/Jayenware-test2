@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Seasons | JAYENWARE Admin</title>
+    <meta name="theme-color" content="#f59e0b">
+    <link rel="icon" type="image/png" href="https://ozuwazkqyrxiwwfjceth.supabase.co/storage/v1/object/public/images/Beige%20Black%20Minimal%20Simple%20Modern%20Handwritten%20Graffiti%20Typographic%20Arts%20and_20251212_154142_0000.png">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.75); --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.1); --radius-3xl: 2.5rem;
+        }
+        * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: #f5f5f7; color: #1d1d1f; margin: 0; padding: 0; min-height: 100vh;
+            transition: background 0.3s, color 0.3s;
+        }
+        body.dark { background: #0a0a0a; color: #f5f5f7; }
+        body.dark .glass-card { background: rgba(28, 28, 30, 0.8); border-color: rgba(255, 255, 255, 0.08); }
+        body.dark .bg-white { background: #1c1c1e; }
+        body.dark .bg-gray-50, body.dark .bg-gray-100 { background: #2c2c2e; }
+        body.dark .text-slate-800, body.dark .text-slate-900 { color: #f5f5f7; }
+        body.dark .text-gray-400 { color: #8e8e93; }
+        body.dark .text-gray-500 { color: #636366; }
+        body.dark .border, body.dark .border-b, body.dark .border-t { border-color: #2c2c2e; }
+        body.dark input, body.dark select, body.dark textarea { background: #1c1c1e; border-color: #2c2c2e; color: #fff; }
+        body.dark .hover\:bg-slate-50:hover { background: #2c2c2e; }
+
+        .glass-card {
+            background: var(--glass-bg); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255,255,255,0.5); box-shadow: var(--shadow-md);
+        }
+        .custom-scroll::-webkit-scrollbar { width: 4px; height: 4px; }
+        .custom-scroll::-webkit-scrollbar-track { background: transparent; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #f59e0b, #ef4444); border-radius: 10px; }
+
+        .btn-action { transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); cursor: pointer; }
+        .btn-action:hover { transform: translateY(-2px); }
+        .btn-action:active { transform: scale(0.96); }
+
+        @keyframes fadeSlideIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideUp { from { transform: translateY(100px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes slideDown { from { transform: translateY(0); opacity: 1; } to { transform: translateY(100px); opacity: 0; } }
+        @keyframes seasonalGlow { 0%,100% { box-shadow: 0 0 15px rgba(245,158,11,0.3); } 50% { box-shadow: 0 0 30px rgba(245,158,11,0.6); } }
+        @keyframes leafFloat { 0%,100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-8px) rotate(5deg); } }
+
+        .toast-enter { animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .toast-exit { animation: slideDown 0.3s ease-in forwards; }
+
+        .season-card { transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); position: relative; overflow: hidden; }
+        .season-card:hover { transform: translateY(-6px); box-shadow: 0 20px 50px rgba(245, 158, 11, 0.2); }
+        .season-card.active-season { animation: seasonalGlow 3s infinite; }
+        .season-card .leaf-icon { animation: leafFloat 3s ease-in-out infinite; }
+
+        .product-chip {
+            background: white; border: 2px solid #f59e0b; color: #92400e;
+            padding: 3px 10px; border-radius: 99px; font-size: 9px; font-weight: 700;
+            transition: all 0.2s;
+        }
+        .product-chip.selected {
+            background: #f59e0b; color: white; border-color: #f59e0b;
+        }
+        body.dark .product-chip { background: #2c2c2e; border-color: #f59e0b; color: #fbbf24; }
+        body.dark .product-chip.selected { background: #f59e0b; color: #1c1c1e; }
+
+        @media (max-width: 768px) {
+            .bottom-nav {
+                display: flex; position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
+                background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px);
+                border-top: 1px solid rgba(0,0,0,0.08); padding: 8px 0 env(safe-area-inset-bottom,8px) 0;
+            }
+            body.dark .bottom-nav { background: rgba(28, 28, 30, 0.95); border-color: rgba(255,255,255,0.08); }
+            main { padding-bottom: 100px !important; }
+        }
+        @media (min-width: 769px) { .bottom-nav { display: none; } }
+    </style>
+</head>
+<body class="text-slate-800 antialiased">
+    <div id="global-loader" style="position:fixed;inset:0;background:white;z-index:9999;display:flex;justify-content:center;align-items:center;">
+        <div class="flex flex-col items-center"><div class="w-14 h-14 border-4 border-amber-500 border-t-transparent rounded-full animate-spin"></div><p class="mt-5 font-bold text-gray-400 text-sm">Loading Seasons...</p></div>
+    </div>
+
+    <div id="main-layout" class="hidden min-h-screen">
+        <main class="p-4 md:p-8 lg:p-10 max-w-7xl mx-auto">
+            <header class="mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                    <div class="flex items-center gap-2 text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">
+                        <a href="/home" class="hover:text-amber-600"><i class="fa-solid fa-house"></i> Home</a>
+                        <i class="fa-solid fa-chevron-right text-[8px]"></i> <span class="text-amber-600">Seasons</span>
+                    </div>
+                    <h2 class="text-2xl md:text-3xl font-black uppercase tracking-tight">Season Manager</h2>
+                </div>
+                <button onclick="openSeasonModal()" class="px-6 py-3 bg-gradient-to-r from-amber-500 to-orange-600 text-white rounded-2xl font-black text-xs uppercase btn-action shadow-lg">
+                    <i class="fa-solid fa-plus mr-2"></i> Create Season
+                </button>
+            </header>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5" id="seasons-grid">
+                <div class="col-span-full text-center py-16 text-xs text-gray-400">
+                    <i class="fa-solid fa-calendar-star text-5xl mb-4 block opacity-20"></i><p class="font-bold">No seasons created</p><p class="mt-1">Create your first seasonal campaign</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- SEASON MODAL -->
+    <div id="season-modal" class="hidden fixed inset-0 z-[500] bg-black/50 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-2xl rounded-[3rem] p-6 md:p-10 overflow-y-auto max-h-[90vh] custom-scroll relative shadow-2xl">
+            <button onclick="closeSeasonModal()" class="absolute top-6 right-6 text-2xl text-gray-400 btn-action"><i class="fa-solid fa-xmark"></i></button>
+            <h2 id="season-modal-title" class="text-2xl font-black mb-6 uppercase">Create Season</h2>
+            <div class="space-y-4 mb-6">
+                <input type="text" id="as-name" placeholder="Season Name *" class="w-full p-4 bg-gray-50 border rounded-2xl outline-none font-bold">
+                <input type="text" id="as-subtitle" placeholder="Subtitle" class="w-full p-4 bg-gray-50 border rounded-2xl outline-none font-bold">
+                <div class="p-4 border-2 border-dashed rounded-3xl bg-gray-50">
+                    <p class="text-[10px] font-bold text-gray-400 mb-3 uppercase"><i class="fa-solid fa-image mr-1"></i> Banner</p>
+                    <input type="text" id="as-banner-url" placeholder="Image URL" class="w-full p-3 bg-white border rounded-xl mb-3 outline-none text-sm font-bold">
+                    <input type="file" id="as-banner-file" class="w-full text-xs text-gray-500" accept="image/*">
+                </div>
+                <label class="flex items-center gap-2 text-xs font-bold p-4 bg-amber-50 rounded-2xl cursor-pointer">
+                    <input type="checkbox" id="as-active" checked class="w-4 h-4 accent-amber-500"> Active Season
+                </label>
+            </div>
+            <div class="border-t pt-6 mb-6">
+                <h3 class="font-black uppercase text-sm mb-4">Select Products (Max 4)</h3>
+                <div id="season-product-selection" class="grid grid-cols-2 gap-3 max-h-60 overflow-y-auto custom-scroll"></div>
+            </div>
+            <button id="btn-season-save" onclick="saveSeason()" class="w-full py-5 bg-gradient-to-r from-amber-500 to-orange-600 text-white rounded-3xl font-black shadow-xl btn-action">PUBLISH SEASON</button>
+        </div>
+    </div>
+
+    <!-- MOBILE NAV -->
+    <nav class="bottom-nav hidden">
+        <div class="flex justify-around items-center px-2">
+            <a href="/home" class="flex flex-col items-center gap-1 p-2 text-[10px] font-black text-gray-400 no-underline"><i class="fa-solid fa-house text-lg"></i> Home</a>
+            <a href="/products" class="flex flex-col items-center gap-1 p-2 text-[10px] font-black text-gray-400 no-underline"><i class="fa-solid fa-box text-lg"></i> Products</a>
+            <a href="/seasons" class="flex flex-col items-center gap-1 p-2 text-[10px] font-black text-amber-600 no-underline"><i class="fa-solid fa-calendar-star text-lg"></i> Seasons</a>
+            <a href="/orders" class="flex flex-col items-center gap-1 p-2 text-[10px] font-black text-gray-400 no-underline"><i class="fa-solid fa-cart-shopping text-lg"></i> Orders</a>
+            <a href="/ai" class="flex flex-col items-center gap-1 p-2 text-[10px] font-black text-gray-400 no-underline"><i class="fa-solid fa-robot text-lg"></i> AI</a>
+        </div>
+    </nav>
+
+    <script>
+        const SUPABASE_URL = "https://vdqbjwzixppbtkbgvhlq.supabase.co";
+        const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZkcWJqd3ppeHBwYnRrYmd2aGxxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgwMDc3MzQsImV4cCI6MjA5MzU4MzczNH0.E6C0_7SWIrTMJlFe5t8EbNAW5fzlpg-fKV3ZV0XYd3k";
+        const ADMIN_EMAIL = "binzeo369@gmail.com";
+        const LOGO_URL = "https://ozuwazkqyrxiwwfjceth.supabase.co/storage/v1/object/public/images/Beige%20Black%20Minimal%20Simple%20Modern%20Handwritten%20Graffiti%20Typographic%20Arts%20and_20251212_154142_0000.png";
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        let allSeasons = [], allProducts = [], seasonProducts = [], isDarkMode = false;
+        let editingSeasonId = null, selectedProducts = [];
+
+        function showToast(m, t = 'success') {
+            const el = document.createElement('div');
+            el.className = `fixed bottom-20 md:bottom-6 right-6 px-5 py-3.5 rounded-2xl font-black text-sm text-white shadow-2xl z-[9999] toast-enter ${t==='success'?'bg-green-500':t==='error'?'bg-red-500':'bg-blue-500'}`;
+            el.innerHTML = `<span><i class="fa-solid fa-${t==='success'?'check-circle':'exclamation-circle'} mr-2"></i>${m}</span>`;
+            document.body.appendChild(el);
+            setTimeout(() => { el.classList.add('toast-exit'); setTimeout(() => el.remove(), 300); }, 3000);
+        }
+
+        async function uploadFile(inputId) {
+            const f = document.getElementById(inputId).files[0]; if (!f) return null;
+            const name = `binzeo_${Date.now()}_${f.name.replace(/\s+/g,'_')}`;
+            try {
+                const { error } = await _supabase.storage.from('images').upload(name, f, { cacheControl: '3600', upsert: false });
+                if (error) { showToast('Upload failed', 'error'); return null; }
+                return _supabase.storage.from('images').getPublicUrl(name).data.publicUrl;
+            } catch (e) { return null; }
+        }
+
+        async function loadData() {
+            const [{ data: s }, { data: p }, { data: sp }] = await Promise.all([
+                _supabase.from('seasons').select('*').order('created_at', { ascending: false }),
+                _supabase.from('products').select('*'),
+                _supabase.from('season_products').select('*')
+            ]);
+            if (s) allSeasons = s; if (p) allProducts = p; if (sp) seasonProducts = sp;
+            renderSeasons();
+        }
+
+        function renderSeasons() {
+            const grid = document.getElementById('seasons-grid');
+            if (allSeasons.length === 0) {
+                grid.innerHTML = `<div class="col-span-full text-center py-16 text-xs text-gray-400"><i class="fa-solid fa-calendar-star text-5xl mb-4 block opacity-20"></i><p class="font-bold">No seasons created</p><p class="mt-1">Create your first seasonal campaign</p></div>`;
+                return;
+            }
+            grid.innerHTML = allSeasons.map(s => {
+                const sps = seasonProducts.filter(sp => sp.season_id === s.id);
+                const products = sps.map(sp => allProducts.find(p => p.id === sp.product_id)).filter(Boolean);
+                const isActive = s.is_active !== false;
+                return `
+                <div class="season-card bg-white rounded-[3rem] border shadow-sm overflow-hidden ${isActive ? 'active-season' : ''}">
+                    ${s.banner_img ? `<img src="${s.banner_img}" class="w-full h-36 object-cover" onerror="this.style.display='none'">` : `<div class="w-full h-36 bg-gradient-to-r from-amber-400 to-orange-500 flex items-center justify-center"><i class="fa-solid fa-calendar-star text-white text-4xl leaf-icon"></i></div>`}
+                    <div class="p-5">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="font-black text-sm truncate">${s.name}</h3>
+                            <span class="text-[9px] font-black px-2 py-1 rounded-full ${isActive ? 'bg-green-100 text-green-600' : 'bg-gray-100 text-gray-500'}">${isActive ? '🟢 Active' : '⚫ Inactive'}</span>
+                        </div>
+                        <p class="text-[10px] text-gray-400 mb-3">${s.subtitle || 'No subtitle'}</p>
+                        ${products.length > 0 ? `<div class="flex flex-wrap gap-1 mb-3">${products.map(p => `<span class="text-[8px] bg-amber-50 text-amber-700 px-2 py-0.5 rounded-full font-bold">${p.title}</span>`).join('')}</div>` : '<p class="text-[9px] text-gray-400 mb-3">No products linked</p>'}
+                        <div class="flex gap-2 pt-3 border-t">
+                            <button onclick="editSeason(${s.id})" class="flex-1 py-2.5 bg-amber-50 text-amber-600 rounded-xl text-[10px] font-black btn-action"><i class="fa-solid fa-pen mr-1"></i> Edit</button>
+                            <button onclick="deleteSeason(${s.id})" class="flex-1 py-2.5 bg-red-50 text-red-500 rounded-xl text-[10px] font-black btn-action"><i class="fa-solid fa-trash mr-1"></i> Delete</button>
+                        </div>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        function openSeasonModal() {
+            editingSeasonId = null; selectedProducts = [];
+            document.getElementById('season-modal-title').textContent = 'Create Season';
+            document.getElementById('btn-season-save').textContent = 'PUBLISH SEASON';
+            ['as-name','as-subtitle','as-banner-url'].forEach(id => document.getElementById(id).value = '');
+            document.getElementById('as-banner-file').value = '';
+            document.getElementById('as-active').checked = true;
+            renderProductSelection();
+            document.getElementById('season-modal').classList.remove('hidden');
+        }
+
+        function closeSeasonModal() { document.getElementById('season-modal').classList.add('hidden'); editingSeasonId = null; }
+
+        function renderProductSelection() {
+            document.getElementById('season-product-selection').innerHTML = allProducts.map(p => `
+                <label class="flex items-center gap-3 p-3 bg-gray-50 rounded-2xl cursor-pointer hover:bg-amber-50 transition border product-chip ${selectedProducts.includes(p.id) ? 'selected' : ''}">
+                    <input type="checkbox" value="${p.id}" ${selectedProducts.includes(p.id) ? 'checked' : ''} onchange="toggleProduct(${p.id})" class="hidden">
+                    <img src="${p.img || LOGO_URL}" class="w-8 h-8 rounded-lg object-cover border" onerror="this.src='${LOGO_URL}'">
+                    <span class="text-xs font-bold truncate">${p.title}</span>
+                </label>`).join('');
+        }
+
+        function toggleProduct(pid) {
+            const idx = selectedProducts.indexOf(pid);
+            if (idx > -1) selectedProducts.splice(idx, 1);
+            else if (selectedProducts.length < 4) selectedProducts.push(pid);
+            else { showToast('Max 4 products per season', 'error'); return; }
+            renderProductSelection();
+        }
+
+        async function editSeason(id) {
+            const s = allSeasons.find(x => x.id === id); if (!s) return;
+            editingSeasonId = id;
+            selectedProducts = seasonProducts.filter(sp => sp.season_id === id).map(sp => sp.product_id);
+            document.getElementById('season-modal-title').textContent = 'Edit Season';
+            document.getElementById('btn-season-save').textContent = 'UPDATE SEASON';
+            document.getElementById('as-name').value = s.name;
+            document.getElementById('as-subtitle').value = s.subtitle || '';
+            document.getElementById('as-banner-url').value = s.banner_img || '';
+            document.getElementById('as-active').checked = s.is_active !== false;
+            renderProductSelection();
+            document.getElementById('season-modal').classList.remove('hidden');
+        }
+
+        async function saveSeason() {
+            const name = document.getElementById('as-name').value.trim();
+            if (!name) { showToast('Season name is required', 'error'); return; }
+            const btn = document.getElementById('btn-season-save');
+            btn.disabled = true; btn.innerHTML = '<div class="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mx-auto"></div>';
+
+            try {
+                let bannerImg = document.getElementById('as-banner-url').value.trim() || await uploadFile('as-banner-file');
+                const obj = { name, subtitle: document.getElementById('as-subtitle').value.trim(), is_active: document.getElementById('as-active').checked };
+                if (bannerImg) obj.banner_img = bannerImg;
+
+                let seasonId = editingSeasonId;
+                if (editingSeasonId) {
+                    await _supabase.from('seasons').update(obj).eq('id', editingSeasonId);
+                    await _supabase.from('season_products').delete().eq('season_id', editingSeasonId);
+                } else {
+                    const { data } = await _supabase.from('seasons').insert([obj]).select();
+                    if (data?.[0]) seasonId = data[0].id;
+                }
+                if (seasonId && selectedProducts.length) {
+                    await _supabase.from('season_products').insert(selectedProducts.map((pid, i) => ({ season_id: seasonId, product_id: pid, display_order: i + 1 })));
+                }
+                showToast(editingSeasonId ? 'Season updated! 🎉' : 'Season published! 🎉', 'success');
+                closeSeasonModal(); await loadData();
+            } catch (e) { showToast('Error saving season', 'error'); }
+            finally { btn.disabled = false; btn.innerHTML = editingSeasonId ? 'UPDATE SEASON' : 'PUBLISH SEASON'; }
+        }
+
+        async function deleteSeason(id) {
+            if (!confirm('Delete this season?')) return;
+            await _supabase.from('season_products').delete().eq('season_id', id);
+            await _supabase.from('seasons').delete().eq('id', id);
+            showToast('Season deleted', 'error'); await loadData();
+        }
+
+        async function checkSession() {
+            const { data: { session } } = await _supabase.auth.getSession();
+            if (!session || session.user.email !== ADMIN_EMAIL) { window.location.href = '/login'; return; }
+            document.getElementById('global-loader').style.display = 'none';
+            document.getElementById('main-layout').classList.remove('hidden');
+            if (localStorage.getItem('darkMode') === 'true') { isDarkMode = true; document.body.classList.add('dark'); }
+            if (window.innerWidth < 769) document.querySelector('.bottom-nav').classList.remove('hidden');
+            await loadData();
+        }
+
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSeasonModal(); });
+        window.onload = checkSession;
+        window.addEventListener('resize', () => { document.querySelector('.bottom-nav').classList.toggle('hidden', window.innerWidth >= 769); });
+    </script>
+</body>
+</html>

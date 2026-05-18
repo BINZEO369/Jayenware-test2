@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Settings | JAYENWARE Admin</title>
+    <meta name="theme-color" content="#6366f1">
+    <link rel="icon" type="image/png" href="https://ozuwazkqyrxiwwfjceth.supabase.co/storage/v1/object/public/images/Beige%20Black%20Minimal%20Simple%20Modern%20Handwritten%20Graffiti%20Typographic%20Arts%20and_20251212_154142_0000.png">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.75); --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.1); --radius-3xl: 2.5rem;
+        }
+        * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: #f5f5f7; color: #1d1d1f; margin: 0; padding: 0; min-height: 100vh;
+            transition: background 0.3s, color 0.3s;
+        }
+        body.dark { background: #0a0a0a; color: #f5f5f7; }
+        body.dark .glass-card { background: rgba(28, 28, 30, 0.8); border-color: rgba(255, 255, 255, 0.08); }
+        body.dark .bg-white { background: #1c1c1e; }
+        body.dark .bg-gray-50, body.dark .bg-gray-100 { background: #2c2c2e; }
+        body.dark .text-slate-800, body.dark .text-slate-900 { color: #f5f5f7; }
+        body.dark .text-gray-400 { color: #8e8e93; }
+        body.dark .text-gray-500 { color: #636366; }
+        body.dark .border, body.dark .border-b, body.dark .border-t { border-color: #2c2c2e; }
+        body.dark input { background: #1c1c1e; border-color: #2c2c2e; color: #fff; }
+        body.dark .hover\:bg-slate-50:hover { background: #2c2c2e; }
+
+        .glass-card {
+            background: var(--glass-bg); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255,255,255,0.5); box-shadow: var(--shadow-md);
+        }
+        .custom-scroll::-webkit-scrollbar { width: 4px; height: 4px; }
+        .custom-scroll::-webkit-scrollbar-track { background: transparent; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #6366f1, #a855f7); border-radius: 10px; }
+
+        .btn-action { transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); cursor: pointer; }
+        .btn-action:hover { transform: translateY(-2px); }
+        .btn-action:active { transform: scale(0.96); }
+        .btn-danger { transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); cursor: pointer; }
+        .btn-danger:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(239, 68, 68, 0.3); }
+
+        @keyframes fadeSlideIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideUp { from { transform: translateY(100px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes slideDown { from { transform: translateY(0); opacity: 1; } to { transform: translateY(100px); opacity: 0; } }
+        @keyframes rotateGear { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        @keyframes profileGlow { 0%,100% { box-shadow: 0 0 20px rgba(99,102,241,0.3); } 50% { box-shadow: 0 0 40px rgba(99,102,241,0.6); } }
+
+        .toast-enter { animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .toast-exit { animation: slideDown 0.3s ease-in forwards; }
+
+        .settings-tab {
+            transition: all 0.3s ease; cursor: pointer; padding: 12px 20px; border-radius: 16px;
+            font-weight: 700; font-size: 12px; display: flex; align-items: center; gap: 10px;
+        }
+        .settings-tab:hover { background: rgba(99, 102, 241, 0.05); }
+        .settings-tab.active { background: #6366f1; color: white; box-shadow: 0 8px 25px rgba(99,102,241,0.3); }
+
+        .profile-avatar {
+            width: 80px; height: 80px; border-radius: 2rem;
+            background: linear-gradient(135deg, #6366f1, #a855f7);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 32px; font-weight: 900; color: white;
+            animation: profileGlow 3s infinite;
+        }
+
+        .toggle-switch {
+            width: 48px; height: 26px; background: #d1d5db; border-radius: 99px;
+            position: relative; cursor: pointer; transition: background 0.3s;
+        }
+        .toggle-switch.active { background: #6366f1; }
+        .toggle-switch::after {
+            content: ''; position: absolute; top: 3px; left: 3px;
+            width: 20px; height: 20px; background: white; border-radius: 50%;
+            transition: transform 0.3s; box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+        .toggle-switch.active::after { transform: translateX(22px); }
+
+        .setting-row {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 16px 0; border-bottom: 1px solid #f1f5f9;
+        }
+        body.dark .setting-row { border-color: #2c2c2e; }
+
+        @media (max-width: 768px) {
+            .bottom-nav {
+                display: flex; position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
+                background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px);
+                border-top: 1px solid rgba(0,0,0,0.08); padding: 8px 0 env(safe-area-inset-bottom,8px) 0;
+            }
+            body.dark .bottom-nav { background: rgba(28, 28, 30, 0.95); border-color: rgba(255,255,255,0.08); }
+            main { padding-bottom: 100px !important; }
+        }
+        @media (min-width: 769px) { .bottom-nav { display: none; } }
+    </style>
+</head>
+<body class="text-slate-800 antialiased">
+    <div id="global-loader" style="position:fixed;inset:0;background:white;z-index:9999;display:flex;justify-content:center;align-items:center;">
+        <div class="flex flex-col items-center"><div class="w-14 h-14 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div><p class="mt-5 font-bold text-gray-400 text-sm">Loading Settings...</p></div>
+    </div>
+
+    <div id="main-layout" class="hidden min-h-screen">
+        <main class="p-4 md:p-8 lg:p-10 max-w-5xl mx-auto">
+            <header class="mb-8">
+                <div class="flex items-center gap-2 text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">
+                    <a href="/home" class="hover:text-indigo-600"><i class="fa-solid fa-house"></i> Home</a>
+                    <i class="fa-solid fa-chevron-right text-[8px]"></i> <span class="text-indigo-600">Settings</span>
+                </div>
+                <h2 class="text-2xl md:text-3xl font-black uppercase tracking-tight">Settings & Profile</h2>
+            </header>
+
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                <!-- SIDEBAR TABS -->
+                <div class="lg:col-span-1 glass-card p-4 rounded-[3rem] shadow-sm h-fit space-y-1">
+                    <div class="settings-tab active" data-tab="profile" onclick="switchTab('profile')">
+                        <i class="fa-solid fa-user w-5"></i> Profile
+                    </div>
+                    <div class="settings-tab" data-tab="security" onclick="switchTab('security')">
+                        <i class="fa-solid fa-shield-halved w-5"></i> Security
+                    </div>
+                    <div class="settings-tab" data-tab="appearance" onclick="switchTab('appearance')">
+                        <i class="fa-solid fa-palette w-5"></i> Appearance
+                    </div>
+                    <div class="settings-tab" data-tab="notifications" onclick="switchTab('notifications')">
+                        <i class="fa-solid fa-bell w-5"></i> Notifications
+                    </div>
+                    <div class="settings-tab" data-tab="system" onclick="switchTab('system')">
+                        <i class="fa-solid fa-server w-5"></i> System Info
+                    </div>
+                    <div class="settings-tab" data-tab="about" onclick="switchTab('about')">
+                        <i class="fa-solid fa-circle-info w-5"></i> About
+                    </div>
+                </div>
+
+                <!-- CONTENT AREA -->
+                <div class="lg:col-span-3">
+                    <!-- PROFILE TAB -->
+                    <div id="tab-profile" class="settings-content glass-card p-6 md:p-8 rounded-[3rem] shadow-sm">
+                        <h3 class="text-lg font-black uppercase mb-6 flex items-center gap-2">
+                            <i class="fa-solid fa-user text-indigo-600"></i> Admin Profile
+                        </h3>
+                        <div class="flex flex-col md:flex-row items-center gap-6 mb-8 p-6 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-[2rem]">
+                            <div class="profile-avatar flex-shrink-0" id="profile-avatar">B</div>
+                            <div class="text-center md:text-left">
+                                <h4 class="text-xl font-black" id="profile-name">Admin</h4>
+                                <p class="text-xs text-gray-500" id="profile-email">admin@jayenware.com</p>
+                                <p class="text-[10px] text-indigo-600 font-bold mt-1 flex items-center gap-1">
+                                    <span class="w-2 h-2 bg-green-500 rounded-full"></span> Super Admin
+                                </p>
+                            </div>
+                        </div>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="text-[10px] font-black text-gray-400 uppercase ml-2 mb-1 block">Display Name</label>
+                                <input type="text" id="set-display-name" class="w-full p-4 bg-gray-50 border rounded-2xl outline-none font-bold text-sm focus:ring-2 focus:ring-indigo-500">
+                            </div>
+                            <button onclick="saveProfile()" class="w-full py-3 bg-indigo-600 text-white rounded-2xl font-black text-xs uppercase btn-action">
+                                <i class="fa-solid fa-check mr-2"></i> Save Changes
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- SECURITY TAB -->
+                    <div id="tab-security" class="settings-content hidden glass-card p-6 md:p-8 rounded-[3rem] shadow-sm">
+                        <h3 class="text-lg font-black uppercase mb-6 flex items-center gap-2">
+                            <i class="fa-solid fa-shield-halved text-red-600"></i> Change Password
+                        </h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="text-[10px] font-black text-gray-400 uppercase ml-2 mb-1 block">Current Password</label>
+                                <input type="password" id="set-current-pass" class="w-full p-4 bg-gray-50 border rounded-2xl outline-none font-bold text-sm focus:ring-2 focus:ring-indigo-500">
+                            </div>
+                            <div>
+                                <label class="text-[10px] font-black text-gray-400 uppercase ml-2 mb-1 block">New Password</label>
+                                <input type="password" id="set-new-pass" class="w-full p-4 bg-gray-50 border rounded-2xl outline-none font-bold text-sm focus:ring-2 focus:ring-indigo-500">
+                            </div>
+                            <div>
+                                <label class="text-[10px] font-black text-gray-400 uppercase ml-2 mb-1 block">Confirm New Password</label>
+                                <input type="password" id="set-confirm-pass" class="w-full p-4 bg-gray-50 border rounded-2xl outline-none font-bold text-sm focus:ring-2 focus:ring-indigo-500">
+                            </div>
+                            <button onclick="changePassword()" class="w-full py-3 bg-red-500 text-white rounded-2xl font-black text-xs uppercase btn-danger">
+                                <i class="fa-solid fa-key mr-2"></i> Update Password
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- APPEARANCE TAB -->
+                    <div id="tab-appearance" class="settings-content hidden glass-card p-6 md:p-8 rounded-[3rem] shadow-sm">
+                        <h3 class="text-lg font-black uppercase mb-6 flex items-center gap-2">
+                            <i class="fa-solid fa-palette text-purple-600"></i> Appearance
+                        </h3>
+                        <div class="space-y-4">
+                            <div class="setting-row">
+                                <div>
+                                    <p class="text-sm font-bold">Dark Mode</p>
+                                    <p class="text-[10px] text-gray-400">Switch between light and dark theme</p>
+                                </div>
+                                <div class="toggle-switch active" id="dark-mode-toggle" onclick="toggleDarkModeSetting()"></div>
+                            </div>
+                            <div class="setting-row">
+                                <div>
+                                    <p class="text-sm font-bold">Compact View</p>
+                                    <p class="text-[10px] text-gray-400">Reduce spacing for more content</p>
+                                </div>
+                                <div class="toggle-switch" id="compact-toggle" onclick="toggleCompactMode()"></div>
+                            </div>
+                            <div class="setting-row">
+                                <div>
+                                    <p class="text-sm font-bold">Animations</p>
+                                    <p class="text-[10px] text-gray-400">Enable or disable UI animations</p>
+                                </div>
+                                <div class="toggle-switch active" id="animation-toggle" onclick="toggleAnimations()"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- NOTIFICATIONS TAB -->
+                    <div id="tab-notifications" class="settings-content hidden glass-card p-6 md:p-8 rounded-[3rem] shadow-sm">
+                        <h3 class="text-lg font-black uppercase mb-6 flex items-center gap-2">
+                            <i class="fa-solid fa-bell text-yellow-600"></i> Notification Preferences
+                        </h3>
+                        <div class="space-y-4">
+                            <div class="setting-row">
+                                <div>
+                                    <p class="text-sm font-bold">Order Alerts</p>
+                                    <p class="text-[10px] text-gray-400">Get notified for new orders</p>
+                                </div>
+                                <div class="toggle-switch active" onclick="this.classList.toggle('active')"></div>
+                            </div>
+                            <div class="setting-row">
+                                <div>
+                                    <p class="text-sm font-bold">Stock Alerts</p>
+                                    <p class="text-[10px] text-gray-400">Low stock notifications</p>
+                                </div>
+                                <div class="toggle-switch active" onclick="this.classList.toggle('active')"></div>
+                            </div>
+                            <div class="setting-row">
+                                <div>
+                                    <p class="text-sm font-bold">Visitor Alerts</p>
+                                    <p class="text-[10px] text-gray-400">Unusual traffic notifications</p>
+                                </div>
+                                <div class="toggle-switch" onclick="this.classList.toggle('active')"></div>
+                            </div>
+                            <div class="setting-row">
+                                <div>
+                                    <p class="text-sm font-bold">Weekly Report</p>
+                                    <p class="text-[10px] text-gray-400">Auto-generate weekly reports</p>
+                                </div>
+                                <div class="toggle-switch active" onclick="this.classList.toggle('active')"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SYSTEM TAB -->
+                    <div id="tab-system" class="settings-content hidden glass-card p-6 md:p-8 rounded-[3rem] shadow-sm">
+                        <h3 class="text-lg font-black uppercase mb-6 flex items-center gap-2">
+                            <i class="fa-solid fa-server text-blue-600"></i> System Information
+                        </h3>
+                        <div class="space-y-3">
+                            <div class="flex justify-between py-3 border-b">
+                                <span class="text-xs font-bold text-gray-500">Supabase URL</span>
+                                <span class="text-[10px] font-mono font-bold">vdqbjwzixppbtkbgvhlq.supabase.co</span>
+                            </div>
+                            <div class="flex justify-between py-3 border-b">
+                                <span class="text-xs font-bold text-gray-500">API Version</span>
+                                <span class="text-[10px] font-bold text-green-600">v2.0</span>
+                            </div>
+                            <div class="flex justify-between py-3 border-b">
+                                <span class="text-xs font-bold text-gray-500">Storage Bucket</span>
+                                <span class="text-[10px] font-bold">images</span>
+                            </div>
+                            <div class="flex justify-between py-3 border-b">
+                                <span class="text-xs font-bold text-gray-500">Auth Provider</span>
+                                <span class="text-[10px] font-bold">Supabase Auth (JWT)</span>
+                            </div>
+                            <div class="flex justify-between py-3 border-b">
+                                <span class="text-xs font-bold text-gray-500">Pathao Store ID</span>
+                                <span class="text-[10px] font-bold">357617</span>
+                            </div>
+                            <div class="flex justify-between py-3 border-b">
+                                <span class="text-xs font-bold text-gray-500">Last Deploy</span>
+                                <span class="text-[10px] font-bold" id="last-deploy">Today</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ABOUT TAB -->
+                    <div id="tab-about" class="settings-content hidden glass-card p-6 md:p-8 rounded-[3rem] shadow-sm text-center">
+                        <h3 class="text-lg font-black uppercase mb-6 flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-circle-info text-indigo-600"></i> About
+                        </h3>
+                        <img src="https://ozuwazkqyrxiwwfjceth.supabase.co/storage/v1/object/public/images/Beige%20Black%20Minimal%20Simple%20Modern%20Handwritten%20Graffiti%20Typographic%20Arts%20and_20251212_154142_0000.png" class="w-20 h-20 rounded-2xl mx-auto mb-4 shadow-lg object-cover">
+                        <h4 class="text-xl font-black uppercase">JAYEN<span class="text-blue-600">WARE</span></h4>
+                        <p class="text-xs text-gray-400 mt-1">Admin Control Panel v3.0</p>
+                        <div class="mt-6 p-5 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-2xl">
+                            <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1">Architected & Developed by</p>
+                            <p class="text-lg font-black text-indigo-600">BINZEO</p>
+                            <p class="text-[10px] text-gray-500 mt-2">© 2024 JAYENWARE. All rights reserved.</p>
+                            <p class="text-[9px] text-gray-400 mt-1">Built with Supabase • Tailwind CSS • Chart.js</p>
+                        </div>
+                        <div class="grid grid-cols-3 gap-3 mt-6">
+                            <div class="bg-gray-50 p-3 rounded-2xl">
+                                <p class="text-[9px] text-gray-400">Version</p>
+                                <p class="text-sm font-black">3.0.0</p>
+                            </div>
+                            <div class="bg-gray-50 p-3 rounded-2xl">
+                                <p class="text-[9px] text-gray-400">Build</p>
+                                <p class="text-sm font-black">2024.1</p>
+                            </div>
+                            <div class="bg-gray-50 p-3 rounded-2xl">
+                                <p class="text-[9px] text-gray-400">License</p>
+                                <p class="text-sm font-black">Pro</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- MOBILE NAV -->
+    <nav class="bottom-nav hidden">
+        <div class="flex justify-around items-center px-2">
+            <a href="/home" class="flex flex-col items-center gap-1 p-2 text-[10px] font-black text-gray-400 no-underline"><i class="fa-solid fa-house text-lg"></i> Home</a>
+            <a href="/quick" class="flex flex-col items-center gap-1 p-2 text-[10px] font-black text-gray-400 no-underline"><i class="fa-solid fa-bolt text-lg"></i> Quick</a>
+            <a href="/settings" class="flex flex-col items-center gap-1 p-2 text-[10px] font-black text-indigo-600 no-underline"><i class="fa-solid fa-gear text-lg"></i> Settings</a>
+            <a href="/orders" class="flex flex-col items-center gap-1 p-2 text-[10px] font-black text-gray-400 no-underline"><i class="fa-solid fa-cart-shopping text-lg"></i> Orders</a>
+            <a href="/ai" class="flex flex-col items-center gap-1 p-2 text-[10px] font-black text-gray-400 no-underline"><i class="fa-solid fa-robot text-lg"></i> AI</a>
+        </div>
+    </nav>
+
+    <script>
+        const SUPABASE_URL = "https://vdqbjwzixppbtkbgvhlq.supabase.co";
+        const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZkcWJqd3ppeHBwYnRrYmd2aGxxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgwMDc3MzQsImV4cCI6MjA5MzU4MzczNH0.E6C0_7SWIrTMJlFe5t8EbNAW5fzlpg-fKV3ZV0XYd3k";
+        const ADMIN_EMAIL = "binzeo369@gmail.com";
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        let isDarkMode = false, currentTab = 'profile';
+
+        function showToast(m, t = 'success') {
+            const el = document.createElement('div');
+            el.className = `fixed bottom-20 md:bottom-6 right-6 px-5 py-3.5 rounded-2xl font-black text-sm text-white shadow-2xl z-[9999] toast-enter ${t==='success'?'bg-green-500':t==='error'?'bg-red-500':'bg-blue-500'}`;
+            el.innerHTML = `<span><i class="fa-solid fa-${t==='success'?'check-circle':'exclamation-circle'} mr-2"></i>${m}</span>`;
+            document.body.appendChild(el); setTimeout(() => { el.classList.add('toast-exit'); setTimeout(() => el.remove(), 300); }, 3000);
+        }
+
+        function switchTab(tab) {
+            currentTab = tab;
+            document.querySelectorAll('.settings-tab').forEach(t => t.classList.remove('active'));
+            document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
+            document.querySelectorAll('.settings-content').forEach(c => c.classList.add('hidden'));
+            document.getElementById(`tab-${tab}`).classList.remove('hidden');
+        }
+
+        function toggleDarkModeSetting() {
+            isDarkMode = !isDarkMode;
+            document.body.classList.toggle('dark', isDarkMode);
+            document.getElementById('dark-mode-toggle').classList.toggle('active', isDarkMode);
+            localStorage.setItem('darkMode', isDarkMode);
+            showToast(`Dark mode ${isDarkMode ? 'enabled' : 'disabled'}`, 'info');
+        }
+
+        function toggleCompactMode() {
+            document.getElementById('compact-toggle').classList.toggle('active');
+            showToast('Compact mode toggled', 'info');
+        }
+
+        function toggleAnimations() {
+            document.getElementById('animation-toggle').classList.toggle('active');
+            showToast('Animations toggled', 'info');
+        }
+
+        function saveProfile() {
+            const name = document.getElementById('set-display-name').value.trim();
+            if (!name) { showToast('Please enter a display name', 'error'); return; }
+            document.getElementById('profile-name').textContent = name;
+            document.getElementById('profile-avatar').textContent = name.charAt(0).toUpperCase();
+            localStorage.setItem('adminDisplayName', name);
+            showToast('Profile updated!', 'success');
+        }
+
+        async function changePassword() {
+            const current = document.getElementById('set-current-pass').value;
+            const newPass = document.getElementById('set-new-pass').value;
+            const confirm = document.getElementById('set-confirm-pass').value;
+
+            if (!current || !newPass || !confirm) { showToast('All fields are required', 'error'); return; }
+            if (newPass !== confirm) { showToast('Passwords do not match', 'error'); return; }
+            if (newPass.length < 6) { showToast('Password must be at least 6 characters', 'error'); return; }
+
+            try {
+                const { error } = await _supabase.auth.updateUser({ password: newPass });
+                if (error) throw error;
+                showToast('Password updated successfully! 🔐', 'success');
+                ['set-current-pass','set-new-pass','set-confirm-pass'].forEach(id => document.getElementById(id).value = '');
+            } catch (e) {
+                showToast('Failed to update password. ' + e.message, 'error');
+            }
+        }
+
+        async function checkSession() {
+            const { data: { session } } = await _supabase.auth.getSession();
+            if (!session || session.user.email !== ADMIN_EMAIL) { window.location.href = '/login'; return; }
+
+            document.getElementById('global-loader').style.display = 'none';
+            document.getElementById('main-layout').classList.remove('hidden');
+
+            // Set profile info
+            const email = session.user.email;
+            const savedName = localStorage.getItem('adminDisplayName') || email.split('@')[0];
+            document.getElementById('profile-name').textContent = savedName;
+            document.getElementById('profile-email').textContent = email;
+            document.getElementById('profile-avatar').textContent = savedName.charAt(0).toUpperCase();
+            document.getElementById('set-display-name').value = savedName;
+
+            // Dark mode
+            if (localStorage.getItem('darkMode') === 'true') {
+                isDarkMode = true; document.body.classList.add('dark');
+                document.getElementById('dark-mode-toggle').classList.add('active');
+            }
+
+            if (window.innerWidth < 769) document.querySelector('.bottom-nav').classList.remove('hidden');
+
+            // Set last deploy
+            document.getElementById('last-deploy').textContent = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+        }
+
+        window.onload = checkSession;
+        window.addEventListener('resize', () => { document.querySelector('.bottom-nav').classList.toggle('hidden', window.innerWidth >= 769); });
+    </script>
+</body>
+</html>

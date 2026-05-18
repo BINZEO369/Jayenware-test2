@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Products | JAYENWARE Admin</title>
+    <meta name="theme-color" content="#0071e3">
+    <link rel="icon" type="image/png" href="https://ozuwazkqyrxiwwfjceth.supabase.co/storage/v1/object/public/images/Beige%20Black%20Minimal%20Simple%20Modern%20Handwritten%20Graffiti%20Typographic%20Arts%20and_20251212_154142_0000.png">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.75);
+            --glass-border: rgba(255, 255, 255, 0.5);
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04);
+            --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 60px rgba(0, 0, 0, 0.15);
+            --radius-xl: 1.5rem;
+            --radius-2xl: 2rem;
+            --radius-3xl: 2.5rem;
+        }
+
+        * {
+            -webkit-tap-highlight-color: transparent;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: #f5f5f7;
+            color: #1d1d1f;
+            transition: background 0.3s, color 0.3s;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+
+        body.dark {
+            background: #0a0a0a;
+            color: #f5f5f7;
+        }
+
+        body.dark .glass-card {
+            background: rgba(28, 28, 30, 0.8);
+            border-color: rgba(255, 255, 255, 0.08);
+        }
+
+        body.dark .bg-white {
+            background: #1c1c1e;
+        }
+
+        body.dark .bg-gray-50,
+        body.dark .bg-gray-100 {
+            background: #2c2c2e;
+        }
+
+        body.dark .text-slate-800,
+        body.dark .text-slate-900,
+        body.dark .text-slate-700 {
+            color: #f5f5f7;
+        }
+
+        body.dark .text-gray-400 {
+            color: #8e8e93;
+        }
+
+        body.dark .text-gray-500 {
+            color: #636366;
+        }
+
+        body.dark .border,
+        body.dark .border-b {
+            border-color: #2c2c2e;
+        }
+
+        body.dark .hover\:bg-slate-50:hover {
+            background: #2c2c2e;
+        }
+
+        body.dark input,
+        body.dark select,
+        body.dark textarea {
+            background: #1c1c1e;
+            border-color: #2c2c2e;
+            color: #fff;
+        }
+
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--shadow-md);
+        }
+
+        .custom-scroll::-webkit-scrollbar {
+            width: 4px;
+            height: 4px;
+        }
+
+        .custom-scroll::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #0071e3, #5856d6);
+            border-radius: 10px;
+        }
+
+        .btn-action {
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            cursor: pointer;
+        }
+
+        .btn-action:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-action:active {
+            transform: scale(0.96);
+        }
+
+        .stock-progress {
+            transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .product-card {
+            transition: all 0.3s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+        }
+
+        body.dark .product-card:hover {
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        @keyframes fadeSlideIn {
+            from { opacity: 0; transform: translateY(16px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(100px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(0); opacity: 1; }
+            to { transform: translateY(100px); opacity: 0; }
+        }
+
+        .toast-enter {
+            animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .toast-exit {
+            animation: slideDown 0.3s ease-in forwards;
+        }
+
+        .badge-hot {
+            background: linear-gradient(135deg, #ff6b6b, #ff3b30);
+            color: white;
+        }
+
+        .badge-best {
+            background: linear-gradient(135deg, #ff9f0a, #f59e0b);
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .bottom-nav {
+                display: flex;
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                z-index: 100;
+                background: rgba(255, 255, 255, 0.95);
+                backdrop-filter: blur(20px);
+                border-top: 1px solid rgba(0, 0, 0, 0.08);
+                padding: 8px 0 env(safe-area-inset-bottom, 8px) 0;
+            }
+            body.dark .bottom-nav {
+                background: rgba(28, 28, 30, 0.95);
+                border-color: rgba(255, 255, 255, 0.08);
+            }
+            main {
+                padding-bottom: 100px !important;
+            }
+        }
+
+        @media (min-width: 769px) {
+            .bottom-nav {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body class="text-slate-800 antialiased">
+    <!-- GLOBAL LOADER -->
+    <div id="global-loader" style="position:fixed;inset:0;background:white;z-index:9999;display:flex;justify-content:center;align-items:center;transition:opacity 0.5s;">
+        <div class="flex flex-col items-center">
+            <div class="w-14 h-14 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+            <p class="mt-5 font-bold text-gray-400 text-sm">Loading Inventory...</p>
+        </div>
+    </div>
+
+    <!-- MAIN LAYOUT -->
+    <div id="main-layout" class="hidden min-h-screen">
+        <main class="p-4 md:p-8 lg:p-10 max-w-7xl mx-auto">
+            <!-- HEADER -->
+            <header class="mb-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                    <div class="flex items-center gap-2 text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">
+                        <a href="/home" class="hover:text-blue-600 transition"><i class="fa-solid fa-house"></i> Home</a>
+                        <i class="fa-solid fa-chevron-right text-[8px]"></i>
+                        <span class="text-blue-600">Products</span>
+                    </div>
+                    <h2 class="text-2xl md:text-3xl font-black uppercase tracking-tight">Inventory Control</h2>
+                </div>
+                <div class="flex flex-wrap gap-2">
+                    <button onclick="toggleProductView('table')" id="btn-prod-table" class="px-4 py-2.5 bg-blue-600 text-white rounded-xl font-black text-[10px] uppercase btn-action shadow-md">
+                        <i class="fa-solid fa-table-list mr-1"></i> Table
+                    </button>
+                    <button onclick="toggleProductView('grid')" id="btn-prod-grid" class="px-4 py-2.5 bg-gray-100 text-gray-500 rounded-xl font-black text-[10px] uppercase btn-action">
+                        <i class="fa-solid fa-grid-2 mr-1"></i> Grid
+                    </button>
+                    <button onclick="openAddProductModal()" class="px-5 py-2.5 bg-green-600 text-white rounded-xl font-black text-xs uppercase btn-action shadow-lg">
+                        <i class="fa-solid fa-plus mr-1"></i> Add Product
+                    </button>
+                </div>
+            </header>
+
+            <!-- PRODUCT STATS -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6" id="product-stats">
+                <div class="bg-white p-4 rounded-2xl border shadow-sm text-center">
+                    <p class="text-[10px] font-black text-gray-400 uppercase">Total Products</p>
+                    <p class="text-2xl font-black" id="stat-total">0</p>
+                </div>
+                <div class="bg-white p-4 rounded-2xl border shadow-sm text-center">
+                    <p class="text-[10px] font-black text-gray-400 uppercase">Low Stock</p>
+                    <p class="text-2xl font-black text-orange-600" id="stat-low">0</p>
+                </div>
+                <div class="bg-white p-4 rounded-2xl border shadow-sm text-center">
+                    <p class="text-[10px] font-black text-gray-400 uppercase">Out of Stock</p>
+                    <p class="text-2xl font-black text-red-600" id="stat-out">0</p>
+                </div>
+                <div class="bg-white p-4 rounded-2xl border shadow-sm text-center">
+                    <p class="text-[10px] font-black text-gray-400 uppercase">Categories</p>
+                    <p class="text-2xl font-black text-blue-600" id="stat-cats">0</p>
+                </div>
+            </div>
+
+            <!-- TABLE VIEW -->
+            <div id="product-table-view" class="glass-card rounded-[2.5rem] shadow-sm overflow-hidden">
+                <div class="overflow-x-auto custom-scroll">
+                    <table class="w-full text-left">
+                        <thead>
+                            <tr class="text-[10px] font-black uppercase text-gray-400 border-b">
+                                <th class="p-4">Product</th>
+                                <th class="p-4">Category</th>
+                                <th class="p-4">Price</th>
+                                <th class="p-4">Stock</th>
+                                <th class="p-4">Status</th>
+                                <th class="p-4 text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="product-table-body" class="text-xs font-bold">
+                            <tr><td colspan="6" class="py-8 text-center text-xs text-gray-400">No products found</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- GRID VIEW -->
+            <div id="product-grid-view" class="hidden">
+                <div class="flex gap-3 mb-4">
+                    <input type="text" id="product-search" placeholder="Search products..." 
+                           class="px-4 py-2.5 bg-white border rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-blue-500 w-full max-w-xs"
+                           onkeyup="filterProducts()">
+                    <select id="category-filter" onchange="filterProducts()" class="px-4 py-2.5 bg-white border rounded-xl text-xs font-bold outline-none">
+                        <option value="all">All Categories</option>
+                    </select>
+                </div>
+                <div id="product-grid-body" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5"></div>
+            </div>
+        </main>
+    </div>
+
+    <!-- PRODUCT MODAL -->
+    <div id="product-modal" class="fixed inset-0 z-[500] hidden bg-black/50 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-2xl rounded-[3rem] p-6 md:p-10 overflow-y-auto max-h-[90vh] custom-scroll relative shadow-2xl">
+            <button onclick="closeProductModal()" class="absolute top-6 right-6 text-2xl text-gray-400 hover:text-gray-600 btn-action z-10">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <h2 id="modal-title" class="text-2xl font-black mb-6 uppercase">Add Product</h2>
+            
+            <div class="space-y-4">
+                <input type="text" id="prod-title" placeholder="Product Title *" class="w-full p-4 bg-gray-50 border rounded-2xl outline-none font-bold focus:ring-2 focus:ring-blue-500 transition">
+
+                <div class="grid grid-cols-2 gap-4">
+                    <select id="prod-category" class="p-4 bg-gray-50 border rounded-2xl outline-none font-bold focus:ring-2 focus:ring-blue-500">
+                        <option value="">Select Category</option>
+                    </select>
+                    <input type="number" id="prod-stock" placeholder="Stock Quantity" class="p-4 bg-gray-50 border rounded-2xl outline-none font-bold focus:ring-2 focus:ring-blue-500">
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-[9px] font-black text-gray-400 uppercase ml-2 mb-1 block">Sale Price (৳) *</label>
+                        <input type="number" id="prod-price" placeholder="0" class="w-full p-4 bg-gray-50 border rounded-2xl outline-none font-bold focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label class="text-[9px] font-black text-gray-400 uppercase ml-2 mb-1 block">Original Price (৳)</label>
+                        <input type="number" id="prod-old-price" placeholder="0" class="w-full p-4 bg-gray-50 border rounded-2xl outline-none font-bold focus:ring-2 focus:ring-blue-500">
+                    </div>
+                </div>
+
+                <textarea id="prod-desc" placeholder="Product Description" class="w-full p-4 bg-gray-50 border rounded-2xl h-24 outline-none font-bold focus:ring-2 focus:ring-blue-500 resize-none"></textarea>
+
+                <!-- Image Upload -->
+                <div class="p-4 border-2 border-dashed rounded-3xl bg-gray-50">
+                    <p class="text-[10px] font-bold text-gray-400 mb-3 uppercase flex items-center gap-2">
+                        <i class="fa-solid fa-image"></i> Main Image
+                    </p>
+                    <input type="text" id="prod-img-url" placeholder="Image URL" class="w-full p-3 bg-white border rounded-xl mb-3 outline-none text-sm font-bold" oninput="updateImagePreview()">
+                    <div class="text-center text-[10px] text-gray-400 font-bold mb-2">OR</div>
+                    <input type="file" id="prod-img-file" class="w-full text-xs text-gray-500" accept="image/*" onchange="previewFileImage()">
+                    <div id="img-preview-container" class="mt-3 hidden">
+                        <img id="img-preview" class="w-32 h-32 object-cover rounded-xl border shadow-sm">
+                    </div>
+                </div>
+
+                <!-- Gallery Images -->
+                <div class="p-4 border-2 border-dashed rounded-3xl bg-blue-50">
+                    <p class="text-[10px] font-bold text-blue-400 mb-2 uppercase flex items-center gap-2">
+                        <i class="fa-solid fa-images"></i> Gallery Images
+                    </p>
+                    <textarea id="prod-gallery" placeholder="URL1, URL2, URL3 (comma separated)" class="w-full p-3 bg-white border rounded-xl outline-none text-sm h-16 font-bold resize-none"></textarea>
+                </div>
+
+                <!-- Variants -->
+                <div class="p-4 border rounded-3xl bg-slate-50">
+                    <div class="flex justify-between items-center mb-4">
+                        <p class="text-[10px] font-bold text-slate-500 uppercase flex items-center gap-2">
+                            <i class="fa-solid fa-layer-group"></i> Variants
+                        </p>
+                        <button onclick="addVariantField()" class="text-[10px] font-black text-blue-600 uppercase btn-action flex items-center gap-1">
+                            <i class="fa-solid fa-plus"></i> Add
+                        </button>
+                    </div>
+                    <div id="variant-list" class="space-y-3">
+                        <p class="text-[10px] text-gray-400 text-center py-2">No variants added</p>
+                    </div>
+                </div>
+
+                <!-- Badges -->
+                <div class="flex gap-6 p-5 bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl">
+                    <label class="flex items-center gap-2 text-xs font-bold cursor-pointer">
+                        <input type="checkbox" id="prod-hot" class="w-4 h-4 rounded accent-red-500"> 
+                        <span class="flex items-center gap-1"><i class="fa-solid fa-fire text-red-500"></i> HOT DEAL</span>
+                    </label>
+                    <label class="flex items-center gap-2 text-xs font-bold cursor-pointer">
+                        <input type="checkbox" id="prod-best" class="w-4 h-4 rounded accent-yellow-500"> 
+                        <span class="flex items-center gap-1"><i class="fa-solid fa-star text-yellow-500"></i> BEST SELLER</span>
+                    </label>
+                </div>
+
+                <button id="btn-product-save" onclick="saveProduct()" class="w-full py-5 bg-blue-600 text-white rounded-3xl font-black shadow-xl btn-action text-sm uppercase tracking-wider hover:bg-blue-700">
+                    <i class="fa-solid fa-check mr-2"></i> Publish Product
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- DELETE CONFIRMATION MODAL -->
+    <div id="delete-modal" class="hidden fixed inset-0 z-[600] bg-black/40 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-[2rem] p-6 md:p-8 max-w-md w-full shadow-2xl">
+            <h3 class="text-lg font-black uppercase mb-4 flex items-center gap-2 text-red-600">
+                <i class="fa-solid fa-triangle-exclamation"></i> Confirm Delete
+            </h3>
+            <p class="text-sm text-gray-600 mb-6" id="delete-modal-message">Are you sure you want to delete this product?</p>
+            <div class="flex gap-3">
+                <button onclick="closeDeleteModal()" class="flex-1 py-3 bg-gray-100 rounded-xl font-black text-xs uppercase btn-action">Cancel</button>
+                <button id="delete-confirm-btn" class="flex-1 py-3 bg-red-500 text-white rounded-xl font-black text-xs uppercase btn-action">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- BOTTOM NAVIGATION (MOBILE) -->
+    <nav class="bottom-nav hidden">
+        <div class="flex justify-around items-center px-2">
+            <a href="/home" class="flex flex-col items-center gap-1 p-2 text-[10px] font-black text-gray-400 no-underline">
+                <i class="fa-solid fa-house text-lg"></i> Home
+            </a>
+            <a href="/orders" class="flex flex-col items-center gap-1 p-2 text-[10px] font-black text-gray-400 no-underline">
+                <i class="fa-solid fa-cart-shopping text-lg"></i> Orders
+            </a>
+            <a href="/products" class="flex flex-col items-center gap-1 p-2 text-[10px] font-black text-blue-600 no-underline">
+                <i class="fa-solid fa-box text-lg"></i> Products
+            </a>
+            <a href="/visitors" class="flex flex-col items-center gap-1 p-2 text-[10px] font-black text-gray-400 no-underline">
+                <i class="fa-solid fa-users text-lg"></i> Visitors
+            </a>
+            <a href="/ai" class="flex flex-col items-center gap-1 p-2 text-[10px] font-black text-gray-400 no-underline">
+                <i class="fa-solid fa-robot text-lg"></i> AI
+            </a>
+        </div>
+    </nav>
+
+    <script>
+        // ==================== CONFIGURATION ====================
+        const SUPABASE_URL = "https://vdqbjwzixppbtkbgvhlq.supabase.co";
+        const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZkcWJqd3ppeHBwYnRrYmd2aGxxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgwMDc3MzQsImV4cCI6MjA5MzU4MzczNH0.E6C0_7SWIrTMJlFe5t8EbNAW5fzlpg-fKV3ZV0XYd3k";
+        const ADMIN_EMAIL = "binzeo369@gmail.com";
+        const LOGO_URL = "https://ozuwazkqyrxiwwfjceth.supabase.co/storage/v1/object/public/images/Beige%20Black%20Minimal%20Simple%20Modern%20Handwritten%20Graffiti%20Typographic%20Arts%20and_20251212_154142_0000.png";
+        const HOME_URL = "/home";
+        const LOGIN_URL = "/login";
+
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        // ==================== STATE ====================
+        let allProducts = [];
+        let allCategories = [];
+        let isDarkMode = false;
+        let currentProductView = 'table';
+        let editingProductId = null;
+        let deleteTargetId = null;
+
+        // ==================== UTILITY ====================
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `fixed bottom-20 md:bottom-6 right-4 md:right-6 px-5 py-3.5 rounded-2xl font-black text-sm text-white shadow-2xl z-[9999] toast-enter ${
+                type === 'success' ? 'bg-green-500' : type === 'error' ? 'bg-red-500' : 'bg-blue-500'
+            }`;
+            toast.innerHTML = `<span class="flex items-center gap-2"><i class="fa-solid fa-${
+                type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'
+            }"></i> ${message}</span>`;
+            document.body.appendChild(toast);
+            setTimeout(() => { toast.classList.add('toast-exit'); setTimeout(() => toast.remove(), 300); }, 3000);
+        }
+
+        async function uploadFile(fileInputId) {
+            const fileInput = document.getElementById(fileInputId);
+            const file = fileInput.files[0];
+            if (!file) return null;
+
+            const fileName = `binzeo_${Date.now()}_${file.name.replace(/\s+/g, '_')}`;
+            try {
+                const { data, error } = await _supabase.storage.from('images').upload(fileName, file, {
+                    cacheControl: '3600', upsert: false
+                });
+                if (error) { showToast('Upload failed: ' + error.message, 'error'); return null; }
+                const { data: publicUrlData } = _supabase.storage.from('images').getPublicUrl(fileName);
+                return publicUrlData.publicUrl;
+            } catch (err) {
+                showToast('Upload error', 'error');
+                return null;
+            }
+        }
+
+        // ==================== LOAD DATA ====================
+        async function loadData() {
+            try {
+                const [{ data: products }, { data: categories }] = await Promise.all([
+                    _supabase.from('products').select('*').order('created_at', { ascending: false }),
+                    _supabase.from('categories').select('*')
+                ]);
+
+                if (products) allProducts = products;
+                if (categories) allCategories = categories;
+
+                renderAll();
+            } catch (error) {
+                console.error('Error loading data:', error);
+                showToast('Failed to load products', 'error');
+            }
+        }
+
+        function renderAll() {
+            renderStats();
+            renderCategoryFilter();
+            if (currentProductView === 'table') renderTable();
+            else renderGrid();
+        }
+
+        // ==================== STATS ====================
+        function renderStats() {
+            const total = allProducts.length;
+            const lowStock = allProducts.filter(p => (p.stock || 0) > 0 && (p.stock || 0) <= 5).length;
+            const outOfStock = allProducts.filter(p => (p.stock || 0) === 0).length;
+            const cats = allCategories.length;
+
+            document.getElementById('stat-total').textContent = total;
+            document.getElementById('stat-low').textContent = lowStock;
+            document.getElementById('stat-out').textContent = outOfStock;
+            document.getElementById('stat-cats').textContent = cats;
+        }
+
+        // ==================== TOGGLE VIEW ====================
+        function toggleProductView(view) {
+            currentProductView = view;
+            document.getElementById('btn-prod-table').className = view === 'table'
+                ? 'px-4 py-2.5 bg-blue-600 text-white rounded-xl font-black text-[10px] uppercase btn-action shadow-md'
+                : 'px-4 py-2.5 bg-gray-100 text-gray-500 rounded-xl font-black text-[10px] uppercase btn-action';
+            document.getElementById('btn-prod-grid').className = view === 'grid'
+                ? 'px-4 py-2.5 bg-blue-600 text-white rounded-xl font-black text-[10px] uppercase btn-action shadow-md'
+                : 'px-4 py-2.5 bg-gray-100 text-gray-500 rounded-xl font-black text-[10px] uppercase btn-action';
+            document.getElementById('product-table-view').classList.toggle('hidden', view !== 'table');
+            document.getElementById('product-grid-view').classList.toggle('hidden', view !== 'grid');
+            renderAll();
+        }
+
+        // ==================== TABLE VIEW ====================
+        function renderTable() {
+            if (allProducts.length === 0) {
+                document.getElementById('product-table-body').innerHTML = 
+                    '<tr><td colspan="6" class="py-8 text-center text-xs text-gray-400">No products found. Click "Add Product" to create one.</td></tr>';
+                return;
+            }
+
+            document.getElementById('product-table-body').innerHTML = allProducts.map(p => {
+                const stock = p.stock || 0;
+                const stockColor = stock > 20 ? 'bg-green-500' : stock > 5 ? 'bg-yellow-500' : 'bg-red-500';
+                const stockPercent = Math.min((stock / 30) * 100, 100);
+                const badges = [];
+                if (p.is_hot) badges.push('<span class="text-[7px] badge-hot px-1.5 py-0.5 rounded-full font-black">HOT</span>');
+                if (p.is_best) badges.push('<span class="text-[7px] badge-best px-1.5 py-0.5 rounded-full font-black">BEST</span>');
+
+                return `
+                    <tr class="border-b hover:bg-slate-50 transition">
+                        <td class="p-4">
+                            <div class="flex items-center gap-3">
+                                <img src="${p.img || LOGO_URL}" class="w-10 h-10 rounded-lg object-cover border" onerror="this.src='${LOGO_URL}'">
+                                <div>
+                                    <span class="font-bold text-xs block">${p.title}</span>
+                                    <div class="flex gap-1 mt-0.5">${badges.join('')}</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="p-4">
+                            <span class="text-[10px] bg-gray-100 px-2.5 py-1 rounded-full font-black">${p.category || 'N/A'}</span>
+                        </td>
+                        <td class="p-4">
+                            <span class="font-black text-blue-600">৳ ${p.price || 0}</span>
+                            ${p.old_price ? `<span class="text-[9px] text-gray-400 line-through ml-1">৳ ${p.old_price}</span>` : ''}
+                        </td>
+                        <td class="p-4">
+                            <div class="flex items-center gap-2">
+                                <div class="w-20 bg-gray-200 rounded-full h-2 overflow-hidden">
+                                    <div class="h-2 rounded-full stock-progress ${stockColor}" style="width:${stockPercent}%"></div>
+                                </div>
+                                <span class="text-[10px] font-bold ${stock <= 5 ? 'text-red-600' : ''}">${stock}</span>
+                            </div>
+                        </td>
+                        <td class="p-4">
+                            <span class="text-[10px] font-black px-2 py-1 rounded-full ${stock === 0 ? 'bg-red-100 text-red-600' : stock <= 5 ? 'bg-orange-100 text-orange-600' : 'bg-green-100 text-green-600'}">
+                                ${stock === 0 ? 'Out of Stock' : stock <= 5 ? 'Low Stock' : 'In Stock'}
+                            </span>
+                        </td>
+                        <td class="p-4 text-right">
+                            <button onclick="editProduct(${p.id})" class="p-2 bg-gray-100 rounded-lg text-xs btn-action mr-1 hover:bg-blue-50" title="Edit">
+                                <i class="fa-solid fa-pen text-blue-600"></i>
+                            </button>
+                            <button onclick="openDeleteModal(${p.id}, '${p.title.replace(/'/g, "\\'")}')" class="p-2 bg-red-50 rounded-lg text-xs btn-action" title="Delete">
+                                <i class="fa-solid fa-trash text-red-500"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // ==================== GRID VIEW ====================
+        function renderCategoryFilter() {
+            const filter = document.getElementById('category-filter');
+            if (!filter) return;
+            filter.innerHTML = '<option value="all">All Categories</option>' +
+                allCategories.map(c => `<option value="${c.name}">${c.name}</option>`).join('');
+        }
+
+        function filterProducts() {
+            renderGrid();
+        }
+
+        function renderGrid() {
+            const searchQuery = (document.getElementById('product-search')?.value || '').toLowerCase();
+            const categoryFilter = document.getElementById('category-filter')?.value || 'all';
+
+            let filtered = allProducts;
+            if (categoryFilter !== 'all') {
+                filtered = filtered.filter(p => p.category === categoryFilter);
+            }
+            if (searchQuery) {
+                filtered = filtered.filter(p => p.title.toLowerCase().includes(searchQuery));
+            }
+
+            document.getElementById('product-grid-body').innerHTML = filtered.length > 0
+                ? filtered.map(p => {
+                    const stock = p.stock || 0;
+                    const stockColor = stock === 0 ? 'text-red-600' : stock <= 5 ? 'text-orange-600' : 'text-green-600';
+                    const badges = [];
+                    if (p.is_hot) badges.push('<span class="text-[7px] badge-hot px-2 py-0.5 rounded-full font-black">HOT</span>');
+                    if (p.is_best) badges.push('<span class="text-[7px] badge-best px-2 py-0.5 rounded-full font-black">BEST</span>');
+
+                    return `
+                        <div class="product-card bg-white rounded-[2.5rem] overflow-hidden border shadow-sm">
+                            <div class="relative">
+                                <img src="${p.img || LOGO_URL}" class="w-full h-48 object-cover" onerror="this.src='${LOGO_URL}'">
+                                <span class="absolute top-3 left-3 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-[10px] font-black ${stockColor}">
+                                    Stock: ${stock}
+                                </span>
+                                <div class="absolute top-3 right-3 flex gap-1">${badges.join('')}</div>
+                            </div>
+                            <div class="p-5">
+                                <h4 class="font-bold truncate text-sm">${p.title}</h4>
+                                <p class="text-[10px] text-gray-400 mt-0.5">${p.category || 'N/A'}</p>
+                                <div class="flex justify-between items-center mt-3 mb-4">
+                                    <div>
+                                        <span class="text-blue-600 font-black text-lg">৳ ${p.price || 0}</span>
+                                        ${p.old_price ? `<span class="text-[10px] text-gray-400 line-through ml-1">৳ ${p.old_price}</span>` : ''}
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <button onclick="editProduct(${p.id})" class="py-2.5 bg-gray-100 rounded-xl text-xs font-black btn-action hover:bg-blue-50">
+                                        <i class="fa-solid fa-pen mr-1"></i> Edit
+                                    </button>
+                                    <button onclick="openDeleteModal(${p.id}, '${p.title.replace(/'/g, "\\'")}')" class="py-2.5 bg-red-50 text-red-500 rounded-xl text-xs font-black btn-action hover:bg-red-100">
+                                        <i class="fa-solid fa-trash mr-1"></i> Delete
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('')
+                : '<p class="col-span-full text-center py-12 text-gray-400 text-xs">No products found</p>';
+        }
+
+        // ==================== PRODUCT MODAL ====================
+        function openAddProductModal() {
+            editingProductId = null;
+            document.getElementById('modal-title').textContent = 'Add Product';
+            document.getElementById('btn-product-save').innerHTML = '<i class="fa-solid fa-check mr-2"></i> Publish Product';
+            
+            // Reset form
+            ['prod-title', 'prod-stock', 'prod-price', 'prod-old-price', 'prod-desc', 'prod-img-url', 'prod-gallery'].forEach(id => {
+                document.getElementById(id).value = '';
+            });
+            document.getElementById('prod-category').value = '';
+            document.getElementById('prod-hot').checked = false;
+            document.getElementById('prod-best').checked = false;
+            document.getElementById('variant-list').innerHTML = '<p class="text-[10px] text-gray-400 text-center py-2">No variants added</p>';
+            document.getElementById('img-preview-container').classList.add('hidden');
+            document.getElementById('prod-img-file').value = '';
+
+            // Populate categories
+            document.getElementById('prod-category').innerHTML = '<option value="">Select Category</option>' +
+                allCategories.map(c => `<option value="${c.name}">${c.name}</option>`).join('');
+
+            document.getElementById('product-modal').classList.remove('hidden');
+        }
+
+        function closeProductModal() {
+            document.getElementById('product-modal').classList.add('hidden');
+            editingProductId = null;
+        }
+
+        async function editProduct(productId) {
+            const product = allProducts.find(p => p.id === productId);
+            if (!product) return;
+
+            editingProductId = productId;
+            document.getElementById('modal-title').textContent = 'Edit Product';
+            document.getElementById('btn-product-save').innerHTML = '<i class="fa-solid fa-save mr-2"></i> Update Product';
+
+            document.getElementById('prod-title').value = product.title || '';
+            document.getElementById('prod-stock').value = product.stock || 0;
+            document.getElementById('prod-price').value = product.price || '';
+            document.getElementById('prod-old-price').value = product.old_price || '';
+            document.getElementById('prod-desc').value = product.description || '';
+            document.getElementById('prod-img-url').value = product.img || '';
+            document.getElementById('prod-gallery').value = product.images || '';
+            document.getElementById('prod-category').value = product.category || '';
+            document.getElementById('prod-hot').checked = product.is_hot || false;
+            document.getElementById('prod-best').checked = product.is_best || false;
+
+            // Show image preview
+            if (product.img) {
+                document.getElementById('img-preview').src = product.img;
+                document.getElementById('img-preview-container').classList.remove('hidden');
+            } else {
+                document.getElementById('img-preview-container').classList.add('hidden');
+            }
+
+            // Load variants
+            const { data: variants } = await _supabase.from('product_variants').select('*').eq('product_id', productId);
+            document.getElementById('variant-list').innerHTML = '';
+            if (variants && variants.length > 0) {
+                variants.forEach(v => addVariantField(v.name, v.price));
+            } else {
+                document.getElementById('variant-list').innerHTML = '<p class="text-[10px] text-gray-400 text-center py-2">No variants added</p>';
+            }
+
+            // Populate categories
+            document.getElementById('prod-category').innerHTML = '<option value="">Select Category</option>' +
+                allCategories.map(c => `<option value="${c.name}" ${c.name === product.category ? 'selected' : ''}>${c.name}</option>`).join('');
+
+            document.getElementById('product-modal').classList.remove('hidden');
+        }
+
+        // ==================== IMAGE PREVIEW ====================
+        function updateImagePreview() {
+            const url = document.getElementById('prod-img-url').value.trim();
+            if (url && (url.startsWith('http://') || url.startsWith('https://'))) {
+                document.getElementById('img-preview').src = url;
+                document.getElementById('img-preview-container').classList.remove('hidden');
+            } else {
+                document.getElementById('img-preview-container').classList.add('hidden');
+            }
+        }
+
+        function previewFileImage() {
+            const file = document.getElementById('prod-img-file').files[0];
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    document.getElementById('img-preview').src = e.target.result;
+                    document.getElementById('img-preview-container').classList.remove('hidden');
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // ==================== VARIANTS ====================
+        function addVariantField(name = '', price = '') {
+            const list = document.getElementById('variant-list');
+            // Remove placeholder
+            const placeholder = list.querySelector('p');
+            if (placeholder) placeholder.remove();
+
+            const div = document.createElement('div');
+            div.className = 'flex gap-2 variant-row items-center';
+            div.innerHTML = `
+                <input class="v-name flex-grow p-3 bg-white border rounded-xl text-xs font-bold outline-none" placeholder="Variant Name (e.g. Size M)" value="${name}">
+                <input class="v-price w-28 p-3 bg-white border rounded-xl text-xs font-bold outline-none" placeholder="Price (৳)" value="${price}">
+                <button onclick="this.parentElement.remove(); checkVariantEmpty()" class="p-3 text-red-400 hover:text-red-600 btn-action">
+                    <i class="fa-solid fa-trash"></i>
+                </button>
+            `;
+            list.appendChild(div);
+        }
+
+        function checkVariantEmpty() {
+            const list = document.getElementById('variant-list');
+            if (list.querySelectorAll('.variant-row').length === 0) {
+                list.innerHTML = '<p class="text-[10px] text-gray-400 text-center py-2">No variants added</p>';
+            }
+        }
+
+        function getVariantData() {
+            return [...document.querySelectorAll('.variant-row')].map(row => {
+                const name = row.querySelector('.v-name')?.value?.trim();
+                const price = row.querySelector('.v-price')?.value?.trim();
+                return name && price ? { name, price: parseFloat(price) } : null;
+            }).filter(Boolean);
+        }
+
+        // ==================== SAVE PRODUCT ====================
+        async function saveProduct() {
+            const title = document.getElementById('prod-title').value.trim();
+            const price = document.getElementById('prod-price').value;
+            const category = document.getElementById('prod-category').value;
+
+            if (!title) { showToast('Product title is required', 'error'); return; }
+            if (!price || parseFloat(price) <= 0) { showToast('Valid price is required', 'error'); return; }
+            if (!category) { showToast('Please select a category', 'error'); return; }
+
+            const btn = document.getElementById('btn-product-save');
+            btn.disabled = true;
+            btn.innerHTML = '<div class="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mx-auto"></div>';
+
+            try {
+                // Upload image if file selected
+                let imgUrl = document.getElementById('prod-img-url').value.trim();
+                const fileInput = document.getElementById('prod-img-file');
+                if (fileInput.files[0]) {
+                    const uploadedUrl = await uploadFile('prod-img-file');
+                    if (uploadedUrl) imgUrl = uploadedUrl;
+                }
+
+                const productData = {
+                    title: title,
+                    price: parseFloat(price),
+                    old_price: parseFloat(document.getElementById('prod-old-price').value) || null,
+                    stock: parseInt(document.getElementById('prod-stock').value) || 0,
+                    category: category,
+                    description: document.getElementById('prod-desc').value.trim(),
+                    is_hot: document.getElementById('prod-hot').checked,
+                    is_best: document.getElementById('prod-best').checked,
+                    images: document.getElementById('prod-gallery').value.trim(),
+                };
+                if (imgUrl) productData.img = imgUrl;
+
+                const variants = getVariantData();
+
+                if (editingProductId) {
+                    // Update existing product
+                    const { error } = await _supabase.from('products').update(productData).eq('id', editingProductId);
+                    if (error) throw error;
+
+                    // Delete old variants and insert new ones
+                    await _supabase.from('product_variants').delete().eq('product_id', editingProductId);
+                    if (variants.length > 0) {
+                        await _supabase.from('product_variants').insert(variants.map(v => ({ ...v, product_id: editingProductId })));
+                    }
+                    showToast('Product updated successfully!', 'success');
+                } else {
+                    // Insert new product
+                    const { data, error } = await _supabase.from('products').insert([productData]).select();
+                    if (error) throw error;
+
+                    if (data && data[0] && variants.length > 0) {
+                        await _supabase.from('product_variants').insert(variants.map(v => ({ ...v, product_id: data[0].id })));
+                    }
+                    showToast('Product published successfully!', 'success');
+                }
+
+                closeProductModal();
+                await loadData();
+            } catch (error) {
+                console.error('Error saving product:', error);
+                showToast('Failed to save product: ' + error.message, 'error');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fa-solid fa-check mr-2"></i> Publish Product';
+            }
+        }
+
+        // ==================== DELETE ====================
+        function openDeleteModal(productId, productTitle) {
+            deleteTargetId = productId;
+            document.getElementById('delete-modal-message').textContent = 
+                `Are you sure you want to permanently delete "${productTitle}"? This action cannot be undone.`;
+            document.getElementById('delete-confirm-btn').onclick = confirmDelete;
+            document.getElementById('delete-modal').classList.remove('hidden');
+        }
+
+        function closeDeleteModal() {
+            document.getElementById('delete-modal').classList.add('hidden');
+            deleteTargetId = null;
+        }
+
+        async function confirmDelete() {
+            if (!deleteTargetId) return;
+            try {
+                await _supabase.from('product_variants').delete().eq('product_id', deleteTargetId);
+                const { error } = await _supabase.from('products').delete().eq('id', deleteTargetId);
+                if (error) throw error;
+                showToast('Product deleted', 'error');
+                closeDeleteModal();
+                await loadData();
+            } catch (error) {
+                console.error('Error deleting product:', error);
+                showToast('Failed to delete product', 'error');
+            }
+        }
+
+        // ==================== SESSION CHECK ====================
+        async function checkSession() {
+            const { data: { session } } = await _supabase.auth.getSession();
+
+            if (!session || session.user.email !== ADMIN_EMAIL) {
+                window.location.href = LOGIN_URL;
+                return;
+            }
+
+            document.getElementById('global-loader').style.display = 'none';
+            document.getElementById('main-layout').classList.remove('hidden');
+
+            if (localStorage.getItem('darkMode') === 'true') {
+                isDarkMode = true;
+                document.body.classList.add('dark');
+            }
+
+            if (window.innerWidth < 769) {
+                document.querySelector('.bottom-nav').classList.remove('hidden');
+            }
+
+            await loadData();
+        }
+
+        // ==================== KEYBOARD SHORTCUTS ====================
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeProductModal();
+                closeDeleteModal();
+            }
+        });
+
+        // ==================== INIT ====================
+        window.onload = checkSession;
+
+        window.addEventListener('resize', () => {
+            if (window.innerWidth >= 769) {
+                document.querySelector('.bottom-nav').classList.add('hidden');
+            } else {
+                document.querySelector('.bottom-nav').classList.remove('hidden');
+            }
+        });
+    </script>
+</body>
+</html>

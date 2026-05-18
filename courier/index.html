@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Courier | JAYENWARE Admin</title>
+    <meta name="theme-color" content="#f59e0b">
+    <link rel="icon" type="image/png" href="https://ozuwazkqyrxiwwfjceth.supabase.co/storage/v1/object/public/images/Beige%20Black%20Minimal%20Simple%20Modern%20Handwritten%20Graffiti%20Typographic%20Arts%20and_20251212_154142_0000.png">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.75);
+            --glass-border: rgba(255, 255, 255, 0.5);
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04);
+            --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 60px rgba(0, 0, 0, 0.15);
+            --radius-xl: 1.5rem;
+            --radius-2xl: 2rem;
+            --radius-3xl: 2.5rem;
+        }
+
+        * {
+            -webkit-tap-highlight-color: transparent;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: #f5f5f7;
+            color: #1d1d1f;
+            transition: background 0.3s, color 0.3s;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+
+        body.dark {
+            background: #0a0a0a;
+            color: #f5f5f7;
+        }
+
+        body.dark .glass-card {
+            background: rgba(28, 28, 30, 0.8);
+            border-color: rgba(255, 255, 255, 0.08);
+        }
+
+        body.dark .bg-white {
+            background: #1c1c1e;
+        }
+
+        body.dark .bg-gray-50,
+        body.dark .bg-gray-100 {
+            background: #2c2c2e;
+        }
+
+        body.dark .text-slate-800,
+        body.dark .text-slate-900,
+        body.dark .text-slate-700 {
+            color: #f5f5f7;
+        }
+
+        body.dark .text-gray-400 {
+            color: #8e8e93;
+        }
+
+        body.dark .text-gray-500 {
+            color: #636366;
+        }
+
+        body.dark .border,
+        body.dark .border-b,
+        body.dark .border-t {
+            border-color: #2c2c2e;
+        }
+
+        body.dark .hover\:bg-slate-50:hover {
+            background: #2c2c2e;
+        }
+
+        body.dark input,
+        body.dark select,
+        body.dark textarea {
+            background: #1c1c1e;
+            border-color: #2c2c2e;
+            color: #fff;
+        }
+
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--shadow-md);
+        }
+
+        .custom-scroll::-webkit-scrollbar {
+            width: 4px;
+            height: 4px;
+        }
+
+        .custom-scroll::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #f59e0b, #ef4444);
+            border-radius: 10px;
+        }
+
+        .btn-action {
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            cursor: pointer;
+        }
+
+        .btn-action:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-action:active {
+            transform: scale(0.96);
+        }
+
+        @keyframes fadeSlideIn {
+            from { opacity: 0; transform: translateY(16px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(100px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(0); opacity: 1; }
+            to { transform: translateY(100px); opacity: 0; }
+        }
+
+        @keyframes truckMove {
+            0% { transform: translateX(-10px); }
+            50% { transform: translateX(10px); }
+            100% { transform: translateX(-10px); }
+        }
+
+        @keyframes pulse-ring {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4); }
+            50% { box-shadow: 0 0 0 15px rgba(245, 158, 11, 0); }
+        }
+
+        .toast-enter {
+            animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .toast-exit {
+            animation: slideDown 0.3s ease-in forwards;
+        }
+
+        .truck-animation {
+            animation: truckMove 2s ease-in-out infinite;
+        }
+
+        .pulse-ring {
+            animation: pulse-ring 2s infinite;
+        }
+
+        .stat-card {
+            animation: fadeSlideIn 0.5s ease-out forwards;
+            opacity: 0;
+        }
+
+        .stat-card:nth-child(1) { animation-delay: 0s; }
+        .stat-card:nth-child(2) { animation-delay: 0.1s; }
+        .stat-card:nth-child(3) { animation-delay: 0.2s; }
+        .stat-card:nth-child(4) { animation-delay: 0.3s; }
+
+        .tracking-step {
+            transition: all 0.3s ease;
+        }
+
+        .tracking-step.completed .step-dot {
+            background: #22c55e;
+            border-color: #22c55e;
+        }
+
+        .tracking-step.completed .step-line {
+            background: #22c55e;
+        }
+
+        .tracking-step.active .step-dot {
+            background: #f59e0b;
+            border-color: #f59e0b;
+            animation: pulse-ring 2s infinite;
+        }
+
+        @media (max-width: 768px) {
+            .bottom-nav {
+                display: flex;
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                z-index: 100;
+                background: rgba(255, 255, 255, 0.95);
+                backdrop-filter: blur(20px);
+                border-top: 1px solid rgba(0, 0, 0, 0.08);
+                padding: 8px 0 env(safe-area-inset-bottom, 8px) 0;
+            }
+            body.dark .bottom-nav {
+                background: rgba(28, 28, 30, 0.95);
+                border-color: rgba(255, 255, 255, 0.08);
+            }
+            main {
+                padding-bottom: 100px !important;
+            }
+        }
+
+        @media (min-width: 769px) {
+            .bottom-nav {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body class="text-slate-800 antialiased">
+    <!-- GLOBAL LOADER -->
+    <div id="global-loader" style="position:fixed;inset:0;background:white;z-index:9999;display:flex;justify-content:center;align-items:center;transition:opacity 0.5s;">
+        <div class="flex flex-col items-center">
+            <div class="w-14 h-14 border-4 border-orange-500 border-t-transparent rounded-full animate-spin"></div>
+            <p class="mt-5 font-bold text-gray-400 text-sm">Loading Logistics...</p>
+        </div>
+    </div>
+
+    <!-- MAIN LAYOUT -->
+    <div id="main-layout" class="hidden min-h-screen">
+        <main class="p-4 md:p-8 lg:p-10 max-w-7xl mx-auto">
+            <!-- HEADER -->
+            <header class="mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                    <div class="flex items-center gap-2 text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">
+                        <a href="/home" class="hover:text-blue-600 transition"><i class="fa-solid fa-house"></i> Home</a>
+                        <i class="fa-solid fa-chevron-right text-[8px]"></i>
+                        <span class="text-orange-600">Courier</span>
+                    </div>
+                    <h2 class="text-2xl md:text-3xl font-black uppercase tracking-tight">Pathao Courier</h2>
+                    <p class="text-[10px] font-bold text-gray-400 uppercase mt-1">Automated Dispatch System</p>
+                </div>
+                <div class="flex items-center gap-3">
+                    <div class="hidden md:flex items-center gap-2 bg-orange-50 text-orange-600 px-4 py-2 rounded-xl">
+                        <i class="fa-solid fa-truck-fast truck-animation text-lg"></i>
+                        <span class="text-[10px] font-black uppercase">Pathao API v2</span>
+                    </div>
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-orange-400 to-red-500 text-white flex items-center justify-center font-black shadow-lg pulse-ring">
+                        <i class="fa-solid fa-truck-fast"></i>
+                    </div>
+                </div>
+            </header>
+
+            <!-- COURIER STATS -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                <div class="glass-card p-5 rounded-[2rem] shadow-sm stat-card">
+                    <div class="flex justify-between items-start mb-2">
+                        <div class="p-3 bg-orange-50 text-orange-600 rounded-2xl"><i class="fa-solid fa-boxes-stacked text-lg"></i></div>
+                    </div>
+                    <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Ready to Ship</p>
+                    <h3 class="text-2xl md:text-3xl font-black" id="stat-ready">0</h3>
+                </div>
+                <div class="glass-card p-5 rounded-[2rem] shadow-sm stat-card">
+                    <div class="flex justify-between items-start mb-2">
+                        <div class="p-3 bg-blue-50 text-blue-600 rounded-2xl"><i class="fa-solid fa-truck text-lg"></i></div>
+                    </div>
+                    <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">In Transit</p>
+                    <h3 class="text-2xl md:text-3xl font-black" id="stat-transit">0</h3>
+                </div>
+                <div class="glass-card p-5 rounded-[2rem] shadow-sm stat-card">
+                    <div class="flex justify-between items-start mb-2">
+                        <div class="p-3 bg-green-50 text-green-600 rounded-2xl"><i class="fa-solid fa-circle-check text-lg"></i></div>
+                    </div>
+                    <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Delivered</p>
+                    <h3 class="text-2xl md:text-3xl font-black" id="stat-delivered">0</h3>
+                </div>
+                <div class="glass-card p-5 rounded-[2rem] shadow-sm stat-card">
+                    <div class="flex justify-between items-start mb-2">
+                        <div class="p-3 bg-purple-50 text-purple-600 rounded-2xl"><i class="fa-solid fa-sack-dollar text-lg"></i></div>
+                    </div>
+                    <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">COD Value</p>
+                    <h3 class="text-2xl md:text-3xl font-black" id="stat-cod">৳ 0</h3>
+                </div>
+            </div>
+
+            <!-- PATHAAO CONFIG -->
+            <div class="glass-card p-6 md:p-8 rounded-[3rem] shadow-sm mb-8">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+                    <div class="flex items-center gap-4">
+                        <div class="w-14 h-14 bg-gradient-to-br from-orange-500 to-red-600 rounded-2xl flex items-center justify-center text-white text-2xl shadow-lg">
+                            <i class="fa-solid fa-truck-fast"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-black uppercase">Pathao API Configuration</h3>
+                            <p class="text-[10px] font-bold text-gray-400 uppercase flex items-center gap-2">
+                                <span class="w-2 h-2 rounded-full bg-green-500" id="api-status-dot"></span>
+                                <span id="api-status-text">Checking connection...</span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="testPathaoConnection()" class="px-5 py-3 bg-blue-600 text-white rounded-xl font-black text-xs uppercase btn-action">
+                            <i class="fa-solid fa-plug mr-1"></i> Test Connection
+                        </button>
+                        <button onclick="refreshCourierData()" class="px-5 py-3 bg-gray-100 text-gray-600 rounded-xl font-black text-xs uppercase btn-action">
+                            <i class="fa-solid fa-rotate mr-1"></i> Refresh
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Pathao Store Info -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 p-5 bg-orange-50 rounded-2xl">
+                    <div>
+                        <p class="text-[9px] font-black text-orange-400 uppercase">Store ID</p>
+                        <p class="text-sm font-black text-orange-700">357617</p>
+                    </div>
+                    <div>
+                        <p class="text-[9px] font-black text-orange-400 uppercase">Delivery Type</p>
+                        <p class="text-sm font-black text-orange-700">Express (48hrs)</p>
+                    </div>
+                    <div>
+                        <p class="text-[9px] font-black text-orange-400 uppercase">Item Type</p>
+                        <p class="text-sm font-black text-orange-700">Apparel (Type 2)</p>
+                    </div>
+                    <div>
+                        <p class="text-[9px] font-black text-orange-400 uppercase">Auth Method</p>
+                        <p class="text-sm font-black text-green-600">OAuth 2.0</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ORDERS READY FOR DISPATCH -->
+            <div class="glass-card p-6 md:p-8 rounded-[3rem] shadow-sm mb-8">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-sm font-black uppercase flex items-center gap-2">
+                        <i class="fa-solid fa-clipboard-list text-orange-600"></i> Orders Ready for Dispatch
+                    </h3>
+                    <div class="flex gap-2">
+                        <input type="text" id="courier-search" placeholder="Search order or customer..." 
+                               class="px-4 py-2 bg-gray-50 border rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-orange-500 w-48 md:w-64"
+                               onkeyup="filterCourierOrders()">
+                        <button onclick="sendAllToPathao()" class="px-4 py-2 bg-orange-600 text-white rounded-xl font-black text-[10px] uppercase btn-action shadow-md">
+                            <i class="fa-solid fa-paper-plane mr-1"></i> Send All
+                        </button>
+                    </div>
+                </div>
+                <div class="overflow-x-auto custom-scroll">
+                    <table class="w-full text-left">
+                        <thead>
+                            <tr class="text-[10px] font-black uppercase text-gray-400 border-b">
+                                <th class="pb-3">Order ID</th>
+                                <th class="pb-3">Customer</th>
+                                <th class="pb-3">Phone</th>
+                                <th class="pb-3">Address</th>
+                                <th class="pb-3">Amount</th>
+                                <th class="pb-3">Status</th>
+                                <th class="pb-3 text-right">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="courier-orders-table">
+                            <tr><td colspan="7" class="py-8 text-center text-xs text-gray-400">No orders ready for dispatch</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- SHIPPING LOG -->
+            <div class="glass-card p-6 md:p-8 rounded-[3rem] shadow-sm">
+                <h3 class="text-sm font-black uppercase mb-6 flex items-center gap-2">
+                    <i class="fa-solid fa-clock-rotate-left text-purple-600"></i> Recent Shipments
+                </h3>
+                <div id="shipping-log" class="space-y-3">
+                    <div class="text-center py-8 text-xs text-gray-400">
+                        <i class="fa-solid fa-inbox text-3xl mb-2 block"></i>
+                        No shipment history yet
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- SHIPPING DETAIL MODAL -->
+    <div id="shipping-modal" class="fixed inset-0 z-[500] hidden bg-black/50 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-lg rounded-[3rem] p-6 md:p-8 max-h-[85vh] overflow-y-auto custom-scroll relative shadow-2xl">
+            <button onclick="closeShippingModal()" class="absolute top-6 right-6 text-2xl text-gray-400 hover:text-gray-600 btn-action z-10">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <h3 class="text-xl font-black uppercase mb-6 flex items-center gap-2">
+                <i class="fa-solid fa-truck-fast text-orange-600"></i> Shipping Details
+            </h3>
+            <div id="shipping-modal-content">
+                <p class="text-xs text-gray-400 text-center py-8">Loading details...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- BOTTOM NAVIGATION (MOBILE) -->
+    <nav class="bottom-nav hidden">
+        <div class="flex justify-around items-center px-2">
+            <a href="/home" class="flex flex-col items-center gap-1 p-2 text-[10px] font-black text-gray-400 no-underline">
+                <i class="fa-solid fa-house text-lg"></i> Home
+            </a>
+            <a href="/orders" class="flex flex-col items-center gap-1 p-2 text-[10px] font-black text-gray-400 no-underline">
+                <i class="fa-solid fa-cart-shopping text-lg"></i> Orders
+            </a>
+            <a href="/courier" class="flex flex-col items-center gap-1 p-2 text-[10px] font-black text-orange-600 no-underline">
+                <i class="fa-solid fa-truck-fast text-lg"></i> Courier
+            </a>
+            <a href="/products" class="flex flex-col items-center gap-1 p-2 text-[10px] font-black text-gray-400 no-underline">
+                <i class="fa-solid fa-box text-lg"></i> Products
+            </a>
+            <a href="/ai" class="flex flex-col items-center gap-1 p-2 text-[10px] font-black text-gray-400 no-underline">
+                <i class="fa-solid fa-robot text-lg"></i> AI
+            </a>
+        </div>
+    </nav>
+
+    <script>
+        // ==================== CONFIGURATION ====================
+        const SUPABASE_URL = "https://vdqbjwzixppbtkbgvhlq.supabase.co";
+        const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZkcWJqd3ppeHBwYnRrYmd2aGxxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgwMDc3MzQsImV4cCI6MjA5MzU4MzczNH0.E6C0_7SWIrTMJlFe5t8EbNAW5fzlpg-fKV3ZV0XYd3k";
+        const ADMIN_EMAIL = "binzeo369@gmail.com";
+        const LOGO_URL = "https://ozuwazkqyrxiwwfjceth.supabase.co/storage/v1/object/public/images/Beige%20Black%20Minimal%20Simple%20Modern%20Handwritten%20Graffiti%20Typographic%20Arts%20and_20251212_154142_0000.png";
+        const HOME_URL = "/home";
+        const LOGIN_URL = "/login";
+
+        const PATHAO_CREDENTIALS = {
+            client_id: "8mep20QbMy",
+            client_secret: "YrXvPYHPDrjFbLrNgDTMmYwExsKTkqi9RWdhW1Uk",
+            username: "binzeo369@gmail.com",
+            password: "jayen@369",
+            store_id: "357617"
+        };
+
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        // ==================== STATE ====================
+        let allOrders = [];
+        let isDarkMode = false;
+        let pathaoToken = null;
+
+        // ==================== UTILITY ====================
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `fixed bottom-20 md:bottom-6 right-4 md:right-6 px-5 py-3.5 rounded-2xl font-black text-sm text-white shadow-2xl z-[9999] toast-enter ${
+                type === 'success' ? 'bg-green-500' : type === 'error' ? 'bg-red-500' : 'bg-blue-500'
+            }`;
+            toast.innerHTML = `<span class="flex items-center gap-2"><i class="fa-solid fa-${
+                type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'
+            }"></i> ${message}</span>`;
+            document.body.appendChild(toast);
+            setTimeout(() => { toast.classList.add('toast-exit'); setTimeout(() => toast.remove(), 300); }, 3000);
+        }
+
+        // ==================== LOAD DATA ====================
+        async function loadCourierData() {
+            try {
+                const { data, error } = await _supabase
+                    .from('orders')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+
+                if (error) throw error;
+                allOrders = data || [];
+                renderAll();
+            } catch (error) {
+                console.error('Error loading orders:', error);
+                showToast('Failed to load orders', 'error');
+            }
+        }
+
+        function refreshCourierData() {
+            showToast('Refreshing data...', 'info');
+            loadCourierData();
+        }
+
+        function renderAll() {
+            renderStats();
+            renderCourierOrders();
+            renderShippingLog();
+        }
+
+        // ==================== STATS ====================
+        function renderStats() {
+            const confirmedOrders = allOrders.filter(o => o.status === 'confirmed');
+            const shippedOrders = allOrders.filter(o => o.status === 'shipped');
+            const completedOrders = allOrders.filter(o => o.status === 'completed');
+            const codValue = confirmedOrders.reduce((acc, o) => acc + (parseFloat(o.member_info?.total?.toString().replace('৳', '') || 0)), 0);
+
+            document.getElementById('stat-ready').textContent = confirmedOrders.length;
+            document.getElementById('stat-transit').textContent = shippedOrders.length;
+            document.getElementById('stat-delivered').textContent = completedOrders.length;
+            document.getElementById('stat-cod').textContent = '৳ ' + Math.round(codValue).toLocaleString();
+        }
+
+        // ==================== COURIER ORDERS TABLE ====================
+        function filterCourierOrders() {
+            renderCourierOrders();
+        }
+
+        function renderCourierOrders() {
+            const searchQuery = (document.getElementById('courier-search')?.value || '').toLowerCase();
+            
+            // Show confirmed and pending orders (ready to ship)
+            let courierOrders = allOrders.filter(o => o.status === 'confirmed' || o.status === 'pending');
+            
+            if (searchQuery) {
+                courierOrders = courierOrders.filter(o => 
+                    o.id.toString().includes(searchQuery) ||
+                    (o.member_name || '').toLowerCase().includes(searchQuery) ||
+                    (o.member_info?.shipping?.phone || '').includes(searchQuery)
+                );
+            }
+
+            if (courierOrders.length === 0) {
+                document.getElementById('courier-orders-table').innerHTML = 
+                    '<tr><td colspan="7" class="py-8 text-center text-xs text-gray-400">No orders ready for dispatch</td></tr>';
+                return;
+            }
+
+            document.getElementById('courier-orders-table').innerHTML = courierOrders.map(o => {
+                const shipping = o.member_info?.shipping || {};
+                const total = o.member_info?.total || '0';
+                const address = (shipping.address || 'N/A') + (shipping.district ? ', ' + shipping.district : '');
+                const phone = shipping.phone || 'N/A';
+                const isShipped = o.status === 'shipped';
+                const hasTracking = o.pathao_consignment_id;
+
+                return `
+                    <tr class="border-b hover:bg-slate-50 transition ${isShipped ? 'bg-green-50/30' : ''}">
+                        <td class="py-3">
+                            <span class="font-black text-xs">#${o.id}</span>
+                            ${hasTracking ? '<br><span class="text-[8px] text-green-600 font-bold">📦 Tracked</span>' : ''}
+                        </td>
+                        <td class="py-3"><span class="font-bold text-xs">${o.member_name || 'N/A'}</span></td>
+                        <td class="py-3"><span class="text-[10px] font-bold">${phone}</span></td>
+                        <td class="py-3"><span class="text-[10px] text-gray-500 truncate max-w-[150px] block">${address}</span></td>
+                        <td class="py-3"><span class="font-black text-orange-600 text-xs">৳ ${total}</span></td>
+                        <td class="py-3">
+                            <span class="text-[9px] font-black px-2 py-1 rounded-full ${isShipped ? 'bg-green-100 text-green-600' : 'bg-yellow-100 text-yellow-600'}">
+                                ${isShipped ? 'Shipped' : 'Ready'}
+                            </span>
+                        </td>
+                        <td class="py-3 text-right">
+                            <div class="flex gap-1 justify-end">
+                                ${!isShipped ? `
+                                    <button onclick="sendToPathao(${o.id})" class="px-3 py-2 bg-orange-600 text-white rounded-lg text-[9px] font-black btn-action" title="Send to Pathao">
+                                        <i class="fa-solid fa-paper-plane"></i> Send
+                                    </button>
+                                ` : `
+                                    <button onclick="viewShippingDetails(${o.id})" class="px-3 py-2 bg-blue-100 text-blue-600 rounded-lg text-[9px] font-black btn-action" title="View Details">
+                                        <i class="fa-solid fa-eye"></i>
+                                    </button>
+                                `}
+                                <button onclick="updateOrderStatusDirect(${o.id}, 'shipped')" class="px-2 py-2 bg-purple-100 text-purple-600 rounded-lg text-[9px] font-black btn-action" title="Mark as Shipped">
+                                    <i class="fa-solid fa-truck"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // ==================== SHIPPING LOG ====================
+        function renderShippingLog() {
+            const shippedOrders = allOrders.filter(o => o.status === 'shipped' || o.status === 'completed').slice(0, 10);
+
+            if (shippedOrders.length === 0) {
+                document.getElementById('shipping-log').innerHTML = `
+                    <div class="text-center py-8 text-xs text-gray-400">
+                        <i class="fa-solid fa-inbox text-3xl mb-2 block"></i>
+                        No shipment history yet
+                    </div>`;
+                return;
+            }
+
+            document.getElementById('shipping-log').innerHTML = shippedOrders.map(o => {
+                const date = new Date(o.created_at).toLocaleString('en-US', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+                const isCompleted = o.status === 'completed';
+                return `
+                    <div class="flex items-center justify-between p-4 bg-gray-50 rounded-2xl tracking-step ${isCompleted ? 'completed' : 'active'}">
+                        <div class="flex items-center gap-4">
+                            <div class="flex items-center">
+                                <div class="w-8 h-8 rounded-full border-2 flex items-center justify-center step-dot ${isCompleted ? 'border-green-500 bg-green-500' : 'border-orange-500 bg-orange-500'}">
+                                    <i class="fa-solid ${isCompleted ? 'fa-check' : 'fa-truck-fast'} text-white text-xs"></i>
+                                </div>
+                                <div class="w-12 h-0.5 step-line ${isCompleted ? 'bg-green-500' : 'bg-gray-300'}"></div>
+                            </div>
+                            <div>
+                                <p class="text-xs font-black">Order #${o.id} - ${o.member_name || 'N/A'}</p>
+                                <p class="text-[9px] text-gray-400">${date} • ৳ ${o.member_info?.total || '0'}</p>
+                            </div>
+                        </div>
+                        <span class="text-[10px] font-black px-2 py-1 rounded-full ${isCompleted ? 'bg-green-100 text-green-600' : 'bg-orange-100 text-orange-600'}">
+                            ${isCompleted ? 'Delivered' : 'In Transit'}
+                        </span>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // ==================== PATHAAO API ====================
+        async function getPathaoToken() {
+            try {
+                const res = await fetch("https://api-hermes.pathao.com/aladdin/api/v1/issue-token", {
+                    method: "POST",
+                    headers: { "content-type": "application/json" },
+                    body: JSON.stringify({
+                        ...PATHAO_CREDENTIALS,
+                        grant_type: "password"
+                    })
+                });
+                const data = await res.json();
+                pathaoToken = data.access_token;
+                return data.access_token;
+            } catch (e) {
+                console.error('Pathao auth error:', e);
+                return null;
+            }
+        }
+
+        async function testPathaoConnection() {
+            showToast('Testing Pathao connection...', 'info');
+            const token = await getPathaoToken();
+            
+            if (token) {
+                document.getElementById('api-status-dot').className = 'w-2 h-2 rounded-full bg-green-500';
+                document.getElementById('api-status-text').textContent = 'Connected • Token Valid';
+                showToast('Pathao API connected successfully! 🚀', 'success');
+            } else {
+                document.getElementById('api-status-dot').className = 'w-2 h-2 rounded-full bg-red-500';
+                document.getElementById('api-status-text').textContent = 'Connection failed';
+                showToast('Pathao API connection failed', 'error');
+            }
+        }
+
+        async function sendToPathao(orderId) {
+            const order = allOrders.find(o => o.id === orderId);
+            if (!order) return;
+
+            if (!confirm(`Send Order #${orderId} to Pathao Courier?`)) return;
+
+            showToast('Sending to Pathao...', 'info');
+
+            // Get token
+            const token = await getPathaoToken();
+            if (!token) {
+                showToast('Pathao authentication failed! Check credentials.', 'error');
+                return;
+            }
+
+            const shipping = order.member_info?.shipping || {};
+            const total = parseInt(order.member_info?.total?.toString().replace('৳', '') || '0');
+
+            const pathaoBody = {
+                store_id: parseInt(PATHAO_CREDENTIALS.store_id),
+                merchant_order_id: order.id.toString(),
+                recipient_name: order.member_name || 'Customer',
+                recipient_phone: (shipping.phone || '01').replace('+88', '').replace(/\D/g, ''),
+                recipient_address: shipping.address || 'Dhaka',
+                recipient_city: 1,
+                recipient_zone: 1,
+                recipient_area: 1,
+                delivery_type: 48,
+                item_type: 2,
+                special_instruction: shipping.note || "Handle with care",
+                item_quantity: (order.member_info?.items || []).length || 1,
+                amount_to_collect: total,
+                item_description: "Apparel Item"
+            };
+
+            try {
+                const res = await fetch("https://api-hermes.pathao.com/aladdin/api/v1/orders", {
+                    method: "POST",
+                    headers: {
+                        "authorization": `Bearer ${token}`,
+                        "accept": "application/json",
+                        "content-type": "application/json"
+                    },
+                    body: JSON.stringify(pathaoBody)
+                });
+
+                const result = await res.json();
+
+                if (result.type === "success" && result.data?.consignment_id) {
+                    // Update order with tracking info
+                    await _supabase.from('orders').update({
+                        status: 'shipped',
+                        pathao_consignment_id: result.data.consignment_id
+                    }).eq('id', orderId);
+
+                    showToast(`✅ Sent! Consignment: ${result.data.consignment_id}`, 'success');
+                    await loadCourierData();
+                } else {
+                    const errorMsg = result.errors?.[0]?.message || result.message || 'Unknown error';
+                    showToast('Pathao Error: ' + errorMsg, 'error');
+                }
+            } catch (err) {
+                console.error('Pathao API error:', err);
+                showToast('Connection error to Pathao servers', 'error');
+            }
+        }
+
+        async function sendAllToPathao() {
+            const readyOrders = allOrders.filter(o => o.status === 'confirmed' || o.status === 'pending');
+            if (readyOrders.length === 0) {
+                showToast('No orders ready to ship', 'error');
+                return;
+            }
+
+            if (!confirm(`Send ALL ${readyOrders.length} orders to Pathao?`)) return;
+
+            showToast(`Sending ${readyOrders.length} orders to Pathao...`, 'info');
+
+            let successCount = 0;
+            let failCount = 0;
+
+            for (const order of readyOrders) {
+                try {
+                    const token = await getPathaoToken();
+                    if (!token) { failCount++; continue; }
+
+                    const shipping = order.member_info?.shipping || {};
+                    const total = parseInt(order.member_info?.total?.toString().replace('৳', '') || '0');
+
+                    const res = await fetch("https://api-hermes.pathao.com/aladdin/api/v1/orders", {
+                        method: "POST",
+                        headers: {
+                            "authorization": `Bearer ${token}`,
+                            "accept": "application/json",
+                            "content-type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            store_id: parseInt(PATHAO_CREDENTIALS.store_id),
+                            merchant_order_id: order.id.toString(),
+                            recipient_name: order.member_name || 'Customer',
+                            recipient_phone: (shipping.phone || '01').replace('+88', '').replace(/\D/g, ''),
+                            recipient_address: shipping.address || 'Dhaka',
+                            recipient_city: 1,
+                            recipient_zone: 1,
+                            recipient_area: 1,
+                            delivery_type: 48,
+                            item_type: 2,
+                            special_instruction: shipping.note || "Handle with care",
+                            item_quantity: (order.member_info?.items || []).length || 1,
+                            amount_to_collect: total,
+                            item_description: "Apparel Item"
+                        })
+                    });
+
+                    const result = await res.json();
+                    if (result.type === "success") {
+                        await _supabase.from('orders').update({
+                            status: 'shipped',
+                            pathao_consignment_id: result.data.consignment_id
+                        }).eq('id', order.id);
+                        successCount++;
+                    } else {
+                        failCount++;
+                    }
+                } catch (e) {
+                    failCount++;
+                }
+            }
+
+            showToast(`Sent: ${successCount} | Failed: ${failCount}`, successCount > 0 ? 'success' : 'error');
+            await loadCourierData();
+        }
+
+        // ==================== VIEW SHIPPING DETAILS ====================
+        function viewShippingDetails(orderId) {
+            const order = allOrders.find(o => o.id === orderId);
+            if (!order) return;
+
+            const shipping = order.member_info?.shipping || {};
+            const items = order.member_info?.items || [];
+            const total = order.member_info?.total || '0';
+
+            document.getElementById('shipping-modal-content').innerHTML = `
+                <div class="space-y-4">
+                    <div class="bg-gray-50 p-4 rounded-2xl">
+                        <p class="text-[10px] font-black text-gray-400 uppercase">Order #${order.id}</p>
+                        <p class="text-lg font-black">${order.member_name || 'N/A'}</p>
+                        <p class="text-xs text-gray-500">${shipping.phone || 'N/A'}</p>
+                    </div>
+                    
+                    <div class="bg-gray-50 p-4 rounded-2xl">
+                        <p class="text-[10px] font-black text-gray-400 uppercase mb-2">Shipping Address</p>
+                        <p class="text-xs font-bold">${shipping.address || 'N/A'}</p>
+                        <p class="text-xs text-gray-500">${shipping.district || ''}, ${shipping.upazila || ''}</p>
+                        ${shipping.note ? `<p class="text-[10px] text-orange-600 mt-2 font-bold">📝 ${shipping.note}</p>` : ''}
+                    </div>
+
+                    <div class="bg-gray-50 p-4 rounded-2xl">
+                        <p class="text-[10px] font-black text-gray-400 uppercase mb-2">Items (${items.length})</p>
+                        ${items.map(i => `
+                            <div class="flex justify-between text-xs py-1">
+                                <span>${i.title} ${i.variant ? `(${i.variant})` : ''}</span>
+                                <span class="font-bold">৳ ${i.price || 0}</span>
+                            </div>
+                        `).join('')}
+                        <div class="border-t pt-2 mt-2 flex justify-between">
+                            <span class="font-black text-sm">TOTAL</span>
+                            <span class="font-black text-orange-600">৳ ${total}</span>
+                        </div>
+                    </div>
+
+                    ${order.pathao_consignment_id ? `
+                        <div class="bg-green-50 p-4 rounded-2xl text-center">
+                            <p class="text-[10px] font-black text-green-600 uppercase">Pathao Consignment ID</p>
+                            <p class="text-lg font-black text-green-700">${order.pathao_consignment_id}</p>
+                        </div>
+                    ` : ''}
+
+                    <div class="text-[10px] text-gray-400 text-center">
+                        Status: <span class="font-black text-blue-600 uppercase">${order.status}</span> • 
+                        ${new Date(order.created_at).toLocaleString()}
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('shipping-modal').classList.remove('hidden');
+        }
+
+        function closeShippingModal() {
+            document.getElementById('shipping-modal').classList.add('hidden');
+        }
+
+        // ==================== QUICK STATUS UPDATE ====================
+        async function updateOrderStatusDirect(orderId, newStatus) {
+            try {
+                const { error } = await _supabase.from('orders').update({ status: newStatus }).eq('id', orderId);
+                if (error) throw error;
+                showToast(`Order #${orderId} → ${newStatus}`, 'success');
+                await loadCourierData();
+            } catch (error) {
+                showToast('Failed to update status', 'error');
+            }
+        }
+
+        // ==================== SESSION CHECK ====================
+        async function checkSession() {
+            const { data: { session } } = await _supabase.auth.getSession();
+
+            if (!session || session.user.email !== ADMIN_EMAIL) {
+                window.location.href = LOGIN_URL;
+                return;
+            }
+
+            document.getElementById('global-loader').style.display = 'none';
+            document.getElementById('main-layout').classList.remove('hidden');
+
+            if (localStorage.getItem('darkMode') === 'true') {
+                isDarkMode = true;
+                document.body.classList.add('dark');
+            }
+
+            if (window.innerWidth < 769) {
+                document.querySelector('.bottom-nav').classList.remove('hidden');
+            }
+
+            await loadCourierData();
+            await testPathaoConnection();
+        }
+
+        // ==================== KEYBOARD SHORTCUTS ====================
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeShippingModal();
+            }
+        });
+
+        // ==================== INIT ====================
+        window.onload = checkSession;
+
+        window.addEventListener('resize', () => {
+            if (window.innerWidth >= 769) {
+                document.querySelector('.bottom-nav').classList.add('hidden');
+            } else {
+                document.querySelector('.bottom-nav').classList.remove('hidden');
+            }
+        });
+    </script>
+</body>
+</html>

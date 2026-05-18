@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Orders | JAYENWARE Admin</title>
+    <meta name="theme-color" content="#0071e3">
+    <link rel="icon" type="image/png" href="https://ozuwazkqyrxiwwfjceth.supabase.co/storage/v1/object/public/images/Beige%20Black%20Minimal%20Simple%20Modern%20Handwritten%20Graffiti%20Typographic%20Arts%20and_20251212_154142_0000.png">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.75);
+            --glass-border: rgba(255, 255, 255, 0.5);
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04);
+            --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.1);
+            --radius-xl: 1.5rem;
+            --radius-2xl: 2rem;
+            --radius-3xl: 2.5rem;
+        }
+
+        * {
+            -webkit-tap-highlight-color: transparent;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: #f5f5f7;
+            color: #1d1d1f;
+            transition: background 0.3s, color 0.3s;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+
+        body.dark {
+            background: #0a0a0a;
+            color: #f5f5f7;
+        }
+
+        body.dark .glass-card {
+            background: rgba(28, 28, 30, 0.8);
+            border-color: rgba(255, 255, 255, 0.08);
+        }
+
+        body.dark .bg-white {
+            background: #1c1c1e;
+        }
+
+        body.dark .bg-gray-50,
+        body.dark .bg-gray-100 {
+            background: #2c2c2e;
+        }
+
+        body.dark .text-slate-800,
+        body.dark .text-slate-900,
+        body.dark .text-slate-700 {
+            color: #f5f5f7;
+        }
+
+        body.dark .text-gray-400 {
+            color: #8e8e93;
+        }
+
+        body.dark .text-gray-500 {
+            color: #636366;
+        }
+
+        body.dark .border,
+        body.dark .border-b,
+        body.dark .border-t {
+            border-color: #2c2c2e;
+        }
+
+        body.dark .hover\:bg-slate-50:hover {
+            background: #2c2c2e;
+        }
+
+        body.dark .kanban-col {
+            background: #1c1c1e;
+        }
+
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--shadow-md);
+        }
+
+        .custom-scroll::-webkit-scrollbar {
+            width: 4px;
+            height: 4px;
+        }
+
+        .custom-scroll::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #0071e3, #5856d6);
+            border-radius: 10px;
+        }
+
+        .btn-action {
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            cursor: pointer;
+        }
+
+        .btn-action:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-action:active {
+            transform: scale(0.96);
+        }
+
+        .kanban-col {
+            min-height: 400px;
+            transition: background 0.2s;
+            border-radius: 1.5rem;
+            padding: 1rem;
+        }
+
+        .kanban-col.drag-over {
+            background: rgba(0, 113, 227, 0.08) !important;
+            border: 2px dashed #0071e3 !important;
+        }
+
+        .kanban-card {
+            cursor: grab;
+            transition: transform 0.2s, box-shadow 0.2s;
+            background: white;
+            border-radius: 1rem;
+            padding: 1rem;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+        }
+
+        body.dark .kanban-card {
+            background: #2c2c2e;
+            border-color: #3a3a3c;
+        }
+
+        .kanban-card:active {
+            cursor: grabbing;
+        }
+
+        .kanban-card.dragging {
+            opacity: 0.5;
+            transform: scale(0.95);
+        }
+
+        .order-drawer {
+            transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateX(100%);
+        }
+
+        .order-drawer.open {
+            transform: translateX(0);
+        }
+
+        .timeline-dot {
+            transition: all 0.3s ease;
+        }
+
+        .timeline-dot.completed {
+            background: #34c759;
+            box-shadow: 0 0 0 4px rgba(52, 199, 89, 0.2);
+        }
+
+        .timeline-dot.active {
+            background: #0071e3;
+            animation: pulse-dot 1.5s infinite;
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(0, 113, 227, 0.4); }
+            50% { box-shadow: 0 0 0 8px rgba(0, 113, 227, 0); }
+        }
+
+        @keyframes fadeSlideIn {
+            from { opacity: 0; transform: translateY(16px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(100px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(0); opacity: 1; }
+            to { transform: translateY(100px); opacity: 0; }
+        }
+
+        .toast-enter {
+            animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .toast-exit {
+            animation: slideDown 0.3s ease-in forwards;
+        }
+
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 99px;
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        @media (max-width: 768px) {
+            .kanban-col {
+                min-height: 200px;
+            }
+            .bottom-nav {
+                display: flex;
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                z-index: 100;
+                background: rgba(255, 255, 255, 0.95);
+                backdrop-filter: blur(20px);
+                border-top: 1px solid rgba(0, 0, 0, 0.08);
+                padding: 8px 0 env(safe-area-inset-bottom, 8px) 0;
+            }
+            body.dark .bottom-nav {
+                background: rgba(28, 28, 30, 0.95);
+                border-color: rgba(255, 255, 255, 0.08);
+            }
+            main {
+                padding-bottom: 100px !important;
+            }
+        }
+
+        @media (min-width: 769px) {
+            .bottom-nav {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body class="text-slate-800 antialiased">
+    <!-- GLOBAL LOADER -->
+    <div id="global-loader" style="position:fixed;inset:0;background:white;z-index:9999;display:flex;justify-content:center;align-items:center;transition:opacity 0.5s;">
+        <div class="flex flex-col items-center">
+            <div class="w-14 h-14 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+            <p class="mt-5 font-bold text-gray-400 text-sm">Loading Orders...</p>
+        </div>
+    </div>
+
+    <!-- MAIN LAYOUT -->
+    <div id="main-layout" class="hidden min-h-screen">
+        <main class="p-4 md:p-8 lg:p-10 max-w-7xl mx-auto">
+            <!-- HEADER -->
+            <header class="mb-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                    <div class="flex items-center gap-2 text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">
+                        <a href="/home" class="hover:text-blue-600 transition"><i class="fa-solid fa-house"></i> Home</a>
+                        <i class="fa-solid fa-chevron-right text-[8px]"></i>
+                        <span class="text-blue-600">Orders</span>
+                    </div>
+                    <h2 class="text-2xl md:text-3xl font-black uppercase tracking-tight">Order Management</h2>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button onclick="toggleOrderView('kanban')" id="btn-view-kanban" class="px-5 py-2.5 bg-blue-600 text-white rounded-xl font-black text-xs uppercase btn-action shadow-md">
+                        <i class="fa-solid fa-columns mr-1"></i> Kanban
+                    </button>
+                    <button onclick="toggleOrderView('cards')" id="btn-view-cards" class="px-5 py-2.5 bg-gray-100 text-gray-500 rounded-xl font-black text-xs uppercase btn-action">
+                        <i class="fa-solid fa-grid-2 mr-1"></i> Cards
+                    </button>
+                    <span class="text-[10px] font-black text-gray-400 hidden md:inline">Drag & drop to update</span>
+                </div>
+            </header>
+
+            <!-- ORDER STATS -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6" id="order-stats">
+                <!-- Filled dynamically -->
+            </div>
+
+            <!-- KANBAN VIEW -->
+            <div id="kanban-view" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <!-- Pending Column -->
+                <div class="kanban-col bg-gray-50 border border-gray-100" data-status="pending" 
+                     ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event, 'pending')">
+                    <div class="flex justify-between items-center mb-4 px-2">
+                        <h3 class="font-black text-xs uppercase flex items-center gap-2">
+                            <span class="w-2 h-2 bg-yellow-500 rounded-full"></span> Pending
+                        </h3>
+                        <span id="count-pending" class="text-[10px] font-black bg-yellow-100 text-yellow-600 px-2.5 py-1 rounded-full">0</span>
+                    </div>
+                    <div id="kanban-pending" class="space-y-3 min-h-[300px]">
+                        <p class="text-xs text-gray-300 text-center py-8">No pending orders</p>
+                    </div>
+                </div>
+
+                <!-- Confirmed Column -->
+                <div class="kanban-col bg-gray-50 border border-gray-100" data-status="confirmed" 
+                     ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event, 'confirmed')">
+                    <div class="flex justify-between items-center mb-4 px-2">
+                        <h3 class="font-black text-xs uppercase flex items-center gap-2">
+                            <span class="w-2 h-2 bg-blue-500 rounded-full"></span> Confirmed
+                        </h3>
+                        <span id="count-confirmed" class="text-[10px] font-black bg-blue-100 text-blue-600 px-2.5 py-1 rounded-full">0</span>
+                    </div>
+                    <div id="kanban-confirmed" class="space-y-3 min-h-[300px]">
+                        <p class="text-xs text-gray-300 text-center py-8">No confirmed orders</p>
+                    </div>
+                </div>
+
+                <!-- Shipped Column -->
+                <div class="kanban-col bg-gray-50 border border-gray-100" data-status="shipped" 
+                     ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event, 'shipped')">
+                    <div class="flex justify-between items-center mb-4 px-2">
+                        <h3 class="font-black text-xs uppercase flex items-center gap-2">
+                            <span class="w-2 h-2 bg-purple-500 rounded-full"></span> Shipped
+                        </h3>
+                        <span id="count-shipped" class="text-[10px] font-black bg-purple-100 text-purple-600 px-2.5 py-1 rounded-full">0</span>
+                    </div>
+                    <div id="kanban-shipped" class="space-y-3 min-h-[300px]">
+                        <p class="text-xs text-gray-300 text-center py-8">No shipped orders</p>
+                    </div>
+                </div>
+
+                <!-- Completed Column -->
+                <div class="kanban-col bg-gray-50 border border-gray-100" data-status="completed" 
+                     ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event, 'completed')">
+                    <div class="flex justify-between items-center mb-4 px-2">
+                        <h3 class="font-black text-xs uppercase flex items-center gap-2">
+                            <span class="w-2 h-2 bg-green-500 rounded-full"></span> Completed
+                        </h3>
+                        <span id="count-completed" class="text-[10px] font-black bg-green-100 text-green-600 px-2.5 py-1 rounded-full">0</span>
+                    </div>
+                    <div id="kanban-completed" class="space-y-3 min-h-[300px]">
+                        <p class="text-xs text-gray-300 text-center py-8">No completed orders</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CARDS VIEW -->
+            <div id="cards-view" class="hidden">
+                <div class="flex gap-3 mb-4">
+                    <input type="text" id="order-search" placeholder="Search orders..." 
+                           class="px-4 py-2.5 bg-white border rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-blue-500 w-full max-w-xs"
+                           onkeyup="filterOrders()">
+                    <select id="status-filter" onchange="filterOrders()" class="px-4 py-2.5 bg-white border rounded-xl text-xs font-bold outline-none">
+                        <option value="all">All Status</option>
+                        <option value="pending">Pending</option>
+                        <option value="confirmed">Confirmed</option>
+                        <option value="shipped">Shipped</option>
+                        <option value="completed">Completed</option>
+                    </select>
+                </div>
+                <div id="admin-list-orders" class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4"></div>
+            </div>
+        </main>
+    </div>
+
+    <!-- ORDER DRAWER -->
+    <div id="order-drawer-overlay" class="hidden fixed inset-0 bg-black/40 backdrop-blur-sm z-[500]" onclick="closeOrderDrawer()"></div>
+    <div id="order-drawer" class="fixed top-0 right-0 h-full w-full md:w-[480px] bg-white shadow-2xl z-[600] order-drawer overflow-y-auto custom-scroll">
+        <div class="sticky top-0 bg-white z-10 p-6 border-b flex justify-between items-center">
+            <h3 class="text-lg font-black uppercase flex items-center gap-2">
+                <i class="fa-solid fa-file-invoice text-blue-600"></i> Order Details
+            </h3>
+            <button onclick="closeOrderDrawer()" class="text-gray-400 hover:text-black text-xl btn-action">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        <div id="order-drawer-content" class="p-6 space-y-5">
+            <p class="text-xs text-gray-400 text-center py-8">Select an order to view details</p>
+        </div>
+    </div>
+
+    <!-- BOTTOM NAVIGATION (MOBILE) -->
+    <nav class="bottom-nav hidden">
+        <div class="flex justify-around items-center px-2">
+            <a href="/home" class="flex flex-col items-center gap-1 p-2 text-[10px] font-black text-gray-400 no-underline">
+                <i class="fa-solid fa-house text-lg"></i> Home
+            </a>
+            <a href="/analytics" class="flex flex-col items-center gap-1 p-2 text-[10px] font-black text-gray-400 no-underline">
+                <i class="fa-solid fa-chart-line text-lg"></i> Analytics
+            </a>
+            <a href="/orders" class="flex flex-col items-center gap-1 p-2 text-[10px] font-black text-blue-600 no-underline">
+                <i class="fa-solid fa-cart-shopping text-lg"></i> Orders
+            </a>
+            <a href="/products" class="flex flex-col items-center gap-1 p-2 text-[10px] font-black text-gray-400 no-underline">
+                <i class="fa-solid fa-box text-lg"></i> Products
+            </a>
+            <a href="/ai" class="flex flex-col items-center gap-1 p-2 text-[10px] font-black text-gray-400 no-underline">
+                <i class="fa-solid fa-robot text-lg"></i> AI
+            </a>
+        </div>
+    </nav>
+
+    <script>
+        // ==================== CONFIGURATION ====================
+        const SUPABASE_URL = "https://vdqbjwzixppbtkbgvhlq.supabase.co";
+        const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZkcWJqd3ppeHBwYnRrYmd2aGxxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgwMDc3MzQsImV4cCI6MjA5MzU4MzczNH0.E6C0_7SWIrTMJlFe5t8EbNAW5fzlpg-fKV3ZV0XYd3k";
+        const ADMIN_EMAIL = "binzeo369@gmail.com";
+        const LOGO_URL = "https://ozuwazkqyrxiwwfjceth.supabase.co/storage/v1/object/public/images/Beige%20Black%20Minimal%20Simple%20Modern%20Handwritten%20Graffiti%20Typographic%20Arts%20and_20251212_154142_0000.png";
+        const HOME_URL = "/home";
+        const LOGIN_URL = "/login";
+
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        // ==================== STATE ====================
+        let allOrders = [];
+        let isDarkMode = false;
+        let currentOrderView = 'kanban';
+        let draggedOrderId = null;
+        let currentDrawerOrderId = null;
+
+        // ==================== UTILITY ====================
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `fixed bottom-20 md:bottom-6 right-4 md:right-6 px-5 py-3.5 rounded-2xl font-black text-sm text-white shadow-2xl z-[9999] toast-enter ${
+                type === 'success' ? 'bg-green-500' : type === 'error' ? 'bg-red-500' : 'bg-blue-500'
+            }`;
+            toast.innerHTML = `<span class="flex items-center gap-2"><i class="fa-solid fa-${
+                type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'
+            }"></i> ${message}</span>`;
+            document.body.appendChild(toast);
+            setTimeout(() => { toast.classList.add('toast-exit'); setTimeout(() => toast.remove(), 300); }, 3000);
+        }
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => showToast('Copied!', 'success'));
+        }
+
+        // ==================== LOAD ORDERS ====================
+        async function loadOrders() {
+            try {
+                const { data, error } = await _supabase
+                    .from('orders')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+
+                if (error) throw error;
+                allOrders = data || [];
+                renderAll();
+            } catch (error) {
+                console.error('Error loading orders:', error);
+                showToast('Failed to load orders', 'error');
+            }
+        }
+
+        function renderAll() {
+            renderOrderStats();
+            if (currentOrderView === 'kanban') renderKanban();
+            else renderCardsView();
+        }
+
+        // ==================== ORDER STATS ====================
+        function renderOrderStats() {
+            const pending = allOrders.filter(o => o.status === 'pending').length;
+            const confirmed = allOrders.filter(o => o.status === 'confirmed').length;
+            const shipped = allOrders.filter(o => o.status === 'shipped').length;
+            const completed = allOrders.filter(o => o.status === 'completed').length;
+            const total = allOrders.length;
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const todayOrders = allOrders.filter(o => new Date(o.created_at) >= today).length;
+
+            document.getElementById('order-stats').innerHTML = `
+                <div class="bg-white p-4 rounded-2xl border shadow-sm text-center">
+                    <p class="text-[10px] font-black text-gray-400 uppercase">Total</p>
+                    <p class="text-2xl font-black">${total}</p>
+                </div>
+                <div class="bg-white p-4 rounded-2xl border shadow-sm text-center">
+                    <p class="text-[10px] font-black text-gray-400 uppercase">Today</p>
+                    <p class="text-2xl font-black text-blue-600">${todayOrders}</p>
+                </div>
+                <div class="bg-white p-4 rounded-2xl border shadow-sm text-center">
+                    <p class="text-[10px] font-black text-gray-400 uppercase">Pending</p>
+                    <p class="text-2xl font-black text-yellow-600">${pending}</p>
+                </div>
+                <div class="bg-white p-4 rounded-2xl border shadow-sm text-center">
+                    <p class="text-[10px] font-black text-gray-400 uppercase">Completed</p>
+                    <p class="text-2xl font-black text-green-600">${completed}</p>
+                </div>
+            `;
+        }
+
+        // ==================== TOGGLE VIEW ====================
+        function toggleOrderView(view) {
+            currentOrderView = view;
+            document.getElementById('btn-view-kanban').className = view === 'kanban' 
+                ? 'px-5 py-2.5 bg-blue-600 text-white rounded-xl font-black text-xs uppercase btn-action shadow-md'
+                : 'px-5 py-2.5 bg-gray-100 text-gray-500 rounded-xl font-black text-xs uppercase btn-action';
+            document.getElementById('btn-view-cards').className = view === 'cards'
+                ? 'px-5 py-2.5 bg-blue-600 text-white rounded-xl font-black text-xs uppercase btn-action shadow-md'
+                : 'px-5 py-2.5 bg-gray-100 text-gray-500 rounded-xl font-black text-xs uppercase btn-action';
+            document.getElementById('kanban-view').classList.toggle('hidden', view !== 'kanban');
+            document.getElementById('cards-view').classList.toggle('hidden', view !== 'cards');
+            renderAll();
+        }
+
+        // ==================== KANBAN ====================
+        function renderKanban() {
+            const statuses = ['pending', 'confirmed', 'shipped', 'completed'];
+            statuses.forEach(status => {
+                const orders = allOrders.filter(o => o.status === status);
+                document.getElementById(`count-${status}`).textContent = orders.length;
+                document.getElementById(`kanban-${status}`).innerHTML = orders.length > 0 
+                    ? orders.map(o => {
+                        const items = o.member_info?.items || [];
+                        const total = o.member_info?.total || '0';
+                        const date = new Date(o.created_at).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' });
+                        return `
+                            <div class="kanban-card cursor-pointer hover:shadow-md" 
+                                 draggable="true" 
+                                 ondragstart="handleDragStart(event, ${o.id})" 
+                                 onclick="openOrderDrawer(${o.id})">
+                                <div class="flex justify-between items-start mb-2">
+                                    <span class="text-[10px] font-black text-gray-400">#${o.id}</span>
+                                    <span class="text-[8px] font-black bg-gray-100 px-2 py-0.5 rounded-full">৳ ${total}</span>
+                                </div>
+                                <h5 class="text-xs font-black truncate">${o.member_name || 'Unknown'}</h5>
+                                <p class="text-[9px] text-gray-400 mt-1">${date}</p>
+                                <div class="mt-2 pt-2 border-t flex flex-wrap gap-1">
+                                    ${items.slice(0, 2).map(i => `<span class="bg-gray-50 px-2 py-0.5 rounded text-[8px] font-bold">${i.title}</span>`).join('')}
+                                    ${items.length > 2 ? `<span class="text-[8px] text-gray-400">+${items.length - 2} more</span>` : ''}
+                                </div>
+                            </div>
+                        `;
+                    }).join('')
+                    : '<p class="text-xs text-gray-300 text-center py-8">No orders</p>';
+            });
+        }
+
+        function handleDragStart(e, orderId) {
+            draggedOrderId = orderId;
+            e.target.classList.add('dragging');
+            e.dataTransfer.effectAllowed = 'move';
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.currentTarget.classList.add('drag-over');
+        }
+
+        function handleDragLeave(e) {
+            e.currentTarget.classList.remove('drag-over');
+        }
+
+        async function handleDrop(e, newStatus) {
+            e.preventDefault();
+            e.currentTarget.classList.remove('drag-over');
+            if (draggedOrderId) {
+                await updateOrderStatus(draggedOrderId, newStatus);
+                draggedOrderId = null;
+            }
+        }
+
+        // ==================== CARDS VIEW ====================
+        function filterOrders() {
+            renderCardsView();
+        }
+
+        function renderCardsView() {
+            const searchQuery = (document.getElementById('order-search')?.value || '').toLowerCase();
+            const statusFilter = document.getElementById('status-filter')?.value || 'all';
+
+            let filtered = allOrders;
+            if (statusFilter !== 'all') {
+                filtered = filtered.filter(o => o.status === statusFilter);
+            }
+            if (searchQuery) {
+                filtered = filtered.filter(o => 
+                    (o.member_name || '').toLowerCase().includes(searchQuery) ||
+                    o.id.toString().includes(searchQuery)
+                );
+            }
+
+            document.getElementById('admin-list-orders').innerHTML = filtered.length > 0
+                ? filtered.map(o => {
+                    const items = o.member_info?.items || [];
+                    const total = o.member_info?.total || '0';
+                    const statusColors = { pending: 'bg-yellow-100 text-yellow-600', confirmed: 'bg-blue-100 text-blue-600', shipped: 'bg-purple-100 text-purple-600', completed: 'bg-green-100 text-green-600' };
+                    const statusColor = statusColors[o.status] || 'bg-gray-100 text-gray-600';
+                    return `
+                        <div onclick="openOrderDrawer(${o.id})" class="bg-white p-5 rounded-[2rem] border shadow-sm hover:shadow-lg transition cursor-pointer btn-action">
+                            <div class="flex justify-between items-start mb-3">
+                                <div>
+                                    <h4 class="font-black uppercase truncate max-w-[130px]">${o.member_name || 'Unknown'}</h4>
+                                    <p class="text-[10px] text-gray-400">#${o.id} • ${new Date(o.created_at).toLocaleDateString()}</p>
+                                </div>
+                                <span class="status-badge ${statusColor}">${o.status}</span>
+                            </div>
+                            <div class="bg-gray-50 p-3 rounded-2xl mb-3">
+                                <div class="flex flex-wrap gap-1">
+                                    ${items.slice(0, 3).map(i => `<span class="bg-white px-2 py-0.5 rounded border text-[8px] font-bold">${i.title}</span>`).join('')}
+                                    ${items.length > 3 ? `<span class="text-[8px] text-gray-400">+${items.length - 3}</span>` : ''}
+                                </div>
+                            </div>
+                            <div class="flex justify-between items-center pt-3 border-t">
+                                <span class="text-lg font-black">৳ ${total}</span>
+                                <div class="flex gap-2" onclick="event.stopPropagation()">
+                                    <button onclick="quickStatusUpdate(${o.id})" class="p-2 bg-green-500 text-white rounded-lg text-xs btn-action" title="Mark Completed">
+                                        <i class="fa-solid fa-check"></i>
+                                    </button>
+                                    <button onclick="deleteOrder(${o.id})" class="p-2 bg-red-500 text-white rounded-lg text-xs btn-action" title="Delete">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('')
+                : '<p class="col-span-full text-center py-12 text-gray-400">No orders found</p>';
+        }
+
+        async function quickStatusUpdate(orderId) {
+            const order = allOrders.find(o => o.id === orderId);
+            if (!order) return;
+            const nextStatus = order.status === 'pending' ? 'confirmed' : order.status === 'confirmed' ? 'shipped' : 'completed';
+            await updateOrderStatus(orderId, nextStatus);
+        }
+
+        // ==================== UPDATE STATUS ====================
+        async function updateOrderStatus(orderId, newStatus) {
+            try {
+                const { error } = await _supabase
+                    .from('orders')
+                    .update({ status: newStatus })
+                    .eq('id', orderId);
+
+                if (error) throw error;
+                showToast(`Order #${orderId} → ${newStatus}`, 'success');
+                await loadOrders();
+            } catch (error) {
+                console.error('Error updating order:', error);
+                showToast('Failed to update order', 'error');
+            }
+        }
+
+        async function deleteOrder(orderId) {
+            if (!confirm(`Permanently delete Order #${orderId}?`)) return;
+            try {
+                const { error } = await _supabase.from('orders').delete().eq('id', orderId);
+                if (error) throw error;
+                showToast(`Order #${orderId} deleted`, 'error');
+                closeOrderDrawer();
+                await loadOrders();
+            } catch (error) {
+                console.error('Error deleting order:', error);
+                showToast('Failed to delete order', 'error');
+            }
+        }
+
+        // ==================== ORDER DRAWER ====================
+        function openOrderDrawer(orderId) {
+            const order = allOrders.find(o => o.id === orderId);
+            if (!order) return;
+            currentDrawerOrderId = orderId;
+
+            const items = order.member_info?.items || [];
+            const shipping = order.member_info?.shipping || {};
+            const subtotal = items.reduce((acc, i) => acc + (parseFloat(i.price) || 0), 0);
+            const deliveryCharge = parseFloat(order.member_info?.delivery_charge) || 0;
+            const discount = parseFloat(order.member_info?.discount) || 0;
+            const grandTotal = order.member_info?.total?.toString().replace('৳', '') || (subtotal + deliveryCharge - discount);
+            const date = new Date(order.created_at).toLocaleString('en-US', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+
+            document.getElementById('order-drawer-content').innerHTML = `
+                <!-- Timeline -->
+                <div>
+                    <p class="text-[10px] font-black text-gray-400 uppercase mb-3">Order Timeline</p>
+                    <div class="flex items-center gap-1 mb-2">
+                        ${['pending', 'confirmed', 'shipped', 'completed'].map((s, i) => {
+                            const statusOrder = ['pending', 'confirmed', 'shipped', 'completed'];
+                            const currentIndex = statusOrder.indexOf(order.status);
+                            const isDone = currentIndex >= i;
+                            const isCurrent = currentIndex === i;
+                            return `
+                                <div class="flex items-center flex-1">
+                                    <div class="w-3 h-3 rounded-full timeline-dot ${isDone ? 'completed' : isCurrent ? 'active' : 'bg-gray-200'}"></div>
+                                    ${i < 3 ? `<div class="flex-1 h-0.5 ${isDone ? 'bg-green-500' : 'bg-gray-200'}"></div>` : ''}
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                    <div class="flex justify-between text-[7px] font-black uppercase text-gray-400">
+                        <span>Pending</span><span>Confirmed</span><span>Shipped</span><span>Completed</span>
+                    </div>
+                </div>
+
+                <!-- Customer Info -->
+                <div class="bg-gray-50 p-5 rounded-2xl space-y-3">
+                    <div>
+                        <label class="text-[10px] font-black text-gray-400 uppercase">Customer</label>
+                        <div class="flex gap-2 mt-1">
+                            <input readonly value="${order.member_name || 'N/A'}" class="w-full p-2.5 bg-white border rounded-xl text-xs font-bold">
+                            <button onclick="copyToClipboard('${order.member_name || ''}')" class="px-3 bg-blue-100 text-blue-600 rounded-xl btn-action"><i class="fa-solid fa-copy"></i></button>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-black text-gray-400 uppercase">Phone</label>
+                        <div class="flex gap-2 mt-1">
+                            <input readonly value="${shipping.phone || 'N/A'}" class="w-full p-2.5 bg-white border rounded-xl text-xs font-bold">
+                            <button onclick="copyToClipboard('${shipping.phone || ''}')" class="px-3 bg-blue-100 text-blue-600 rounded-xl btn-action"><i class="fa-solid fa-copy"></i></button>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-black text-gray-400 uppercase">Address</label>
+                        <p class="text-xs font-bold mt-1">${shipping.address || 'N/A'}, ${shipping.district || ''}</p>
+                    </div>
+                    ${shipping.note ? `<div><label class="text-[10px] font-black text-gray-400 uppercase">Note</label><p class="text-xs mt-1 text-orange-600 font-bold">${shipping.note}</p></div>` : ''}
+                </div>
+
+                <!-- Products -->
+                <div class="bg-gray-50 p-5 rounded-2xl">
+                    <h4 class="text-[10px] font-black uppercase text-gray-400 mb-3">Products (${items.length})</h4>
+                    ${items.map(i => `
+                        <div class="flex justify-between items-center py-2 border-b last:border-0">
+                            <div class="flex items-center gap-2">
+                                <img src="${i.img || LOGO_URL}" class="w-8 h-8 rounded-lg object-cover" onerror="this.src='${LOGO_URL}'">
+                                <span class="text-xs font-bold">${i.title} ${i.variant ? `(${i.variant})` : ''}</span>
+                            </div>
+                            <span class="text-xs font-black">৳ ${i.price || 0}</span>
+                        </div>
+                    `).join('')}
+                    <div class="pt-3 mt-3 border-t space-y-1.5">
+                        <div class="flex justify-between text-[11px]"><span>Subtotal</span><span class="font-bold">৳ ${subtotal}</span></div>
+                        <div class="flex justify-between text-[11px] text-orange-600"><span>Delivery</span><span class="font-bold">+৳ ${deliveryCharge}</span></div>
+                        ${discount > 0 ? `<div class="flex justify-between text-[11px] text-green-600"><span>Discount</span><span class="font-bold">-৳ ${discount}</span></div>` : ''}
+                        <div class="flex justify-between text-lg font-black border-t pt-2 mt-2"><span>TOTAL</span><span class="text-blue-600">৳ ${grandTotal}</span></div>
+                    </div>
+                </div>
+
+                <!-- Date -->
+                <div class="text-center text-[10px] text-gray-400 font-bold">Order placed on ${date}</div>
+
+                <!-- Actions -->
+                <div class="space-y-2">
+                    <div class="grid grid-cols-2 gap-2">
+                        <button onclick="downloadInvoice(${order.id})" class="py-3 bg-slate-900 text-white rounded-xl font-black text-xs btn-action"><i class="fa-solid fa-file-pdf mr-1"></i> Invoice</button>
+                        <button onclick="downloadShippingSticker(${order.id})" class="py-3 bg-blue-600 text-white rounded-xl font-black text-xs btn-action"><i class="fa-solid fa-tag mr-1"></i> Sticker</button>
+                    </div>
+                    <div class="grid grid-cols-3 gap-2">
+                        ${order.status !== 'pending' ? `<button onclick="updateOrderStatus(${order.id}, 'pending')" class="py-2.5 bg-yellow-100 text-yellow-700 rounded-xl font-black text-[10px] btn-action">← Pending</button>` : '<div></div>'}
+                        ${order.status !== 'confirmed' ? `<button onclick="updateOrderStatus(${order.id}, 'confirmed')" class="py-2.5 bg-blue-100 text-blue-700 rounded-xl font-black text-[10px] btn-action">Confirm</button>` : '<div></div>'}
+                        ${order.status !== 'shipped' ? `<button onclick="updateOrderStatus(${order.id}, 'shipped')" class="py-2.5 bg-purple-100 text-purple-700 rounded-xl font-black text-[10px] btn-action">Ship</button>` : '<div></div>'}
+                        ${order.status !== 'completed' ? `<button onclick="updateOrderStatus(${order.id}, 'completed')" class="py-2.5 bg-green-100 text-green-700 rounded-xl font-black text-[10px] btn-action">Complete</button>` : '<div></div>'}
+                    </div>
+                    <button onclick="deleteOrder(${order.id})" class="w-full py-3 bg-red-50 text-red-600 rounded-xl font-black text-xs btn-action mt-2"><i class="fa-solid fa-trash mr-1"></i> Delete Order</button>
+                </div>
+            `;
+
+            document.getElementById('order-drawer-overlay').classList.remove('hidden');
+            document.getElementById('order-drawer').classList.add('open');
+        }
+
+        function closeOrderDrawer() {
+            document.getElementById('order-drawer-overlay').classList.add('hidden');
+            document.getElementById('order-drawer').classList.remove('open');
+            currentDrawerOrderId = null;
+        }
+
+        // ==================== DOWNLOAD FUNCTIONS ====================
+        function downloadInvoice(orderId) {
+            const order = allOrders.find(o => o.id === orderId);
+            if (!order) return;
+
+            const items = order.member_info?.items || [];
+            const shipping = order.member_info?.shipping || {};
+            const subtotal = items.reduce((acc, i) => acc + (parseFloat(i.price) || 0), 0);
+            const deliveryCharge = parseFloat(order.member_info?.delivery_charge) || 0;
+            const discount = parseFloat(order.member_info?.discount) || 0;
+            const grandTotal = order.member_info?.total?.toString().replace('৳', '') || (subtotal + deliveryCharge - discount);
+            const date = new Date(order.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+
+            const div = document.createElement('div');
+            div.style.padding = '40px 50px';
+            div.style.fontFamily = 'Inter, system-ui, sans-serif';
+            div.style.color = '#1e293b';
+            div.style.maxWidth = '800px';
+            div.style.margin = '0 auto';
+            div.style.background = 'white';
+            div.innerHTML = `
+                <div style="display:flex;justify-content:space-between;border-bottom:4px solid #0f172a;padding-bottom:25px;margin-bottom:35px">
+                    <div>
+                        <h1 style="font-size:32px;font-weight:900;margin:0;color:#0f172a">INVOICE</h1>
+                        <p style="color:#64748b;font-size:12px;margin:5px 0">ORDER #${order.id}</p>
+                    </div>
+                    <div style="text-align:right">
+                        <img src="${LOGO_URL}" style="width:55px;height:55px;border-radius:12px;object-fit:cover">
+                        <h2 style="font-size:18px;font-weight:900;color:#0071e3;margin-top:8px">JAYENWARE</h2>
+                        <p style="font-size:9px;color:#94a3b8;font-weight:700;margin:3px 0">SYSTEMS BY BINZEO</p>
+                        <p style="font-size:11px;margin-top:5px">${date}</p>
+                    </div>
+                </div>
+                <div style="margin-bottom:35px">
+                    <p style="font-size:9px;color:#94a3b8;text-transform:uppercase;font-weight:800;letter-spacing:0.1em">Bill To:</p>
+                    <p style="font-weight:800;font-size:18px;margin:5px 0;color:#0f172a">${order.member_name || 'N/A'}</p>
+                    <p style="font-size:13px;color:#475569;line-height:1.6">${shipping.phone || ''}<br>${shipping.address || ''}, ${shipping.district || ''}</p>
+                </div>
+                <table style="width:100%;border-collapse:collapse;margin-bottom:30px">
+                    <thead>
+                        <tr style="border-bottom:2px solid #0f172a;text-align:left">
+                            <th style="padding:10px 0;font-size:10px;text-transform:uppercase;color:#64748b">Item</th>
+                            <th style="text-align:right;padding:10px 0;font-size:10px;text-transform:uppercase;color:#64748b">Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${items.map(i => `<tr style="border-bottom:1px solid #f1f5f9">
+                            <td style="padding:12px 0;font-weight:600;font-size:13px">${i.title}${i.variant ? ` <span style="color:#0071e3;font-size:10px">(${i.variant})</span>` : ''}</td>
+                            <td style="text-align:right;font-weight:700;font-size:13px">৳ ${i.price || 0}</td>
+                        </tr>`).join('')}
+                    </tbody>
+                </table>
+                <div style="display:flex;justify-content:flex-end">
+                    <div style="width:260px;background:#f8fafc;padding:20px;border-radius:16px">
+                        <div style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:13px"><span>Subtotal:</span><span>৳ ${subtotal}</span></div>
+                        <div style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:13px"><span>Delivery:</span><span>৳ ${deliveryCharge}</span></div>
+                        ${discount > 0 ? `<div style="display:flex;justify-content:space-between;margin-bottom:10px;color:#16a34a;font-size:13px"><span>Discount:</span><span>-৳ ${discount}</span></div>` : ''}
+                        <div style="display:flex;justify-content:space-between;font-weight:900;font-size:20px;border-top:2px solid #e2e8f0;padding-top:8px;color:#0071e3"><span>TOTAL:</span><span>৳ ${grandTotal}</span></div>
+                    </div>
+                </div>`;
+
+            html2pdf().set({ margin: 0, filename: `Invoice_#${order.id}.pdf`, jsPDF: { format: 'a4' } }).from(div).save();
+            showToast('Invoice downloaded', 'success');
+        }
+
+        function downloadShippingSticker(orderId) {
+            const order = allOrders.find(o => o.id === orderId);
+            if (!order) return;
+            const shipping = order.member_info?.shipping || {};
+            const grandTotal = order.member_info?.total?.toString().replace('৳', '') || '0';
+
+            const div = document.createElement('div');
+            div.style.padding = '35px';
+            div.style.fontFamily = 'Inter, system-ui, sans-serif';
+            div.innerHTML = `
+                <div style="border:8px solid #000;padding:40px;border-radius:25px;width:100%;box-sizing:border-box">
+                    <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:4px solid #000;padding-bottom:15px;margin-bottom:25px">
+                        <span style="font-weight:900;font-size:32px">JAYENWARE</span>
+                        <span style="font-weight:900;font-size:22px">ORDER #${order.id}</span>
+                    </div>
+                    <p style="font-size:38px;font-weight:900;margin:0;color:#0f172a">${order.member_name || 'N/A'}</p>
+                    <p style="font-size:28px;font-weight:800;margin:12px 0;color:#0071e3">${shipping.phone || 'N/A'}</p>
+                    <p style="font-size:20px;font-weight:600;line-height:1.4">${shipping.address || ''}, ${shipping.district || ''}</p>
+                    <div style="background:#000;color:#fff;padding:25px;text-align:center;border-radius:16px;margin-top:30px">
+                        <p style="font-size:42px;font-weight:900;margin:0">৳ ${grandTotal}</p>
+                        <p style="font-size:12px;margin:5px 0 0;opacity:0.7">COD AMOUNT</p>
+                    </div>
+                </div>`;
+
+            html2pdf().set({ margin: 0, filename: `Sticker_#${order.id}.pdf`, jsPDF: { format: 'a4' } }).from(div).save();
+            showToast('Shipping sticker downloaded', 'success');
+        }
+
+        // ==================== SESSION CHECK ====================
+        async function checkSession() {
+            const { data: { session } } = await _supabase.auth.getSession();
+
+            if (!session || session.user.email !== ADMIN_EMAIL) {
+                window.location.href = LOGIN_URL;
+                return;
+            }
+
+            document.getElementById('global-loader').style.display = 'none';
+            document.getElementById('main-layout').classList.remove('hidden');
+
+            if (localStorage.getItem('darkMode') === 'true') {
+                isDarkMode = true;
+                document.body.classList.add('dark');
+            }
+
+            if (window.innerWidth < 769) {
+                document.querySelector('.bottom-nav').classList.remove('hidden');
+            }
+
+            await loadOrders();
+        }
+
+        // ==================== KEYBOARD SHORTCUTS ====================
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeOrderDrawer();
+            }
+        });
+
+        // ==================== INIT ====================
+        window.onload = checkSession;
+
+        window.addEventListener('resize', () => {
+            if (window.innerWidth >= 769) {
+                document.querySelector('.bottom-nav').classList.add('hidden');
+            } else {
+                document.querySelector('.bottom-nav').classList.remove('hidden');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,18 @@
+{
+  "routes": [
+    { "src": "/login", "dest": "/login/index.html" },
+    { "src": "/home", "dest": "/home/index.html" },
+    { "src": "/analytics", "dest": "/analytics/index.html" },
+    { "src": "/visitors", "dest": "/visitors/index.html" },
+    { "src": "/ai", "dest": "/ai/index.html" },
+    { "src": "/orders", "dest": "/orders/index.html" },
+    { "src": "/courier", "dest": "/courier/index.html" },
+    { "src": "/products", "dest": "/products/index.html" },
+    { "src": "/promo", "dest": "/promo/index.html" },
+    { "src": "/categories", "dest": "/categories/index.html" },
+    { "src": "/delivery", "dest": "/delivery/index.html" },
+    { "src": "/seasons", "dest": "/seasons/index.html" },
+    { "src": "/banners", "dest": "/banners/index.html" },
+    { "src": "/blog", "dest": "/blog/index.html" }
+  ]
+}

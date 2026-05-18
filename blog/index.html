@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Blog | JAYENWARE Admin</title>
+    <meta name="theme-color" content="#ec4899">
+    <link rel="icon" type="image/png" href="https://ozuwazkqyrxiwwfjceth.supabase.co/storage/v1/object/public/images/Beige%20Black%20Minimal%20Simple%20Modern%20Handwritten%20Graffiti%20Typographic%20Arts%20and_20251212_154142_0000.png">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.75); --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.1); --radius-3xl: 2.5rem;
+        }
+        * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: #f5f5f7; color: #1d1d1f; margin: 0; padding: 0; min-height: 100vh;
+            transition: background 0.3s, color 0.3s;
+        }
+        body.dark { background: #0a0a0a; color: #f5f5f7; }
+        body.dark .glass-card { background: rgba(28, 28, 30, 0.8); border-color: rgba(255, 255, 255, 0.08); }
+        body.dark .bg-white { background: #1c1c1e; }
+        body.dark .bg-gray-50, body.dark .bg-gray-100 { background: #2c2c2e; }
+        body.dark .text-slate-800, body.dark .text-slate-900 { color: #f5f5f7; }
+        body.dark .text-gray-400 { color: #8e8e93; }
+        body.dark .text-gray-500 { color: #636366; }
+        body.dark .border, body.dark .border-b, body.dark .border-t { border-color: #2c2c2e; }
+        body.dark input, body.dark textarea { background: #1c1c1e; border-color: #2c2c2e; color: #fff; }
+        body.dark .hover\:bg-slate-50:hover { background: #2c2c2e; }
+
+        .glass-card {
+            background: var(--glass-bg); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255,255,255,0.5); box-shadow: var(--shadow-md);
+        }
+        .custom-scroll::-webkit-scrollbar { width: 4px; height: 4px; }
+        .custom-scroll::-webkit-scrollbar-track { background: transparent; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #ec4899, #8b5cf6); border-radius: 10px; }
+
+        .btn-action { transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); cursor: pointer; }
+        .btn-action:hover { transform: translateY(-2px); }
+        .btn-action:active { transform: scale(0.96); }
+
+        @keyframes fadeSlideIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideUp { from { transform: translateY(100px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes slideDown { from { transform: translateY(0); opacity: 1; } to { transform: translateY(100px); opacity: 0; } }
+        @keyframes typewriter { from { width: 0; } to { width: 100%; } }
+        @keyframes penWrite { 0%,100% { transform: rotate(0deg); } 25% { transform: rotate(-10deg); } 75% { transform: rotate(10deg); } }
+
+        .toast-enter { animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .toast-exit { animation: slideDown 0.3s ease-in forwards; }
+
+        .blog-card {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); position: relative; overflow: hidden;
+            border-radius: 2.5rem;
+        }
+        .blog-card:hover { transform: translateY(-6px); box-shadow: 0 20px 50px rgba(236, 72, 153, 0.15); }
+        .blog-card:hover .blog-image { transform: scale(1.05); }
+
+        .blog-image { transition: transform 0.6s ease; }
+
+        .pen-icon { animation: penWrite 3s ease-in-out infinite; display: inline-block; }
+
+        .read-time-badge {
+            background: linear-gradient(135deg, #ec4899, #8b5cf6);
+            color: white; padding: 3px 10px; border-radius: 99px;
+            font-size: 9px; font-weight: 700; letter-spacing: 0.03em;
+        }
+
+        @media (max-width: 768px) {
+            .bottom-nav {
+                display: flex; position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
+                background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px);
+                border-top: 1px solid rgba(0,0,0,0.08); padding: 8px 0 env(safe-area-inset-bottom,8px) 0;
+            }
+            body.dark .bottom-nav { background: rgba(28, 28, 30, 0.95); border-color: rgba(255,255,255,0.08); }
+            main { padding-bottom: 100px !important; }
+        }
+        @media (min-width: 769px) { .bottom-nav { display: none; } }
+    </style>
+</head>
+<body class="text-slate-800 antialiased">
+    <div id="global-loader" style="position:fixed;inset:0;background:white;z-index:9999;display:flex;justify-content:center;align-items:center;">
+        <div class="flex flex-col items-center"><div class="w-14 h-14 border-4 border-pink-500 border-t-transparent rounded-full animate-spin"></div><p class="mt-5 font-bold text-gray-400 text-sm">Loading Articles...</p></div>
+    </div>
+
+    <div id="main-layout" class="hidden min-h-screen">
+        <main class="p-4 md:p-8 lg:p-10 max-w-7xl mx-auto">
+            <header class="mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                    <div class="flex items-center gap-2 text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">
+                        <a href="/home" class="hover:text-pink-600"><i class="fa-solid fa-house"></i> Home</a>
+                        <i class="fa-solid fa-chevron-right text-[8px]"></i> <span class="text-pink-600">Blog</span>
+                    </div>
+                    <h2 class="text-2xl md:text-3xl font-black uppercase tracking-tight">Content Hub</h2>
+                    <p class="text-[10px] font-bold text-gray-400 uppercase mt-1">Manage blog & news articles</p>
+                </div>
+                <button onclick="openEditor()" class="px-6 py-3 bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-2xl font-black text-xs uppercase btn-action shadow-lg">
+                    <i class="fa-solid fa-plus mr-2 pen-icon"></i> New Article
+                </button>
+            </header>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- EDITOR -->
+                <div class="lg:col-span-1 glass-card p-6 md:p-8 rounded-[3rem] shadow-sm h-fit" id="editor-panel">
+                    <h3 class="text-sm font-black uppercase mb-6 flex items-center gap-2 text-pink-600">
+                        <i class="fa-solid fa-pen-nib pen-icon"></i> <span id="editor-title">Write Article</span>
+                    </h3>
+                    <div class="space-y-4">
+                        <input type="text" id="an-title" placeholder="Article Title *" class="w-full p-4 bg-gray-50 border rounded-2xl outline-none font-bold focus:ring-2 focus:ring-pink-500 text-sm">
+                        <textarea id="an-desc" placeholder="Write your content here..." class="w-full p-4 bg-gray-50 border rounded-2xl outline-none font-medium focus:ring-2 focus:ring-pink-500 text-sm resize-none" rows="6"></textarea>
+                        <div class="p-4 border-2 border-dashed rounded-3xl bg-gray-50">
+                            <p class="text-[10px] font-bold text-gray-400 mb-3 uppercase"><i class="fa-solid fa-image mr-1"></i> Featured Image</p>
+                            <input type="text" id="an-url" placeholder="Image URL" class="w-full p-3 bg-white border rounded-xl mb-3 outline-none text-sm font-bold" oninput="previewBlogImage()">
+                            <div class="text-center text-[10px] text-gray-400 font-bold mb-2">OR</div>
+                            <input type="file" id="an-file" class="w-full text-xs text-gray-500" accept="image/*" onchange="previewBlogFile()">
+                            <div id="an-preview-container" class="mt-3 hidden">
+                                <img id="an-preview-img" class="w-full h-32 object-cover rounded-xl border">
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2 p-3 bg-pink-50 rounded-2xl">
+                            <i class="fa-solid fa-clock text-pink-500"></i>
+                            <span class="text-[10px] font-bold text-pink-600" id="read-time-display">~0 min read</span>
+                        </div>
+                        <button id="btn-blog-save" onclick="saveArticle()" class="w-full py-4 bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-2xl font-black text-sm uppercase btn-action shadow-lg">
+                            <i class="fa-solid fa-check mr-2"></i> Publish Article
+                        </button>
+                        <button id="btn-blog-cancel" onclick="resetEditor()" class="hidden w-full py-3 bg-gray-100 text-gray-600 rounded-2xl font-black text-xs uppercase btn-action">
+                            Cancel Edit
+                        </button>
+                    </div>
+                </div>
+
+                <!-- ARTICLES LIST -->
+                <div class="lg:col-span-2">
+                    <div class="glass-card p-6 md:p-8 rounded-[3rem] shadow-sm">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="text-sm font-black uppercase flex items-center gap-2 text-purple-600">
+                                <i class="fa-solid fa-newspaper"></i> All Articles
+                            </h3>
+                            <span id="article-count" class="text-[10px] bg-purple-100 text-purple-600 px-3 py-1 rounded-full font-black">0</span>
+                        </div>
+                        <div id="articles-list" class="space-y-4">
+                            <div class="text-center py-16 text-xs text-gray-400">
+                                <i class="fa-solid fa-pen-to-square text-5xl mb-4 block opacity-20"></i>
+                                <p class="font-bold">No articles yet</p>
+                                <p class="mt-1">Write your first blog post</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- MOBILE NAV -->
+    <nav class="bottom-nav hidden">
+        <div class="flex justify-around items-center px-2">
+            <a href="/home" class="flex flex-col items-center gap-1 p-2 text-[10px] font-black text-gray-400 no-underline"><i class="fa-solid fa-house text-lg"></i> Home</a>
+            <a href="/products" class="flex flex-col items-center gap-1 p-2 text-[10px] font-black text-gray-400 no-underline"><i class="fa-solid fa-box text-lg"></i> Products</a>
+            <a href="/blog" class="flex flex-col items-center gap-1 p-2 text-[10px] font-black text-pink-600 no-underline"><i class="fa-solid fa-pen-nib text-lg"></i> Blog</a>
+            <a href="/banners" class="flex flex-col items-center gap-1 p-2 text-[10px] font-black text-gray-400 no-underline"><i class="fa-solid fa-image text-lg"></i> Banners</a>
+            <a href="/ai" class="flex flex-col items-center gap-1 p-2 text-[10px] font-black text-gray-400 no-underline"><i class="fa-solid fa-robot text-lg"></i> AI</a>
+        </div>
+    </nav>
+
+    <script>
+        const SUPABASE_URL = "https://vdqbjwzixppbtkbgvhlq.supabase.co";
+        const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZkcWJqd3ppeHBwYnRrYmd2aGxxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgwMDc3MzQsImV4cCI6MjA5MzU4MzczNH0.E6C0_7SWIrTMJlFe5t8EbNAW5fzlpg-fKV3ZV0XYd3k";
+        const ADMIN_EMAIL = "binzeo369@gmail.com";
+        const LOGO_URL = "https://ozuwazkqyrxiwwfjceth.supabase.co/storage/v1/object/public/images/Beige%20Black%20Minimal%20Simple%20Modern%20Handwritten%20Graffiti%20Typographic%20Arts%20and_20251212_154142_0000.png";
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        let allArticles = [], isDarkMode = false, editingId = null;
+
+        function showToast(m, t = 'success') {
+            const el = document.createElement('div');
+            el.className = `fixed bottom-20 md:bottom-6 right-6 px-5 py-3.5 rounded-2xl font-black text-sm text-white shadow-2xl z-[9999] toast-enter ${t==='success'?'bg-green-500':t==='error'?'bg-red-500':'bg-blue-500'}`;
+            el.innerHTML = `<span><i class="fa-solid fa-${t==='success'?'check-circle':'exclamation-circle'} mr-2"></i>${m}</span>`;
+            document.body.appendChild(el); setTimeout(() => { el.classList.add('toast-exit'); setTimeout(() => el.remove(), 300); }, 3000);
+        }
+
+        function calculateReadTime(text) {
+            const words = (text || '').trim().split(/\s+/).length;
+            const minutes = Math.max(1, Math.ceil(words / 200));
+            document.getElementById('read-time-display').textContent = `~${minutes} min read`;
+            return minutes;
+        }
+
+        async function uploadFile(inputId) {
+            const f = document.getElementById(inputId).files[0]; if (!f) return null;
+            const name = `binzeo_${Date.now()}_${f.name.replace(/\s+/g,'_')}`;
+            try {
+                const { error } = await _supabase.storage.from('images').upload(name, f, { cacheControl: '3600', upsert: false });
+                if (error) { showToast('Upload failed', 'error'); return null; }
+                return _supabase.storage.from('images').getPublicUrl(name).data.publicUrl;
+            } catch (e) { return null; }
+        }
+
+        function previewBlogImage() {
+            const url = document.getElementById('an-url').value.trim();
+            if (url && (url.startsWith('http://') || url.startsWith('https://'))) {
+                document.getElementById('an-preview-img').src = url;
+                document.getElementById('an-preview-container').classList.remove('hidden');
+            } else {
+                document.getElementById('an-preview-container').classList.add('hidden');
+            }
+        }
+
+        function previewBlogFile() {
+            const f = document.getElementById('an-file').files[0];
+            if (f && f.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    document.getElementById('an-preview-img').src = e.target.result;
+                    document.getElementById('an-preview-container').classList.remove('hidden');
+                };
+                reader.readAsDataURL(f);
+            }
+        }
+
+        async function loadData() {
+            const { data } = await _supabase.from('news').select('*').order('created_at', { ascending: false });
+            if (data) { allArticles = data; renderArticles(); }
+        }
+
+        function renderArticles() {
+            document.getElementById('article-count').textContent = allArticles.length;
+            const list = document.getElementById('articles-list');
+            if (allArticles.length === 0) {
+                list.innerHTML = `<div class="text-center py-16 text-xs text-gray-400"><i class="fa-solid fa-pen-to-square text-5xl mb-4 block opacity-20"></i><p class="font-bold">No articles yet</p><p class="mt-1">Write your first blog post</p></div>`;
+                return;
+            }
+            list.innerHTML = allArticles.map(a => {
+                const date = a.created_at ? new Date(a.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }) : 'N/A';
+                const desc = a.description || '';
+                const words = desc.trim().split(/\s+/).length;
+                const readTime = Math.max(1, Math.ceil(words / 200));
+                const preview = desc.length > 120 ? desc.substring(0, 120) + '...' : desc;
+                return `
+                <div class="blog-card bg-white border shadow-sm overflow-hidden">
+                    <div class="flex flex-col md:flex-row">
+                        <div class="w-full md:w-48 h-40 md:h-auto flex-shrink-0 overflow-hidden">
+                            <img src="${a.img || LOGO_URL}" class="blog-image w-full h-full object-cover" onerror="this.src='${LOGO_URL}'">
+                        </div>
+                        <div class="flex-grow p-5 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center gap-2 mb-2">
+                                    <span class="read-time-badge"><i class="fa-solid fa-clock mr-1"></i> ${readTime} min</span>
+                                    <span class="text-[9px] text-gray-400 font-bold">${date}</span>
+                                </div>
+                                <h4 class="font-black text-sm mb-2 line-clamp-2">${a.title || 'Untitled'}</h4>
+                                <p class="text-[10px] text-gray-500 line-clamp-2">${preview || 'No content'}</p>
+                            </div>
+                            <div class="flex gap-2 mt-4 pt-3 border-t">
+                                <button onclick="editArticle(${a.id})" class="flex-1 py-2.5 bg-pink-50 text-pink-600 rounded-xl text-[10px] font-black btn-action"><i class="fa-solid fa-pen mr-1"></i> Edit</button>
+                                <button onclick="deleteArticle(${a.id})" class="flex-1 py-2.5 bg-red-50 text-red-500 rounded-xl text-[10px] font-black btn-action"><i class="fa-solid fa-trash mr-1"></i> Delete</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        function openEditor() { resetEditor(); document.getElementById('editor-panel').scrollIntoView({ behavior: 'smooth' }); }
+
+        function resetEditor() {
+            editingId = null;
+            document.getElementById('editor-title').textContent = 'Write Article';
+            document.getElementById('btn-blog-save').innerHTML = '<i class="fa-solid fa-check mr-2"></i> Publish Article';
+            document.getElementById('btn-blog-cancel').classList.add('hidden');
+            ['an-title','an-desc','an-url'].forEach(id => document.getElementById(id).value = '');
+            document.getElementById('an-file').value = '';
+            document.getElementById('an-preview-container').classList.add('hidden');
+            document.getElementById('read-time-display').textContent = '~0 min read';
+        }
+
+        function editArticle(id) {
+            const a = allArticles.find(x => x.id === id); if (!a) return;
+            editingId = id;
+            document.getElementById('editor-title').textContent = 'Edit Article';
+            document.getElementById('btn-blog-save').innerHTML = '<i class="fa-solid fa-save mr-2"></i> Update Article';
+            document.getElementById('btn-blog-cancel').classList.remove('hidden');
+            document.getElementById('an-title').value = a.title || '';
+            document.getElementById('an-desc').value = a.description || '';
+            document.getElementById('an-url').value = a.img || '';
+            calculateReadTime(a.description || '');
+            if (a.img) { document.getElementById('an-preview-img').src = a.img; document.getElementById('an-preview-container').classList.remove('hidden'); }
+            document.getElementById('editor-panel').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        async function saveArticle() {
+            const title = document.getElementById('an-title').value.trim();
+            const desc = document.getElementById('an-desc').value.trim();
+            if (!title) { showToast('Article title is required', 'error'); return; }
+            if (!desc) { showToast('Content is required', 'error'); return; }
+
+            const btn = document.getElementById('btn-blog-save');
+            btn.disabled = true; btn.innerHTML = '<div class="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mx-auto"></div>';
+
+            try {
+                let img = document.getElementById('an-url').value.trim() || await uploadFile('an-file');
+                const obj = { title, description: desc };
+                if (img) obj.img = img;
+
+                if (editingId) {
+                    await _supabase.from('news').update(obj).eq('id', editingId);
+                    showToast('Article updated! ✨', 'success');
+                } else {
+                    const { error } = await _supabase.from('news').insert([obj]);
+                    if (error) throw error;
+                    showToast('Article published! 🎉', 'success');
+                }
+                resetEditor(); await loadData();
+            } catch (e) { showToast('Error saving article', 'error'); }
+            finally { btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-check mr-2"></i> Publish Article'; }
+        }
+
+        async function deleteArticle(id) {
+            if (!confirm('Delete this article?')) return;
+            await _supabase.from('news').delete().eq('id', id);
+            showToast('Article deleted', 'error');
+            if (editingId === id) resetEditor();
+            await loadData();
+        }
+
+        // Auto calculate read time
+        document.addEventListener('DOMContentLoaded', () => {
+            const descInput = document.getElementById('an-desc');
+            if (descInput) descInput.addEventListener('input', () => calculateReadTime(descInput.value));
+        });
+
+        async function checkSession() {
+            const { data: { session } } = await _supabase.auth.getSession();
+            if (!session || session.user.email !== ADMIN_EMAIL) { window.location.href = '/login'; return; }
+            document.getElementById('global-loader').style.display = 'none';
+            document.getElementById('main-layout').classList.remove('hidden');
+            if (localStorage.getItem('darkMode') === 'true') { isDarkMode = true; document.body.classList.add('dark'); }
+            if (window.innerWidth < 769) document.querySelector('.bottom-nav').classList.remove('hidden');
+            await loadData();
+        }
+
+        window.onload = checkSession;
+        window.addEventListener('resize', () => { document.querySelector('.bottom-nav').classList.toggle('hidden', window.innerWidth >= 769); });
+    </script>
+</body>
+</html>

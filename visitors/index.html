@@ -3,25 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Visitors Analytics | JAYENWARE Admin</title>
-    <meta name="theme-color" content="#0071e3">
+    <title>Visitor Intelligence | JAYENWARE</title>
+    <meta name="theme-color" content="#000000">
     <link rel="icon" type="image/png" href="https://ozuwazkqyrxiwwfjceth.supabase.co/storage/v1/object/public/images/Beige%20Black%20Minimal%20Simple%20Modern%20Handwritten%20Graffiti%20Typographic%20Arts%20and_20251212_154142_0000.png">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         :root {
-            --glass-bg: rgba(255, 255, 255, 0.75);
-            --glass-border: rgba(255, 255, 255, 0.5);
-            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04);
-            --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.06);
-            --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.1);
-            --shadow-xl: 0 20px 60px rgba(0, 0, 0, 0.15);
-            --radius-xl: 1.5rem;
-            --radius-2xl: 2rem;
-            --radius-3xl: 2.5rem;
+            --bg-primary: #ffffff;
+            --bg-secondary: #fafafa;
+            --bg-tertiary: #f5f5f5;
+            --text-primary: #0a0a0a;
+            --text-secondary: #525252;
+            --text-tertiary: #a3a3a3;
+            --border-color: #e5e5e5;
+            --border-light: #f0f0f0;
+            --accent: #0a0a0a;
+            --accent-hover: #262626;
+            --danger: #0a0a0a;
+            --danger-bg: #fafafa;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.04);
+            --shadow-lg: 0 8px 24px rgba(0,0,0,0.06);
+            --radius-sm: 0.5rem;
+            --radius-md: 0.75rem;
+            --radius-lg: 1rem;
+            --radius-xl: 1.25rem;
+            --radius-2xl: 1.5rem;
         }
 
         * {
@@ -31,72 +42,246 @@
 
         body {
             font-family: 'Inter', system-ui, -apple-system, sans-serif;
-            background: #f5f5f7;
-            color: #1d1d1f;
-            transition: background 0.3s, color 0.3s;
+            background: var(--bg-primary);
+            color: var(--text-primary);
             margin: 0;
             padding: 0;
             min-height: 100vh;
+            letter-spacing: -0.01em;
         }
 
-        body.dark {
-            background: #0a0a0a;
-            color: #f5f5f7;
+        .font-mono {
+            font-family: 'JetBrains Mono', monospace;
         }
 
-        body.dark .glass-card {
-            background: rgba(28, 28, 30, 0.8);
-            border-color: rgba(255, 255, 255, 0.08);
+        .card {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-2xl);
+            transition: all 0.2s ease;
         }
 
-        body.dark .bg-white {
-            background: #1c1c1e;
+        .card:hover {
+            border-color: var(--text-tertiary);
         }
 
-        body.dark .bg-gray-50,
-        body.dark .bg-gray-100 {
-            background: #2c2c2e;
-        }
-
-        body.dark .text-slate-800,
-        body.dark .text-slate-900,
-        body.dark .text-slate-700 {
-            color: #f5f5f7;
-        }
-
-        body.dark .text-gray-400 {
-            color: #8e8e93;
-        }
-
-        body.dark .text-gray-500 {
-            color: #636366;
-        }
-
-        body.dark .border,
-        body.dark .border-b,
-        body.dark .border-t {
-            border-color: #2c2c2e;
-        }
-
-        body.dark .hover\:bg-slate-50:hover {
-            background: #2c2c2e;
-        }
-
-        body.dark table {
-            color: #f5f5f7;
-        }
-
-        .glass-card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            border: 1px solid var(--glass-border);
+        .card-elevated {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-2xl);
             box-shadow: var(--shadow-md);
         }
 
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.625rem 1.25rem;
+            background: var(--accent);
+            color: white;
+            border: 1px solid var(--accent);
+            border-radius: var(--radius-md);
+            font-size: 0.6875rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .btn:hover {
+            background: var(--accent-hover);
+            transform: translateY(-1px);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-outline:hover {
+            background: var(--bg-tertiary);
+            border-color: var(--text-primary);
+            color: var(--text-primary);
+        }
+
+        .btn-danger {
+            background: transparent;
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-danger:hover {
+            background: #fafafa;
+            border-color: #0a0a0a;
+        }
+
+        .btn-sm {
+            padding: 0.375rem 0.875rem;
+            font-size: 0.625rem;
+        }
+
+        .btn-icon {
+            padding: 0.5rem;
+            min-width: 2rem;
+            justify-content: center;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.125rem 0.625rem;
+            border-radius: 99px;
+            font-size: 0.5625rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border: 1px solid var(--border-color);
+        }
+
+        .badge-new {
+            background: #0a0a0a;
+            color: white;
+            border-color: #0a0a0a;
+        }
+
+        .badge-bot {
+            background: #fafafa;
+            color: #0a0a0a;
+            border-color: #e5e5e5;
+        }
+
+        .badge-consent {
+            background: #fafafa;
+            color: #0a0a0a;
+            border-color: #e5e5e5;
+        }
+
+        .live-dot {
+            width: 0.5rem;
+            height: 0.5rem;
+            background: #0a0a0a;
+            border-radius: 50%;
+            animation: livePulse 2s infinite;
+        }
+
+        @keyframes livePulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.3; transform: scale(1.4); }
+        }
+
+        @keyframes fadeSlideIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .animate-in {
+            animation: fadeSlideIn 0.4s ease-out forwards;
+            opacity: 0;
+        }
+
+        .animate-in:nth-child(1) { animation-delay: 0s; }
+        .animate-in:nth-child(2) { animation-delay: 0.05s; }
+        .animate-in:nth-child(3) { animation-delay: 0.1s; }
+        .animate-in:nth-child(4) { animation-delay: 0.15s; }
+        .animate-in:nth-child(5) { animation-delay: 0.2s; }
+        .animate-in:nth-child(6) { animation-delay: 0.25s; }
+
+        .animate-slide-right {
+            animation: slideInRight 0.4s ease-out forwards;
+        }
+
+        .progress-track {
+            height: 0.25rem;
+            background: var(--bg-tertiary);
+            border-radius: 99px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--accent);
+            border-radius: 99px;
+            transition: width 0.8s cubic-bezier(0.22, 0.61, 0.36, 1);
+        }
+
+        .divider {
+            height: 1px;
+            background: var(--border-light);
+            margin: 0;
+        }
+
+        .insight-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 1rem;
+            transition: all 0.2s ease;
+        }
+
+        .insight-card:hover {
+            border-color: var(--text-primary);
+        }
+
+        .tab {
+            padding: 0.5rem 1rem;
+            font-size: 0.6875rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s ease;
+            color: var(--text-tertiary);
+        }
+
+        .tab.active {
+            color: var(--text-primary);
+            border-bottom-color: var(--text-primary);
+        }
+
+        .tab:hover {
+            color: var(--text-secondary);
+        }
+
+        table {
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+
+        table th {
+            font-size: 0.625rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-tertiary);
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border-color);
+            text-align: left;
+            white-space: nowrap;
+        }
+
+        table td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border-light);
+            font-size: 0.8125rem;
+            color: var(--text-primary);
+        }
+
+        table tr:hover td {
+            background: var(--bg-secondary);
+        }
+
         .custom-scroll::-webkit-scrollbar {
-            width: 4px;
-            height: 4px;
+            width: 3px;
+            height: 3px;
         }
 
         .custom-scroll::-webkit-scrollbar-track {
@@ -104,171 +289,23 @@
         }
 
         .custom-scroll::-webkit-scrollbar-thumb {
-            background: linear-gradient(180deg, #0071e3, #5856d6);
-            border-radius: 10px;
-        }
-
-        .btn-action {
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-            cursor: pointer;
-        }
-
-        .btn-action:hover {
-            transform: translateY(-2px);
-        }
-
-        .btn-action:active {
-            transform: scale(0.96);
-        }
-
-        .btn-danger {
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-            cursor: pointer;
-        }
-
-        .btn-danger:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(239, 68, 68, 0.3);
-        }
-
-        @keyframes fadeSlideIn {
-            from { opacity: 0; transform: translateY(16px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes pulse-glow {
-            0%, 100% {
-                box-shadow: 0 0 20px rgba(0, 113, 227, 0.3);
-            }
-            50% {
-                box-shadow: 0 0 40px rgba(0, 113, 227, 0.6), 0 0 60px rgba(88, 86, 214, 0.3);
-            }
-        }
-
-        @keyframes livePulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.6; transform: scale(1.1); }
-        }
-
-        @keyframes botPulse {
-            0%, 100% { background-color: rgba(239, 68, 68, 0.1); }
-            50% { background-color: rgba(239, 68, 68, 0.2); }
-        }
-
-        .stat-card {
-            animation: fadeSlideIn 0.5s ease-out forwards;
-            opacity: 0;
-        }
-
-        .stat-card:nth-child(1) { animation-delay: 0s; }
-        .stat-card:nth-child(2) { animation-delay: 0.1s; }
-        .stat-card:nth-child(3) { animation-delay: 0.2s; }
-        .stat-card:nth-child(4) { animation-delay: 0.3s; }
-        .stat-card:nth-child(5) { animation-delay: 0.4s; }
-        .stat-card:nth-child(6) { animation-delay: 0.5s; }
-
-        .live-counter {
-            animation: pulse-glow 3s infinite;
-        }
-
-        .live-dot {
-            animation: livePulse 1.5s infinite;
-        }
-
-        .bot-alert {
-            animation: botPulse 2s infinite;
-        }
-
-        .toast-enter {
-            animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-
-        .toast-exit {
-            animation: slideDown 0.3s ease-in forwards;
-        }
-
-        @keyframes slideUp {
-            from { transform: translateY(100px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
-        @keyframes slideDown {
-            from { transform: translateY(0); opacity: 1; }
-            to { transform: translateY(100px); opacity: 0; }
-        }
-
-        .progress-bar {
-            transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .visitor-row {
-            transition: all 0.2s ease;
-        }
-
-        .visitor-row:hover {
-            background: rgba(0, 113, 227, 0.03);
-        }
-
-        .visitor-row.bot-row {
-            background: rgba(239, 68, 68, 0.05);
-        }
-
-        .visitor-row.bot-row:hover {
-            background: rgba(239, 68, 68, 0.1);
-        }
-
-        .page-badge {
-            display: inline-block;
-            padding: 2px 10px;
+            background: #d4d4d4;
             border-radius: 99px;
-            font-size: 9px;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.03em;
         }
 
-        .bot-badge {
-            display: inline-block;
-            padding: 2px 8px;
-            border-radius: 99px;
-            font-size: 9px;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.03em;
-            background: rgba(239, 68, 68, 0.1);
-            color: #ef4444;
-        }
-
-        .consent-badge {
-            display: inline-block;
-            padding: 2px 8px;
-            border-radius: 99px;
-            font-size: 9px;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.03em;
-            background: rgba(34, 197, 94, 0.1);
-            color: #22c55e;
-        }
-
-        .tab-button {
-            transition: all 0.2s ease;
-            position: relative;
-        }
-
-        .tab-button.active {
-            color: #0071e3;
-        }
-
-        .tab-button.active::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: #0071e3;
-            border-radius: 2px;
+        .toast {
+            position: fixed;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            background: var(--text-primary);
+            color: white;
+            padding: 0.75rem 1.25rem;
+            border-radius: var(--radius-md);
+            font-size: 0.75rem;
+            font-weight: 600;
+            z-index: 9999;
+            animation: fadeSlideIn 0.3s ease-out;
+            box-shadow: var(--shadow-lg);
         }
 
         @media (max-width: 768px) {
@@ -279,20 +316,16 @@
                 left: 0;
                 right: 0;
                 z-index: 100;
-                background: rgba(255, 255, 255, 0.95);
-                backdrop-filter: blur(20px);
-                border-top: 1px solid rgba(0, 0, 0, 0.08);
-                padding: 8px 0 env(safe-area-inset-bottom, 8px) 0;
-            }
-            body.dark .bottom-nav {
-                background: rgba(28, 28, 30, 0.95);
-                border-color: rgba(255, 255, 255, 0.08);
+                background: var(--bg-primary);
+                border-top: 1px solid var(--border-color);
+                padding: 0.5rem 0 env(safe-area-inset-bottom, 0.5rem) 0;
             }
             main {
-                padding-bottom: 100px !important;
+                padding-bottom: 5rem !important;
             }
-            .table-responsive {
-                font-size: 10px;
+            table td, table th {
+                padding: 0.5rem 0.75rem;
+                font-size: 0.6875rem;
             }
         }
 
@@ -303,334 +336,352 @@
         }
     </style>
 </head>
-<body class="text-slate-800 antialiased">
+<body class="antialiased">
     <!-- GLOBAL LOADER -->
-    <div id="global-loader" style="position:fixed;inset:0;background:white;z-index:9999;display:flex;justify-content:center;align-items:center;transition:opacity 0.5s;">
-        <div class="flex flex-col items-center">
-            <div class="w-14 h-14 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-            <p class="mt-5 font-bold text-gray-400 text-sm">Loading Advanced Analytics...</p>
+    <div id="global-loader" style="position:fixed;inset:0;background:white;z-index:9999;display:flex;justify-content:center;align-items:center;">
+        <div class="flex flex-col items-center gap-4">
+            <div class="w-10 h-10 border-2 border-black border-t-transparent rounded-full animate-spin"></div>
+            <p class="text-xs font-bold text-gray-400 uppercase tracking-widest">JAYENWARE</p>
         </div>
     </div>
 
     <!-- MAIN LAYOUT -->
     <div id="main-layout" class="hidden min-h-screen">
         <main class="p-4 md:p-8 lg:p-10 max-w-7xl mx-auto">
+            
             <!-- HEADER -->
             <header class="mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
-                    <div class="flex items-center gap-2 text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">
-                        <a href="/home" class="hover:text-blue-600 transition"><i class="fa-solid fa-house"></i> Home</a>
-                        <i class="fa-solid fa-chevron-right text-[8px]"></i>
-                        <span class="text-blue-600">Visitors Analytics</span>
-                        <span class="flex items-center gap-1 ml-2 px-2 py-0.5 bg-green-100 text-green-600 rounded-full">
-                            <span class="live-dot w-1.5 h-1.5 bg-green-500 rounded-full"></span> Live v2.0
+                    <div class="flex items-center gap-2 text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-2">
+                        <a href="/home" class="hover:text-black transition">Home</a>
+                        <span>/</span>
+                        <span class="text-black">Visitor Intelligence</span>
+                        <span class="flex items-center gap-1.5 ml-2 px-2 py-0.5 bg-gray-50 border border-gray-200 rounded-full">
+                            <span class="live-dot"></span> LIVE
                         </span>
                     </div>
-                    <h2 class="text-2xl md:text-3xl font-black uppercase tracking-tight flex items-center gap-2">
-                        <i class="fa-solid fa-chart-simple text-blue-600"></i> Advanced Visitor Analytics
-                    </h2>
+                    <h1 class="text-2xl md:text-3xl font-black tracking-tight">
+                        VISITOR<span class="text-gray-300">_</span>INTELLIGENCE
+                    </h1>
+                    <p class="text-xs text-gray-400 mt-1 font-medium">AI-Powered Traffic Analysis & Decision Engine</p>
                 </div>
-                <!-- ACTION BUTTONS -->
                 <div class="flex flex-wrap gap-2">
-                    <button onclick="switchTab('overview')" id="tab-overview" class="tab-button active px-4 py-2.5 bg-blue-50 text-blue-600 rounded-xl font-black text-[10px] uppercase flex items-center gap-2">
-                        <i class="fa-solid fa-chart-pie"></i> Overview
+                    <button onclick="refreshVisitors()" class="btn btn-outline btn-sm">
+                        <i class="fa-solid fa-rotate text-[10px]"></i> Refresh
                     </button>
-                    <button onclick="switchTab('bots')" id="tab-bots" class="tab-button px-4 py-2.5 bg-red-50 text-red-600 rounded-xl font-black text-[10px] uppercase flex items-center gap-2">
-                        <i class="fa-solid fa-robot"></i> Bot Detection
+                    <button onclick="cleanupDuplicateVisitors()" class="btn btn-outline btn-sm">
+                        <i class="fa-solid fa-clone text-[10px]"></i> Deduplicate
                     </button>
-                    <button onclick="switchTab('locations')" id="tab-locations" class="tab-button px-4 py-2.5 bg-purple-50 text-purple-600 rounded-xl font-black text-[10px] uppercase flex items-center gap-2">
-                        <i class="fa-solid fa-map-pin"></i> Locations
+                    <button onclick="cleanupOldVisitors()" class="btn btn-outline btn-sm">
+                        <i class="fa-solid fa-broom text-[10px]"></i> Clean 30d
                     </button>
-                    <button onclick="switchTab('devices')" id="tab-devices" class="tab-button px-4 py-2.5 bg-green-50 text-green-600 rounded-xl font-black text-[10px] uppercase flex items-center gap-2">
-                        <i class="fa-solid fa-mobile-screen"></i> Devices
+                    <button onclick="deleteAllVisitors()" class="btn btn-danger btn-sm">
+                        <i class="fa-solid fa-trash-can text-[10px]"></i> Clear
                     </button>
                 </div>
             </header>
 
-            <!-- TAB CONTENT: OVERVIEW -->
+            <!-- LIVE COUNTER -->
+            <div class="card-elevated p-6 md:p-8 mb-6 bg-black text-white border-0">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="live-dot bg-white"></span>
+                            <p class="text-[10px] font-bold uppercase tracking-widest opacity-60">Active Now</p>
+                        </div>
+                        <h2 id="live-online-count" class="text-5xl md:text-6xl font-black tracking-tight">0</h2>
+                        <p class="text-xs opacity-50 mt-1 font-medium">unique visitors in last 15 min</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-[9px] font-bold uppercase tracking-widest opacity-40 mb-1">Updated</p>
+                        <p id="last-updated" class="text-xs font-mono opacity-50">just now</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STATS GRID -->
+            <div class="grid grid-cols-2 md:grid-cols-6 gap-3 mb-6">
+                <div class="card p-4 animate-in">
+                    <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-1">Total Visits</p>
+                    <h3 class="text-xl font-black tracking-tight" id="stat-total-visits">0</h3>
+                </div>
+                <div class="card p-4 animate-in">
+                    <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-1">Unique IPs</p>
+                    <h3 class="text-xl font-black tracking-tight" id="stat-unique-ips">0</h3>
+                </div>
+                <div class="card p-4 animate-in">
+                    <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-1">Sessions</p>
+                    <h3 class="text-xl font-black tracking-tight" id="stat-sessions">0</h3>
+                </div>
+                <div class="card p-4 animate-in">
+                    <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-1">First Time</p>
+                    <h3 class="text-xl font-black tracking-tight" id="stat-first-time">0</h3>
+                </div>
+                <div class="card p-4 animate-in">
+                    <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-1">Consented</p>
+                    <h3 class="text-xl font-black tracking-tight" id="stat-consented">0</h3>
+                </div>
+                <div class="card p-4 animate-in">
+                    <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-1">Bots Blocked</p>
+                    <h3 class="text-xl font-black tracking-tight" id="stat-bots">0</h3>
+                </div>
+            </div>
+
+            <!-- TABS -->
+            <div class="flex gap-0 mb-6 border-b border-gray-100">
+                <button onclick="switchTab('overview')" id="tab-overview" class="tab active">Overview</button>
+                <button onclick="switchTab('insights')" id="tab-insights" class="tab">AI Insights</button>
+                <button onclick="switchTab('bots')" id="tab-bots" class="tab">Bot Detection</button>
+                <button onclick="switchTab('locations')" id="tab-locations" class="tab">Locations</button>
+                <button onclick="switchTab('devices')" id="tab-devices" class="tab">Devices</button>
+            </div>
+
+            <!-- TAB: OVERVIEW -->
             <div id="content-overview">
-                <!-- LIVE COUNTER + BOT ALERT -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                    <div class="live-counter glass-card p-6 rounded-[2.5rem] text-center bg-gradient-to-r from-blue-600 via-blue-700 to-purple-700 text-white border-0 shadow-xl col-span-2">
-                        <div class="flex items-center justify-center gap-3 mb-2">
-                            <span class="live-dot w-3 h-3 bg-green-400 rounded-full"></span>
-                            <p class="text-[10px] font-black uppercase tracking-widest opacity-80">Real-Time Visitors</p>
-                        </div>
-                        <h3 id="live-online-count" class="text-6xl md:text-7xl font-black">0</h3>
-                        <p class="text-xs opacity-70 mt-2 font-medium">active visitors in last 15 minutes</p>
-                        <p class="text-[8px] opacity-50 mt-1 uppercase tracking-widest">Updated: <span id="last-updated">just now</span></p>
-                    </div>
-                    <div id="bot-alert-card" class="glass-card p-6 rounded-[2.5rem] bg-gradient-to-r from-red-50 to-orange-50 border-red-200 shadow-sm bot-alert">
-                        <div class="flex items-center gap-3 mb-2">
-                            <i class="fa-solid fa-shield-halved text-red-500 text-2xl"></i>
-                            <p class="text-[10px] font-black text-red-600 uppercase tracking-widest">Bot Protection</p>
-                        </div>
-                        <h3 class="text-4xl font-black text-red-600" id="bot-blocked-count">0</h3>
-                        <p class="text-xs text-red-500 mt-2 font-medium">bots blocked today</p>
-                        <p class="text-[8px] text-red-400 mt-1 uppercase">AI-Powered Detection</p>
-                    </div>
-                </div>
-
-                <!-- STATS OVERVIEW -->
-                <div class="grid grid-cols-2 md:grid-cols-6 gap-4 mb-6" id="visitor-stats-container">
-                    <div class="glass-card p-5 rounded-[2rem] shadow-sm stat-card">
-                        <p class="text-[10px] font-black text-gray-400 uppercase mb-1"><i class="fa-solid fa-eye mr-1"></i> Total</p>
-                        <h3 class="text-2xl font-black" id="stat-total-visits">0</h3>
-                    </div>
-                    <div class="glass-card p-5 rounded-[2rem] shadow-sm stat-card">
-                        <p class="text-[10px] font-black text-blue-400 uppercase mb-1"><i class="fa-solid fa-users mr-1"></i> Unique IPs</p>
-                        <h3 class="text-2xl font-black" id="stat-unique-ips">0</h3>
-                    </div>
-                    <div class="glass-card p-5 rounded-[2rem] shadow-sm stat-card">
-                        <p class="text-[10px] font-black text-purple-400 uppercase mb-1"><i class="fa-solid fa-clock mr-1"></i> Sessions</p>
-                        <h3 class="text-2xl font-black" id="stat-sessions">0</h3>
-                    </div>
-                    <div class="glass-card p-5 rounded-[2rem] shadow-sm stat-card">
-                        <p class="text-[10px] font-black text-green-400 uppercase mb-1"><i class="fa-solid fa-user-plus mr-1"></i> First Time</p>
-                        <h3 class="text-2xl font-black" id="stat-first-time">0</h3>
-                    </div>
-                    <div class="glass-card p-5 rounded-[2rem] shadow-sm stat-card">
-                        <p class="text-[10px] font-black text-emerald-400 uppercase mb-1"><i class="fa-solid fa-cookie-bite mr-1"></i> Consented</p>
-                        <h3 class="text-2xl font-black" id="stat-consented">0</h3>
-                    </div>
-                    <div class="glass-card p-5 rounded-[2rem] shadow-sm stat-card">
-                        <p class="text-[10px] font-black text-amber-400 uppercase mb-1"><i class="fa-solid fa-clock mr-1"></i> Avg Duration</p>
-                        <h3 class="text-2xl font-black" id="stat-avg-duration">0s</h3>
-                    </div>
-                </div>
-
-                <!-- CHARTS ROW -->
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-                    <!-- Device Breakdown -->
-                    <div class="glass-card p-6 md:p-8 rounded-[2.5rem] shadow-sm">
-                        <h4 class="text-sm font-black uppercase mb-6 text-gray-400 flex items-center gap-2">
-                            <i class="fa-solid fa-mobile-screen text-blue-600"></i> Device Breakdown
-                        </h4>
-                        <canvas id="deviceChart" height="250"></canvas>
+                    <!-- Device Chart -->
+                    <div class="card p-6">
+                        <h4 class="text-xs font-black uppercase text-gray-400 mb-4">Device Distribution</h4>
+                        <canvas id="deviceChart" height="220"></canvas>
                     </div>
-
                     <!-- Top Pages -->
-                    <div class="glass-card p-6 md:p-8 rounded-[2.5rem] shadow-sm">
-                        <h4 class="text-sm font-black uppercase mb-6 text-gray-400 flex items-center gap-2">
-                            <i class="fa-solid fa-file-lines text-purple-600"></i> Top Pages
-                        </h4>
-                        <div id="top-pages" class="space-y-1">
-                            <div class="text-center py-8 text-xs text-gray-400">Loading page data...</div>
+                    <div class="card p-6">
+                        <h4 class="text-xs font-black uppercase text-gray-400 mb-4">Top Pages</h4>
+                        <div id="top-pages" class="space-y-0">
+                            <p class="text-xs text-gray-400 text-center py-8">Loading...</p>
                         </div>
                     </div>
                 </div>
 
                 <!-- VISITOR TABLE -->
-                <div class="glass-card p-4 md:p-6 rounded-[2.5rem] shadow-sm">
+                <div class="card p-4 md:p-6">
                     <div class="flex justify-between items-center mb-4">
-                        <h4 class="text-sm font-black uppercase text-gray-400 flex items-center gap-2">
-                            <i class="fa-solid fa-list text-green-600"></i> Visitor Log
-                            <span id="visitor-count-badge" class="text-[10px] bg-gray-100 px-2 py-0.5 rounded-full">0 records</span>
+                        <h4 class="text-xs font-black uppercase text-gray-400">
+                            Visitor Log <span id="visitor-count-badge" class="text-[10px] text-gray-300 ml-1">0 records</span>
                         </h4>
-                        <div class="flex gap-2">
-                            <input type="text" id="visitor-search" placeholder="Search IP, page, device..." 
-                                   class="px-4 py-2 bg-gray-50 border rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-blue-500 w-40 md:w-56"
-                                   onkeyup="filterVisitorTable()">
-                        </div>
+                        <input type="text" id="visitor-search" placeholder="Search..." 
+                               class="px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-xs font-medium outline-none focus:border-black focus:ring-1 focus:ring-black w-40 md:w-56 transition"
+                               onkeyup="filterVisitorTable()">
                     </div>
                     <div class="overflow-x-auto custom-scroll">
-                        <table class="w-full text-left table-responsive">
+                        <table class="w-full">
                             <thead>
-                                <tr class="text-[10px] font-black uppercase text-gray-400 border-b">
-                                    <th class="pb-3 min-w-[100px]">IP Address</th>
-                                    <th class="pb-3 min-w-[80px]">Session</th>
-                                    <th class="pb-3 min-w-[100px]">Location</th>
-                                    <th class="pb-3 min-w-[100px]">Device</th>
-                                    <th class="pb-3 min-w-[100px]">Page</th>
-                                    <th class="pb-3 min-w-[70px]">Duration</th>
-                                    <th class="pb-3 min-w-[80px]">Status</th>
-                                    <th class="pb-3 min-w-[100px]">Time</th>
-                                    <th class="pb-3 text-right min-w-[60px]">Action</th>
+                                <tr>
+                                    <th>IP Address</th>
+                                    <th>Session</th>
+                                    <th>Location</th>
+                                    <th>Device</th>
+                                    <th>Page</th>
+                                    <th>Duration</th>
+                                    <th>Status</th>
+                                    <th>Time</th>
+                                    <th class="text-right">Action</th>
                                 </tr>
                             </thead>
-                            <tbody id="visitor-table-body" class="text-xs font-bold text-slate-700">
-                                <tr><td colspan="9" class="py-8 text-center text-xs text-gray-400">Loading visitors...</td></tr>
+                            <tbody id="visitor-table-body">
+                                <tr><td colspan="9" class="text-center text-xs text-gray-400 py-8">Loading visitors...</td></tr>
                             </tbody>
                         </table>
                     </div>
-                    <!-- Pagination -->
-                    <div class="flex justify-between items-center mt-4 pt-4 border-t" id="pagination-container">
+                    <div class="flex justify-between items-center mt-4 pt-4 border-t border-gray-100">
                         <p class="text-[10px] font-bold text-gray-400" id="pagination-info">Showing 0 of 0</p>
                         <div class="flex gap-2" id="pagination-buttons"></div>
                     </div>
                 </div>
             </div>
 
-            <!-- TAB CONTENT: BOT DETECTION -->
+            <!-- TAB: AI INSIGHTS -->
+            <div id="content-insights" class="hidden">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                    <!-- Traffic Quality -->
+                    <div class="card p-6">
+                        <h4 class="text-xs font-black uppercase text-gray-400 mb-3">
+                            <i class="fa-solid fa-chart-simple mr-1"></i> Traffic Quality Score
+                        </h4>
+                        <div class="flex items-end gap-2 mb-2">
+                            <span class="text-4xl font-black tracking-tight" id="insight-quality-score">0</span>
+                            <span class="text-sm text-gray-400 mb-1">/100</span>
+                        </div>
+                        <div class="progress-track mb-3">
+                            <div class="progress-fill" id="insight-quality-bar" style="width:0%"></div>
+                        </div>
+                        <p class="text-[11px] text-gray-500 font-medium" id="insight-quality-text">Analyzing...</p>
+                    </div>
+
+                    <!-- Risk Level -->
+                    <div class="card p-6">
+                        <h4 class="text-xs font-black uppercase text-gray-400 mb-3">
+                            <i class="fa-solid fa-shield-halved mr-1"></i> Security Risk Level
+                        </h4>
+                        <div class="flex items-end gap-2 mb-2">
+                            <span class="text-4xl font-black tracking-tight" id="insight-risk-score">0</span>
+                            <span class="text-sm text-gray-400 mb-1">% Risk</span>
+                        </div>
+                        <div class="progress-track mb-3">
+                            <div class="progress-fill bg-black" id="insight-risk-bar" style="width:0%"></div>
+                        </div>
+                        <p class="text-[11px] text-gray-500 font-medium" id="insight-risk-text">Analyzing...</p>
+                    </div>
+                </div>
+
+                <!-- AI Recommendations -->
+                <div class="card p-6 mb-6">
+                    <h4 class="text-xs font-black uppercase text-gray-400 mb-4">
+                        <i class="fa-solid fa-lightbulb mr-1"></i> AI-Powered Recommendations
+                    </h4>
+                    <div id="ai-recommendations" class="space-y-3">
+                        <p class="text-xs text-gray-400">Generating insights...</p>
+                    </div>
+                </div>
+
+                <!-- Traffic Pattern -->
+                <div class="card p-6">
+                    <h4 class="text-xs font-black uppercase text-gray-400 mb-4">
+                        <i class="fa-solid fa-wave-square mr-1"></i> Traffic Pattern Analysis
+                    </h4>
+                    <div id="traffic-pattern" class="space-y-3">
+                        <p class="text-xs text-gray-400">Analyzing patterns...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB: BOT DETECTION -->
             <div id="content-bots" class="hidden">
-                <div class="glass-card p-6 rounded-[2.5rem] shadow-sm mb-6">
-                    <h4 class="text-sm font-black uppercase mb-6 text-gray-400 flex items-center gap-2">
-                        <i class="fa-solid fa-robot text-red-600"></i> Bot Detection Analytics
-                    </h4>
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-                        <div class="bg-red-50 p-4 rounded-2xl">
-                            <p class="text-[10px] font-black text-red-500">Total Bots Blocked</p>
-                            <h3 class="text-2xl font-black text-red-600" id="bot-total-blocked">0</h3>
-                        </div>
-                        <div class="bg-orange-50 p-4 rounded-2xl">
-                            <p class="text-[10px] font-black text-orange-500">High Risk (≥0.7)</p>
-                            <h3 class="text-2xl font-black text-orange-600" id="bot-high-risk">0</h3>
-                        </div>
-                        <div class="bg-yellow-50 p-4 rounded-2xl">
-                            <p class="text-[10px] font-black text-yellow-500">Medium Risk (0.4-0.7)</p>
-                            <h3 class="text-2xl font-black text-yellow-600" id="bot-medium-risk">0</h3>
-                        </div>
-                        <div class="bg-green-50 p-4 rounded-2xl">
-                            <p class="text-[10px] font-black text-green-500">Clean Traffic</p>
-                            <h3 class="text-2xl font-black text-green-600" id="bot-clean">0</h3>
-                        </div>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+                    <div class="card p-4">
+                        <p class="text-[9px] font-bold text-gray-400 uppercase">Total Blocked</p>
+                        <h3 class="text-xl font-black" id="bot-total-blocked">0</h3>
                     </div>
-                    <canvas id="botChart" height="250"></canvas>
+                    <div class="card p-4">
+                        <p class="text-[9px] font-bold text-gray-400 uppercase">High Risk</p>
+                        <h3 class="text-xl font-black" id="bot-high-risk">0</h3>
+                    </div>
+                    <div class="card p-4">
+                        <p class="text-[9px] font-bold text-gray-400 uppercase">Medium Risk</p>
+                        <h3 class="text-xl font-black" id="bot-medium-risk">0</h3>
+                    </div>
+                    <div class="card p-4">
+                        <p class="text-[9px] font-bold text-gray-400 uppercase">Clean Traffic</p>
+                        <h3 class="text-xl font-black" id="bot-clean">0</h3>
+                    </div>
                 </div>
-                <div class="glass-card p-6 rounded-[2.5rem] shadow-sm">
-                    <h4 class="text-sm font-black uppercase mb-4 text-gray-400 flex items-center gap-2">
-                        <i class="fa-solid fa-shield-halved text-red-600"></i> Recent Bot Activity
-                    </h4>
+                <div class="card p-6 mb-6">
+                    <canvas id="botChart" height="200"></canvas>
+                </div>
+                <div class="card p-4">
+                    <h4 class="text-xs font-black uppercase text-gray-400 mb-4">Recent Bot Activity</h4>
                     <div class="overflow-x-auto custom-scroll">
-                        <table class="w-full text-left">
+                        <table class="w-full">
                             <thead>
-                                <tr class="text-[10px] font-black uppercase text-gray-400 border-b">
-                                    <th class="pb-3">IP Address</th>
-                                    <th class="pb-3">User Agent</th>
-                                    <th class="pb-3">Bot Score</th>
-                                    <th class="pb-3">Risk Level</th>
-                                    <th class="pb-3">Time</th>
+                                <tr>
+                                    <th>IP</th>
+                                    <th>User Agent</th>
+                                    <th>Score</th>
+                                    <th>Risk</th>
+                                    <th>Time</th>
                                 </tr>
                             </thead>
-                            <tbody id="bot-table-body" class="text-xs font-bold">
-                                <tr><td colspan="5" class="py-8 text-center text-xs text-gray-400">Loading bot data...</td></tr>
+                            <tbody id="bot-table-body">
+                                <tr><td colspan="5" class="text-center text-xs text-gray-400 py-8">Loading...</td></tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
 
-            <!-- TAB CONTENT: LOCATIONS -->
+            <!-- TAB: LOCATIONS -->
             <div id="content-locations" class="hidden">
-                <div class="glass-card p-6 rounded-[2.5rem] shadow-sm">
-                    <h4 class="text-sm font-black uppercase mb-6 text-gray-400 flex items-center gap-2">
-                        <i class="fa-solid fa-map-pin text-purple-600"></i> Location Analytics
-                    </h4>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                        <div class="bg-purple-50 p-4 rounded-2xl">
-                            <p class="text-[10px] font-black text-purple-500">GPS Accuracy</p>
-                            <h3 class="text-2xl font-black text-purple-600" id="loc-gps-count">0</h3>
-                            <p class="text-[9px] text-purple-400">High precision</p>
-                        </div>
-                        <div class="bg-indigo-50 p-4 rounded-2xl">
-                            <p class="text-[10px] font-black text-indigo-500">IP-Based</p>
-                            <h3 class="text-2xl font-black text-indigo-600" id="loc-ip-count">0</p>
-                            <p class="text-[9px] text-indigo-400">Approximate</p>
-                        </div>
-                        <div class="bg-violet-50 p-4 rounded-2xl">
-                            <p class="text-[10px] font-black text-violet-500">Unknown</p>
-                            <h3 class="text-2xl font-black text-violet-600" id="loc-unknown-count">0</p>
-                            <p class="text-[9px] text-violet-400">No location data</p>
-                        </div>
+                <div class="grid grid-cols-3 gap-3 mb-6">
+                    <div class="card p-4">
+                        <p class="text-[9px] font-bold text-gray-400 uppercase">GPS Precision</p>
+                        <h3 class="text-xl font-black" id="loc-gps-count">0</h3>
                     </div>
+                    <div class="card p-4">
+                        <p class="text-[9px] font-bold text-gray-400 uppercase">IP-Based</p>
+                        <h3 class="text-xl font-black" id="loc-ip-count">0</h3>
+                    </div>
+                    <div class="card p-4">
+                        <p class="text-[9px] font-bold text-gray-400 uppercase">Unknown</p>
+                        <h3 class="text-xl font-black" id="loc-unknown-count">0</h3>
+                    </div>
+                </div>
+                <div class="card p-4">
+                    <h4 class="text-xs font-black uppercase text-gray-400 mb-4">Location Details</h4>
                     <div class="overflow-x-auto custom-scroll">
-                        <table class="w-full text-left">
+                        <table class="w-full">
                             <thead>
-                                <tr class="text-[10px] font-black uppercase text-gray-400 border-b">
-                                    <th class="pb-3">IP Address</th>
-                                    <th class="pb-3">City/Country</th>
-                                    <th class="pb-3">Location Type</th>
-                                    <th class="pb-3">ISP</th>
-                                    <th class="pb-3">Connection</th>
-                                    <th class="pb-3">Time</th>
+                                <tr>
+                                    <th>IP</th>
+                                    <th>City/Country</th>
+                                    <th>Type</th>
+                                    <th>ISP</th>
+                                    <th>Connection</th>
+                                    <th>Time</th>
                                 </tr>
                             </thead>
-                            <tbody id="location-table-body" class="text-xs font-bold">
-                                <tr><td colspan="6" class="py-8 text-center text-xs text-gray-400">Loading location data...</td></tr>
+                            <tbody id="location-table-body">
+                                <tr><td colspan="6" class="text-center text-xs text-gray-400 py-8">Loading...</td></tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
 
-            <!-- TAB CONTENT: DEVICES -->
+            <!-- TAB: DEVICES -->
             <div id="content-devices" class="hidden">
-                <div class="glass-card p-6 rounded-[2.5rem] shadow-sm">
-                    <h4 class="text-sm font-black uppercase mb-6 text-gray-400 flex items-center gap-2">
-                        <i class="fa-solid fa-mobile-screen text-green-600"></i> Device & Connection Analytics
-                    </h4>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <h5 class="text-xs font-black text-gray-500 mb-4">Device Types</h5>
-                            <canvas id="deviceTypeChart" height="200"></canvas>
-                        </div>
-                        <div>
-                            <h5 class="text-xs font-black text-gray-500 mb-4">Connection Types</h5>
-                            <canvas id="connectionChart" height="200"></canvas>
-                        </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="card p-6">
+                        <h4 class="text-xs font-black uppercase text-gray-400 mb-4">Device Types</h4>
+                        <canvas id="deviceTypeChart" height="200"></canvas>
+                    </div>
+                    <div class="card p-6">
+                        <h4 class="text-xs font-black uppercase text-gray-400 mb-4">Connection Types</h4>
+                        <canvas id="connectionChart" height="200"></canvas>
                     </div>
                 </div>
             </div>
 
-            <!-- ACTION BAR -->
-            <div class="flex flex-wrap gap-2 mt-6">
-                <button onclick="refreshVisitors()" class="px-4 py-2.5 bg-blue-100 text-blue-600 rounded-xl font-black text-[10px] uppercase btn-action flex items-center gap-2">
-                    <i class="fa-solid fa-rotate"></i> Refresh
-                </button>
-                <button onclick="cleanupDuplicateVisitors()" class="px-4 py-2.5 bg-purple-100 text-purple-600 rounded-xl font-black text-[10px] uppercase btn-action flex items-center gap-2">
-                    <i class="fa-solid fa-clone"></i> Deduplicate
-                </button>
-                <button onclick="cleanupOldVisitors()" class="px-4 py-2.5 bg-orange-100 text-orange-600 rounded-xl font-black text-[10px] uppercase btn-action flex items-center gap-2">
-                    <i class="fa-solid fa-broom"></i> Clean 30d
-                </button>
-                <button onclick="deleteAllVisitors()" class="px-4 py-2.5 bg-red-100 text-red-600 rounded-xl font-black text-[10px] uppercase btn-danger flex items-center gap-2">
-                    <i class="fa-solid fa-trash-can"></i> Clear All
-                </button>
-            </div>
         </main>
     </div>
 
-    <!-- BOTTOM NAVIGATION (MOBILE) -->
+    <!-- BOTTOM NAVIGATION -->
     <nav class="bottom-nav hidden">
-        <div class="flex justify-around items-center px-2">
-            <a href="/home" class="flex flex-col items-center gap-1 p-2 text-[10px] font-black text-gray-400 no-underline">
+        <div class="flex justify-around items-center">
+            <a href="/home" class="flex flex-col items-center gap-1 p-2 text-[10px] font-bold text-gray-400 no-underline">
                 <i class="fa-solid fa-house text-lg"></i> Home
             </a>
-            <a href="/analytics" class="flex flex-col items-center gap-1 p-2 text-[10px] font-black text-gray-400 no-underline">
+            <a href="/analytics" class="flex flex-col items-center gap-1 p-2 text-[10px] font-bold text-gray-400 no-underline">
                 <i class="fa-solid fa-chart-line text-lg"></i> Analytics
             </a>
-            <a href="/visitors" class="flex flex-col items-center gap-1 p-2 text-[10px] font-black text-blue-600 no-underline">
+            <a href="/visitors" class="flex flex-col items-center gap-1 p-2 text-[10px] font-bold text-black no-underline">
                 <i class="fa-solid fa-users-viewfinder text-lg"></i> Visitors
             </a>
-            <a href="/orders" class="flex flex-col items-center gap-1 p-2 text-[10px] font-black text-gray-400 no-underline">
+            <a href="/orders" class="flex flex-col items-center gap-1 p-2 text-[10px] font-bold text-gray-400 no-underline">
                 <i class="fa-solid fa-cart-shopping text-lg"></i> Orders
             </a>
-            <a href="/products" class="flex flex-col items-center gap-1 p-2 text-[10px] font-black text-gray-400 no-underline">
+            <a href="/products" class="flex flex-col items-center gap-1 p-2 text-[10px] font-bold text-gray-400 no-underline">
                 <i class="fa-solid fa-box text-lg"></i> Products
             </a>
         </div>
     </nav>
 
-    <!-- DELETE CONFIRMATION MODAL -->
-    <div id="delete-modal" class="hidden fixed inset-0 z-[500] bg-black/40 backdrop-blur-sm flex items-center justify-center p-4">
-        <div class="bg-white rounded-[2rem] p-6 md:p-8 max-w-md w-full shadow-2xl">
-            <h3 class="text-lg font-black uppercase mb-4 flex items-center gap-2 text-red-600">
-                <i class="fa-solid fa-triangle-exclamation"></i> Confirm Delete
-            </h3>
-            <p class="text-sm text-gray-600 mb-6" id="delete-modal-message">Are you sure you want to delete this visitor record?</p>
+    <!-- DELETE MODAL -->
+    <div id="delete-modal" class="hidden fixed inset-0 z-[500] bg-black/20 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl p-6 md:p-8 max-w-md w-full border border-gray-200 shadow-lg">
+            <h3 class="text-lg font-black uppercase mb-2">Confirm Delete</h3>
+            <p class="text-sm text-gray-500 mb-6" id="delete-modal-message"></p>
             <div class="flex gap-3">
-                <button onclick="closeDeleteModal()" class="flex-1 py-3 bg-gray-100 rounded-xl font-black text-xs uppercase btn-action">Cancel</button>
-                <button id="delete-confirm-btn" class="flex-1 py-3 bg-red-500 text-white rounded-xl font-black text-xs uppercase btn-danger">Delete</button>
+                <button onclick="closeDeleteModal()" class="flex-1 py-3 bg-gray-50 border border-gray-200 rounded-xl font-bold text-xs uppercase hover:bg-gray-100 transition">Cancel</button>
+                <button id="delete-confirm-btn" class="flex-1 py-3 bg-black text-white rounded-xl font-bold text-xs uppercase hover:bg-gray-800 transition">Delete</button>
             </div>
         </div>
     </div>
 
     <script>
-        // ==================== CONFIGURATION ====================
+        // ==================== CONFIG ====================
         const SUPABASE_URL = "https://vdqbjwzixppbtkbgvhlq.supabase.co";
         const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZkcWJqd3ppeHBwYnRrYmd2aGxxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgwMDc3MzQsImV4cCI6MjA5MzU4MzczNH0.E6C0_7SWIrTMJlFe5t8EbNAW5fzlpg-fKV3ZV0XYd3k";
         const ADMIN_EMAIL = "binzeo369@gmail.com";
-        const HOME_URL = "/home";
         const LOGIN_URL = "/login";
 
         const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -640,106 +691,73 @@
         let filteredVisitors = [];
         let currentPage = 1;
         const itemsPerPage = 25;
-        let isDarkMode = false;
         let deleteTargetId = null;
         let currentTab = 'overview';
-        
-        // Chart instances
         let deviceChartInstance = null;
         let botChartInstance = null;
         let deviceTypeChartInstance = null;
         let connectionChartInstance = null;
 
-        // ==================== UTILITY FUNCTIONS ====================
-        function showToast(message, type = 'success') {
-            const toast = document.createElement('div');
-            toast.className = `fixed bottom-20 md:bottom-6 right-4 md:right-6 px-5 py-3.5 rounded-2xl font-black text-sm text-white shadow-2xl z-[9999] toast-enter ${
-                type === 'success' ? 'bg-green-500' : type === 'error' ? 'bg-red-500' : 'bg-blue-500'
-            }`;
-            toast.innerHTML = `<span class="flex items-center gap-2"><i class="fa-solid fa-${
-                type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'
-            }"></i> ${message}</span>`;
-            document.body.appendChild(toast);
-            setTimeout(() => {
-                toast.classList.add('toast-exit');
-                setTimeout(() => toast.remove(), 300);
-            }, 3000);
+        // ==================== UTILS ====================
+        function showToast(msg) {
+            const t = document.createElement('div');
+            t.className = 'toast';
+            t.textContent = msg;
+            document.body.appendChild(t);
+            setTimeout(() => { t.style.opacity = '0'; t.style.transition = 'opacity 0.3s'; setTimeout(() => t.remove(), 300); }, 2500);
         }
 
-        function timeAgo(dateString) {
-            const now = new Date();
-            const date = new Date(dateString);
-            const seconds = Math.floor((now - date) / 1000);
-            
-            if (seconds < 60) return 'Just now';
-            if (seconds < 3600) return Math.floor(seconds / 60) + 'm ago';
-            if (seconds < 86400) return Math.floor(seconds / 3600) + 'h ago';
-            if (seconds < 604800) return Math.floor(seconds / 86400) + 'd ago';
-            return date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+        function timeAgo(d) {
+            const s = Math.floor((new Date() - new Date(d)) / 1000);
+            if (s < 60) return 'Now';
+            if (s < 3600) return Math.floor(s/60) + 'm';
+            if (s < 86400) return Math.floor(s/3600) + 'h';
+            return Math.floor(s/86400) + 'd';
         }
 
-        function getRiskLevel(score) {
-            if (score >= 0.7) return { level: 'High', class: 'text-red-600 bg-red-50' };
-            if (score >= 0.4) return { level: 'Medium', class: 'text-yellow-600 bg-yellow-50' };
-            return { level: 'Low', class: 'text-green-600 bg-green-50' };
+        function getRisk(score) {
+            if (score >= 0.7) return { l: 'HIGH', c: 'bg-gray-100 text-black' };
+            if (score >= 0.4) return { l: 'MED', c: 'bg-gray-50 text-gray-600' };
+            return { l: 'LOW', c: 'bg-gray-50 text-gray-400' };
         }
 
         // ==================== TAB SWITCHING ====================
         function switchTab(tab) {
             currentTab = tab;
-            
-            // Hide all content
-            document.querySelectorAll('[id^="content-"]').forEach(el => el.classList.add('hidden'));
-            
-            // Show selected content
-            document.getElementById(`content-${tab}`).classList.remove('hidden');
-            
-            // Update tab buttons
-            document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
-            document.getElementById(`tab-${tab}`).classList.add('active');
-            
-            // Render tab-specific content
+            document.querySelectorAll('[id^="content-"]').forEach(e => e.classList.add('hidden'));
+            document.getElementById('content-' + tab).classList.remove('hidden');
+            document.querySelectorAll('.tab').forEach(e => e.classList.remove('active'));
+            document.getElementById('tab-' + tab).classList.add('active');
+            if (tab === 'insights') renderAIInsights();
             if (tab === 'bots') renderBotData();
             if (tab === 'locations') renderLocationData();
             if (tab === 'devices') renderDeviceAnalytics();
         }
 
-        // ==================== LOAD VISITORS ====================
+        // ==================== LOAD DATA ====================
         async function loadVisitors() {
             try {
-                const { data, error } = await _supabase
-                    .from('visitor_logs')
-                    .select('*')
-                    .order('created_at', { ascending: false });
-
+                const { data, error } = await _supabase.from('visitor_logs').select('*').order('created_at', { ascending: false });
                 if (error) throw error;
-                
                 allVisitors = data || [];
                 filteredVisitors = [...allVisitors];
-                
-                renderAllVisitorData();
+                renderAll();
                 document.getElementById('last-updated').textContent = 'just now';
-                
-            } catch (error) {
-                console.error('Error loading visitors:', error);
-                showToast('Failed to load visitor data', 'error');
+            } catch (e) {
+                console.error(e);
+                showToast('Failed to load data');
             }
         }
 
-        function refreshVisitors() {
-            showToast('Refreshing visitor data...', 'info');
-            loadVisitors();
-        }
+        function refreshVisitors() { showToast('Refreshing...'); loadVisitors(); }
 
-        // ==================== RENDER ALL DATA ====================
-        function renderAllVisitorData() {
+        function renderAll() {
             renderStats();
             renderDeviceChart();
             renderTopPages();
             renderVisitorTable();
             updateLiveCount();
-            updateBotAlert();
-            
+            if (currentTab === 'insights') renderAIInsights();
             if (currentTab === 'bots') renderBotData();
             if (currentTab === 'locations') renderLocationData();
             if (currentTab === 'devices') renderDeviceAnalytics();
@@ -747,41 +765,123 @@
 
         // ==================== LIVE COUNT ====================
         function updateLiveCount() {
-            const fifteenMinutesAgo = new Date(Date.now() - 15 * 60 * 1000);
-            const onlineVisitors = allVisitors.filter(v => 
-                new Date(v.created_at) >= fifteenMinutesAgo && !v.is_bot
-            );
-            const uniqueOnlineIPs = new Set(onlineVisitors.map(v => v.ip_address)).size;
-            
-            document.getElementById('live-online-count').textContent = Math.min(uniqueOnlineIPs, 999);
-        }
-
-        function updateBotAlert() {
-            const today = new Date().toISOString().split('T')[0];
-            const botsToday = allVisitors.filter(v => 
-                v.is_bot && v.created_at.startsWith(today)
-            );
-            document.getElementById('bot-blocked-count').textContent = botsToday.length;
+            const recent = allVisitors.filter(v => new Date(v.created_at) >= new Date(Date.now() - 15*60*1000) && !v.is_bot);
+            document.getElementById('live-online-count').textContent = new Set(recent.map(v => v.ip_address)).size;
         }
 
         // ==================== STATS ====================
         function renderStats() {
-            const totalVisits = allVisitors.length;
-            const uniqueIps = new Set(allVisitors.map(v => v.ip_address)).size;
-            const uniqueSessions = new Set(allVisitors.map(v => v.session_id)).size;
-            const firstTime = allVisitors.filter(v => v.is_unique_visit).length;
-            const consented = allVisitors.filter(v => v.consent_given).length;
-            const avgDuration = allVisitors.length > 0 
-                ? Math.round(allVisitors.reduce((sum, v) => sum + (v.visit_duration || 0), 0) / allVisitors.length)
-                : 0;
+            document.getElementById('stat-total-visits').textContent = allVisitors.length;
+            document.getElementById('stat-unique-ips').textContent = new Set(allVisitors.map(v => v.ip_address)).size;
+            document.getElementById('stat-sessions').textContent = new Set(allVisitors.map(v => v.session_id)).size;
+            document.getElementById('stat-first-time').textContent = allVisitors.filter(v => v.is_unique_visit).length;
+            document.getElementById('stat-consented').textContent = allVisitors.filter(v => v.consent_given).length;
+            document.getElementById('stat-bots').textContent = allVisitors.filter(v => v.is_bot).length;
+            document.getElementById('visitor-count-badge').textContent = allVisitors.length + ' records';
+        }
 
-            document.getElementById('stat-total-visits').textContent = totalVisits.toLocaleString();
-            document.getElementById('stat-unique-ips').textContent = uniqueIps.toLocaleString();
-            document.getElementById('stat-sessions').textContent = uniqueSessions.toLocaleString();
-            document.getElementById('stat-first-time').textContent = firstTime.toLocaleString();
-            document.getElementById('stat-consented').textContent = consented.toLocaleString();
-            document.getElementById('stat-avg-duration').textContent = `${avgDuration}s`;
-            document.getElementById('visitor-count-badge').textContent = `${totalVisits} records`;
+        // ==================== AI INSIGHTS ====================
+        function renderAIInsights() {
+            const total = allVisitors.length || 1;
+            const bots = allVisitors.filter(v => v.is_bot).length;
+            const consented = allVisitors.filter(v => v.consent_given).length;
+            const firstTime = allVisitors.filter(v => v.is_unique_visit).length;
+            const avgDuration = allVisitors.reduce((s, v) => s + (v.visit_duration || 0), 0) / total;
+
+            // Quality Score (0-100)
+            const qualityScore = Math.min(100, Math.round(
+                ((consented / total) * 40) + ((firstTime / total) * 30) + (Math.min(avgDuration / 60, 1) * 30)
+            ));
+            document.getElementById('insight-quality-score').textContent = qualityScore;
+            document.getElementById('insight-quality-bar').style.width = qualityScore + '%';
+            document.getElementById('insight-quality-text').textContent = 
+                qualityScore >= 70 ? 'Excellent - High quality human traffic' :
+                qualityScore >= 40 ? 'Moderate - Some bot activity detected' :
+                'Poor - Significant bot traffic or low engagement';
+
+            // Risk Score
+            const riskScore = Math.min(100, Math.round((bots / total) * 100));
+            document.getElementById('insight-risk-score').textContent = riskScore;
+            document.getElementById('insight-risk-bar').style.width = riskScore + '%';
+            document.getElementById('insight-risk-text').textContent = 
+                riskScore <= 10 ? 'Low Risk - Normal traffic patterns' :
+                riskScore <= 30 ? 'Medium Risk - Investigate bot sources' :
+                'High Risk - Immediate action recommended';
+
+            // AI Recommendations
+            const recs = [];
+            if (bots > total * 0.2) recs.push({
+                icon: 'fa-shield-halved', title: 'Bot Mitigation Needed',
+                desc: `${bots} bots detected (${Math.round(bots/total*100)}% of traffic). Consider enabling CAPTCHA or rate limiting.`,
+                action: 'Review Bot Detection tab for details'
+            });
+            if (consented < total * 0.5) recs.push({
+                icon: 'fa-cookie-bite', title: 'Low Consent Rate',
+                desc: `Only ${consented} visitors gave consent. Improve cookie consent UI for better data collection.`,
+                action: 'Optimize consent banner placement'
+            });
+            if (firstTime < total * 0.3 && total > 50) recs.push({
+                icon: 'fa-user-group', title: 'Low New Visitor Rate',
+                desc: 'Most traffic is returning. Consider SEO optimization or new content strategy.',
+                action: 'Expand marketing channels'
+            });
+            if (avgDuration < 15 && total > 20) recs.push({
+                icon: 'fa-clock', title: 'High Bounce Rate',
+                desc: `Average visit duration: ${Math.round(avgDuration)}s. Content may not be engaging visitors.`,
+                action: 'Improve landing page content'
+            });
+            if (recs.length === 0) recs.push({
+                icon: 'fa-circle-check', title: 'All Systems Optimal',
+                desc: 'Traffic quality is excellent. No immediate actions required.',
+                action: 'Continue monitoring'
+            });
+
+            document.getElementById('ai-recommendations').innerHTML = recs.map(r => `
+                <div class="insight-card animate-slide-right">
+                    <div class="flex items-start gap-3">
+                        <i class="fa-solid ${r.icon} text-lg mt-0.5"></i>
+                        <div class="flex-grow">
+                            <h5 class="text-sm font-bold mb-1">${r.title}</h5>
+                            <p class="text-xs text-gray-500 mb-2">${r.desc}</p>
+                            <span class="badge">→ ${r.action}</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            // Traffic Pattern
+            const hours = {};
+            allVisitors.forEach(v => {
+                const h = new Date(v.created_at).getHours();
+                hours[h] = (hours[h] || 0) + 1;
+            });
+            const peakHour = Object.entries(hours).sort((a,b) => b[1]-a[1])[0];
+            const deviceCounts = {};
+            allVisitors.forEach(v => {
+                if (v.is_bot) return;
+                const d = (v.device_type || 'desktop').toLowerCase();
+                const t = d.includes('mobile') ? 'Mobile' : d.includes('tablet') ? 'Tablet' : 'Desktop';
+                deviceCounts[t] = (deviceCounts[t] || 0) + 1;
+            });
+            const topDevice = Object.entries(deviceCounts).sort((a,b) => b[1]-a[1])[0];
+
+            document.getElementById('traffic-pattern').innerHTML = `
+                <div class="insight-card">
+                    <p class="text-xs font-bold mb-1">Peak Traffic Hour</p>
+                    <p class="text-2xl font-black">${peakHour ? peakHour[0] + ':00' : 'N/A'}</p>
+                    <p class="text-[10px] text-gray-400">${peakHour ? peakHour[1] + ' visits' : ''}</p>
+                </div>
+                <div class="insight-card">
+                    <p class="text-xs font-bold mb-1">Dominant Device</p>
+                    <p class="text-2xl font-black">${topDevice ? topDevice[0] : 'N/A'}</p>
+                    <p class="text-[10px] text-gray-400">${topDevice ? Math.round(topDevice[1]/total*100) + '% of traffic' : ''}</p>
+                </div>
+                <div class="insight-card">
+                    <p class="text-xs font-bold mb-1">Traffic Quality Ratio</p>
+                    <p class="text-2xl font-black">${Math.round((total - bots)/total*100)}%</p>
+                    <p class="text-[10px] text-gray-400">Human vs Bot traffic</p>
+                </div>
+            `;
         }
 
         // ==================== DEVICE CHART ====================
@@ -789,532 +889,247 @@
             const devices = {};
             allVisitors.forEach(v => {
                 if (v.is_bot) return;
-                const deviceType = v.device_type || 'desktop';
-                const type = deviceType.toLowerCase();
-                if (type.includes('mobile') || type.includes('phone')) {
-                    devices['Mobile'] = (devices['Mobile'] || 0) + 1;
-                } else if (type.includes('tablet') || type.includes('ipad')) {
-                    devices['Tablet'] = (devices['Tablet'] || 0) + 1;
-                } else {
-                    devices['Desktop'] = (devices['Desktop'] || 0) + 1;
-                }
+                const t = (v.device_type || 'desktop').toLowerCase();
+                if (t.includes('mobile')) devices['Mobile'] = (devices['Mobile']||0)+1;
+                else if (t.includes('tablet')) devices['Tablet'] = (devices['Tablet']||0)+1;
+                else devices['Desktop'] = (devices['Desktop']||0)+1;
             });
-
             const ctx = document.getElementById('deviceChart');
             if (!ctx) return;
-            
             if (deviceChartInstance) deviceChartInstance.destroy();
-
             deviceChartInstance = new Chart(ctx, {
                 type: 'doughnut',
                 data: {
                     labels: Object.keys(devices),
-                    datasets: [{
-                        data: Object.values(devices),
-                        backgroundColor: ['#0071e3', '#5856d6', '#34c759'],
-                        borderWidth: 2,
-                        borderColor: '#fff'
-                    }]
+                    datasets: [{ data: Object.values(devices), backgroundColor: ['#0a0a0a','#525252','#d4d4d4'], borderWidth: 0 }]
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: true,
-                    cutout: '65%',
-                    plugins: {
-                        legend: { 
-                            position: 'bottom',
-                            labels: { padding: 20, usePointStyle: true }
-                        }
-                    }
-                }
+                options: { responsive: true, cutout: '70%', plugins: { legend: { position: 'bottom', labels: { usePointStyle: true, padding: 20 } } } }
             });
         }
 
         // ==================== TOP PAGES ====================
         function renderTopPages() {
             const pages = {};
-            allVisitors.forEach(v => {
-                if (v.is_bot) return;
-                const page = v.page_visited || 'Home';
-                pages[page] = (pages[page] || 0) + 1;
-            });
-
-            const sortedPages = Object.entries(pages)
-                .sort((a, b) => b[1] - a[1])
-                .slice(0, 10);
-
-            const maxCount = sortedPages[0]?.[1] || 1;
-
-            document.getElementById('top-pages').innerHTML = sortedPages.length > 0
-                ? sortedPages.map(([page, count], index) => `
-                    <div class="flex items-center gap-3 py-2.5 border-b last:border-0">
-                        <span class="text-[10px] font-black text-gray-400 w-5">${index + 1}</span>
-                        <div class="flex-grow">
-                            <div class="flex justify-between items-center mb-1">
-                                <span class="text-xs font-bold truncate max-w-[200px]">${page}</span>
-                                <span class="text-[10px] font-black text-gray-500 ml-2">${count}</span>
-                            </div>
-                            <div class="w-full bg-gray-100 rounded-full h-1.5">
-                                <div class="h-1.5 rounded-full bg-blue-500 progress-bar" style="width:${(count / maxCount) * 100}%"></div>
-                            </div>
+            allVisitors.forEach(v => { if (!v.is_bot) { const p = v.page_visited || '/'; pages[p] = (pages[p]||0)+1; } });
+            const sorted = Object.entries(pages).sort((a,b) => b[1]-a[1]).slice(0,8);
+            const max = sorted[0]?.[1] || 1;
+            document.getElementById('top-pages').innerHTML = sorted.length ? sorted.map(([p,c],i) => `
+                <div class="flex items-center gap-3 py-3 border-b border-gray-50 last:border-0">
+                    <span class="text-[10px] font-bold text-gray-400 w-4">${i+1}</span>
+                    <div class="flex-grow">
+                        <div class="flex justify-between mb-1">
+                            <span class="text-xs font-bold truncate max-w-[180px]">${p}</span>
+                            <span class="text-[10px] font-bold text-gray-400">${c}</span>
                         </div>
+                        <div class="progress-track"><div class="progress-fill" style="width:${(c/max)*100}%"></div></div>
                     </div>
-                `).join('')
-                : '<p class="text-xs text-gray-400 text-center py-8">No page data available</p>';
+                </div>
+            `).join('') : '<p class="text-xs text-gray-400 py-8 text-center">No data</p>';
         }
 
         // ==================== VISITOR TABLE ====================
         function renderVisitorTable() {
-            const start = (currentPage - 1) * itemsPerPage;
-            const end = start + itemsPerPage;
-            const pageVisitors = filteredVisitors.slice(start, end);
-
-            if (pageVisitors.length === 0) {
-                document.getElementById('visitor-table-body').innerHTML = 
-                    '<tr><td colspan="9" class="py-8 text-center text-xs text-gray-400">No visitors found</td></tr>';
+            const s = (currentPage-1)*itemsPerPage;
+            const page = filteredVisitors.slice(s, s+itemsPerPage);
+            if (!page.length) {
+                document.getElementById('visitor-table-body').innerHTML = '<tr><td colspan="9" class="text-center text-xs text-gray-400 py-8">No visitors found</td></tr>';
             } else {
-                document.getElementById('visitor-table-body').innerHTML = pageVisitors.map(v => {
-                    let loc = "Unknown";
-                    try {
-                        const l = typeof v.location_info === 'string' ? JSON.parse(v.location_info) : v.location_info;
-                        loc = l?.city || l?.country || l?.region || "Unknown";
-                    } catch (e) {}
-
-                    const deviceInfo = (v.device_type || v.device_info || 'Unknown');
-                    const truncatedDevice = deviceInfo.length > 25 ? deviceInfo.substring(0, 22) + '...' : deviceInfo;
-                    const sessionShort = v.session_id ? v.session_id.substring(0, 8) + '...' : 'N/A';
-                    const isBot = v.is_bot;
-                    const hasConsent = v.consent_given;
-                    const botScore = v.bot_score || 0;
-
+                document.getElementById('visitor-table-body').innerHTML = page.map(v => {
+                    let loc = 'Unknown';
+                    try { const l = typeof v.location_info === 'string' ? JSON.parse(v.location_info) : v.location_info; loc = l?.city || l?.country || 'Unknown'; } catch(e){}
+                    const dev = (v.device_type || v.device_info || 'Unknown').substring(0,20);
+                    const sid = (v.session_id || '').substring(0,8);
                     return `
-                        <tr class="border-b border-gray-50 visitor-row ${isBot ? 'bot-row' : ''}">
-                            <td class="py-3">
-                                <div class="font-black text-xs">${v.ip_address || '?'}</div>
-                                ${v.is_unique_visit ? '<span class="text-[8px] bg-green-100 text-green-600 px-1.5 py-0.5 rounded-full font-black">NEW</span>' : ''}
-                            </td>
-                            <td class="py-3">
-                                <span class="text-[10px] text-gray-500 font-mono" title="${v.session_id || ''}">${sessionShort}</span>
-                            </td>
-                            <td class="py-3">
-                                <span class="text-xs font-bold">${loc}</span>
-                            </td>
-                            <td class="py-3">
-                                <span class="text-[10px] text-gray-500 block truncate max-w-[100px]" title="${deviceInfo}">${truncatedDevice}</span>
-                            </td>
-                            <td class="py-3">
-                                <span class="page-badge bg-blue-50 text-blue-600">${v.page_visited || 'Home'}</span>
-                            </td>
-                            <td class="py-3">
-                                <span class="text-[10px] font-bold">${v.visit_duration || 0}s</span>
-                            </td>
-                            <td class="py-3">
-                                ${isBot 
-                                    ? `<span class="bot-badge" title="Bot Score: ${botScore}">🤖 BOT</span>`
-                                    : hasConsent 
-                                        ? '<span class="consent-badge">✓ Consent</span>'
-                                        : '<span class="text-[10px] text-gray-400">-</span>'
-                                }
-                            </td>
-                            <td class="py-3">
-                                <span class="text-[10px] text-gray-400" title="${v.created_at}">${timeAgo(v.created_at)}</span>
-                            </td>
-                            <td class="py-3 text-right">
-                                <button onclick="openDeleteModal(${v.id})" 
-                                        class="p-2 bg-red-50 text-red-500 rounded-lg text-[10px] btn-action hover:bg-red-100"
-                                        title="Delete this record">
-                                    <i class="fa-solid fa-trash"></i>
-                                </button>
-                            </td>
+                        <tr>
+                            <td class="font-bold text-xs">${v.ip_address||'?'} ${v.is_unique_visit?'<span class="badge badge-new ml-1">NEW</span>':''}</td>
+                            <td class="font-mono text-[10px] text-gray-400">${sid}...</td>
+                            <td class="text-xs">${loc}</td>
+                            <td class="text-[10px] text-gray-500">${dev}</td>
+                            <td><span class="badge">${v.page_visited||'/'}</span></td>
+                            <td class="text-xs">${v.visit_duration||0}s</td>
+                            <td>${v.is_bot?'<span class="badge badge-bot">BOT</span>':v.consent_given?'<span class="badge badge-consent">✓</span>':'<span class="text-gray-300">-</span>'}</td>
+                            <td class="text-[10px] text-gray-400">${timeAgo(v.created_at)}</td>
+                            <td class="text-right"><button onclick="openDeleteModal(${v.id})" class="btn btn-outline btn-icon btn-sm"><i class="fa-solid fa-trash text-[10px]"></i></button></td>
                         </tr>
                     `;
                 }).join('');
             }
-
-            // Pagination
-            const totalPages = Math.ceil(filteredVisitors.length / itemsPerPage);
-            document.getElementById('pagination-info').textContent = 
-                `Showing ${start + 1}-${Math.min(end, filteredVisitors.length)} of ${filteredVisitors.length}`;
-
-            let paginationHTML = '';
+            const totalPages = Math.ceil(filteredVisitors.length/itemsPerPage);
+            document.getElementById('pagination-info').textContent = `Showing ${s+1}-${Math.min(s+itemsPerPage, filteredVisitors.length)} of ${filteredVisitors.length}`;
+            let btns = '';
             if (totalPages > 1) {
-                paginationHTML += `
-                    <button onclick="goToPage(${currentPage - 1})" 
-                            class="px-3 py-1.5 bg-gray-100 rounded-lg text-[10px] font-black btn-action ${currentPage === 1 ? 'opacity-50 cursor-not-allowed' : ''}"
-                            ${currentPage === 1 ? 'disabled' : ''}>
-                        <i class="fa-solid fa-chevron-left"></i>
-                    </button>`;
-
-                for (let i = 1; i <= totalPages; i++) {
-                    if (i === 1 || i === totalPages || (i >= currentPage - 2 && i <= currentPage + 2)) {
-                        paginationHTML += `
-                            <button onclick="goToPage(${i})" 
-                                    class="px-3 py-1.5 rounded-lg text-[10px] font-black btn-action ${i === currentPage ? 'bg-blue-600 text-white' : 'bg-gray-100'}">
-                                ${i}
-                            </button>`;
-                    } else if (i === currentPage - 3 || i === currentPage + 3) {
-                        paginationHTML += '<span class="px-2 text-gray-400">...</span>';
-                    }
+                btns += `<button onclick="goToPage(${currentPage-1})" class="btn btn-outline btn-sm" ${currentPage===1?'disabled':''}><i class="fa-solid fa-chevron-left text-[8px]"></i></button>`;
+                for (let i=1; i<=totalPages; i++) {
+                    if (i===1||i===totalPages||(i>=currentPage-2&&i<=currentPage+2)) {
+                        btns += `<button onclick="goToPage(${i})" class="btn btn-sm ${i===currentPage?'':'btn-outline'}" style="min-width:2rem;justify-content:center;">${i}</button>`;
+                    } else if (i===currentPage-3||i===currentPage+3) btns += '<span class="text-gray-300 px-1">...</span>';
                 }
-
-                paginationHTML += `
-                    <button onclick="goToPage(${currentPage + 1})" 
-                            class="px-3 py-1.5 bg-gray-100 rounded-lg text-[10px] font-black btn-action ${currentPage === totalPages ? 'opacity-50 cursor-not-allowed' : ''}"
-                            ${currentPage === totalPages ? 'disabled' : ''}>
-                        <i class="fa-solid fa-chevron-right"></i>
-                    </button>`;
+                btns += `<button onclick="goToPage(${currentPage+1})" class="btn btn-outline btn-sm" ${currentPage===totalPages?'disabled':''}><i class="fa-solid fa-chevron-right text-[8px]"></i></button>`;
             }
-            document.getElementById('pagination-buttons').innerHTML = paginationHTML;
+            document.getElementById('pagination-buttons').innerHTML = btns;
+        }
+
+        function goToPage(p) {
+            const t = Math.ceil(filteredVisitors.length/itemsPerPage);
+            if (p<1||p>t) return;
+            currentPage = p;
+            renderVisitorTable();
+        }
+
+        function filterVisitorTable() {
+            const q = document.getElementById('visitor-search').value.toLowerCase();
+            filteredVisitors = q ? allVisitors.filter(v => 
+                (v.ip_address||'').toLowerCase().includes(q) ||
+                (v.page_visited||'').toLowerCase().includes(q) ||
+                (v.device_type||'').toLowerCase().includes(q) ||
+                (v.session_id||'').toLowerCase().includes(q)
+            ) : [...allVisitors];
+            currentPage = 1;
+            renderVisitorTable();
         }
 
         // ==================== BOT DATA ====================
         function renderBotData() {
-            const bots = allVisitors.filter(v => v.is_bot || v.bot_score > 0.7);
-            const highRisk = allVisitors.filter(v => v.bot_score >= 0.7 && !v.is_bot);
-            const mediumRisk = allVisitors.filter(v => v.bot_score >= 0.4 && v.bot_score < 0.7);
-            const clean = allVisitors.filter(v => v.bot_score < 0.4 && !v.is_bot);
-
+            const bots = allVisitors.filter(v => v.is_bot);
+            const high = allVisitors.filter(v => v.bot_score>=0.7 && !v.is_bot);
+            const med = allVisitors.filter(v => v.bot_score>=0.4 && v.bot_score<0.7);
+            const clean = allVisitors.filter(v => v.bot_score<0.4 && !v.is_bot);
             document.getElementById('bot-total-blocked').textContent = bots.length;
-            document.getElementById('bot-high-risk').textContent = highRisk.length;
-            document.getElementById('bot-medium-risk').textContent = mediumRisk.length;
+            document.getElementById('bot-high-risk').textContent = high.length;
+            document.getElementById('bot-medium-risk').textContent = med.length;
             document.getElementById('bot-clean').textContent = clean.length;
-
-            // Bot Chart
+            
             const ctx = document.getElementById('botChart');
-            if (!ctx) return;
-            
-            if (botChartInstance) botChartInstance.destroy();
-
-            botChartInstance = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: ['Blocked Bots', 'High Risk', 'Medium Risk', 'Clean'],
-                    datasets: [{
-                        label: 'Traffic Analysis',
-                        data: [bots.length, highRisk.length, mediumRisk.length, clean.length],
-                        backgroundColor: ['#ef4444', '#f97316', '#eab308', '#22c55e'],
-                        borderRadius: 10
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: { display: false }
+            if (ctx) {
+                if (botChartInstance) botChartInstance.destroy();
+                botChartInstance = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Blocked','High Risk','Medium','Clean'],
+                        datasets: [{ data: [bots.length,high.length,med.length,clean.length], backgroundColor: ['#0a0a0a','#525252','#a3a3a3','#d4d4d4'], borderRadius: 6 }]
                     },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: { stepSize: 1 }
-                        }
-                    }
-                }
-            });
+                    options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } } }
+                });
+            }
 
-            // Bot Table
-            const recentBots = [...bots, ...highRisk].sort((a, b) => new Date(b.created_at) - new Date(a.created_at)).slice(0, 20);
-            
-            document.getElementById('bot-table-body').innerHTML = recentBots.length > 0
-                ? recentBots.map(v => {
-                    const risk = getRiskLevel(v.bot_score || 0);
-                    return `
-                        <tr class="border-b visitor-row bot-row">
-                            <td class="py-2 text-xs font-bold">${v.ip_address || '?'}</td>
-                            <td class="py-2 text-[10px] text-gray-500 max-w-[200px] truncate">${v.user_agent || 'N/A'}</td>
-                            <td class="py-2 text-xs font-bold">${(v.bot_score * 100).toFixed(0)}%</td>
-                            <td class="py-2">
-                                <span class="text-[10px] font-black px-2 py-0.5 rounded-full ${risk.class}">${risk.level}</span>
-                            </td>
-                            <td class="py-2 text-[10px] text-gray-400">${timeAgo(v.created_at)}</td>
-                        </tr>
-                    `;
-                }).join('')
-                : '<tr><td colspan="5" class="py-8 text-center text-xs text-green-500">🎉 No bot activity detected!</td></tr>';
+            const list = [...bots,...high].sort((a,b) => new Date(b.created_at)-new Date(a.created_at)).slice(0,20);
+            document.getElementById('bot-table-body').innerHTML = list.length ? list.map(v => {
+                const r = getRisk(v.bot_score||0);
+                return `<tr>
+                    <td class="text-xs font-bold">${v.ip_address||'?'}</td>
+                    <td class="text-[10px] text-gray-500 max-w-[150px] truncate">${v.user_agent||'N/A'}</td>
+                    <td class="text-xs font-bold">${Math.round((v.bot_score||0)*100)}%</td>
+                    <td><span class="badge ${r.c}">${r.l}</span></td>
+                    <td class="text-[10px] text-gray-400">${timeAgo(v.created_at)}</td>
+                </tr>`;
+            }).join('') : '<tr><td colspan="5" class="text-center text-xs text-gray-400 py-8">No bots detected ✓</td></tr>';
         }
 
         // ==================== LOCATION DATA ====================
         function renderLocationData() {
-            const gpsCount = allVisitors.filter(v => v.location_type === 'gps').length;
-            const ipCount = allVisitors.filter(v => v.location_type === 'ip').length;
-            const unknownCount = allVisitors.filter(v => !v.location_type || v.location_type === 'unknown').length;
-
-            document.getElementById('loc-gps-count').textContent = gpsCount;
-            document.getElementById('loc-ip-count').textContent = ipCount;
-            document.getElementById('loc-unknown-count').textContent = unknownCount;
-
-            const recentLocations = allVisitors.slice(0, 50);
+            document.getElementById('loc-gps-count').textContent = allVisitors.filter(v => v.location_type==='gps').length;
+            document.getElementById('loc-ip-count').textContent = allVisitors.filter(v => v.location_type==='ip').length;
+            document.getElementById('loc-unknown-count').textContent = allVisitors.filter(v => !v.location_type||v.location_type==='unknown').length;
             
-            document.getElementById('location-table-body').innerHTML = recentLocations.length > 0
-                ? recentLocations.map(v => {
-                    let loc = { city: 'Unknown', country: 'Unknown' };
-                    try {
-                        const l = typeof v.location_info === 'string' ? JSON.parse(v.location_info) : v.location_info;
-                        if (l) loc = l;
-                    } catch (e) {}
-
-                    return `
-                        <tr class="border-b visitor-row">
-                            <td class="py-2 text-xs font-bold">${v.ip_address || '?'}</td>
-                            <td class="py-2 text-xs">${loc.city || 'Unknown'}, ${loc.country || 'Unknown'}</td>
-                            <td class="py-2">
-                                <span class="text-[10px] font-black px-2 py-0.5 rounded-full ${
-                                    v.location_type === 'gps' ? 'bg-green-50 text-green-600' : 
-                                    v.location_type === 'ip' ? 'bg-blue-50 text-blue-600' : 
-                                    'bg-gray-50 text-gray-600'
-                                }">${(v.location_type || 'unknown').toUpperCase()}</span>
-                            </td>
-                            <td class="py-2 text-[10px] text-gray-500">${v.isp_info || 'N/A'}</td>
-                            <td class="py-2 text-[10px] text-gray-500">${v.connection_type || 'N/A'}</td>
-                            <td class="py-2 text-[10px] text-gray-400">${timeAgo(v.created_at)}</td>
-                        </tr>
-                    `;
-                }).join('')
-                : '<tr><td colspan="6" class="py-8 text-center text-xs text-gray-400">No location data available</td></tr>';
+            document.getElementById('location-table-body').innerHTML = allVisitors.slice(0,50).map(v => {
+                let loc = {};
+                try { loc = typeof v.location_info==='string' ? JSON.parse(v.location_info) : v.location_info||{}; } catch(e){}
+                return `<tr>
+                    <td class="text-xs font-bold">${v.ip_address||'?'}</td>
+                    <td class="text-xs">${loc.city||'?'}, ${loc.country||'?'}</td>
+                    <td><span class="badge">${(v.location_type||'unknown').toUpperCase()}</span></td>
+                    <td class="text-[10px] text-gray-500">${v.isp_info||'N/A'}</td>
+                    <td class="text-[10px] text-gray-500">${v.connection_type||'N/A'}</td>
+                    <td class="text-[10px] text-gray-400">${timeAgo(v.created_at)}</td>
+                </tr>`;
+            }).join('') || '<tr><td colspan="6" class="text-center text-xs text-gray-400 py-8">No location data</td></tr>';
         }
 
         // ==================== DEVICE ANALYTICS ====================
         function renderDeviceAnalytics() {
-            // Device Type Chart
-            const deviceTypes = {};
+            const dTypes = {};
             allVisitors.forEach(v => {
                 if (v.is_bot) return;
-                const type = (v.device_type || 'desktop').toLowerCase();
-                if (type.includes('mobile') || type.includes('phone')) deviceTypes['Mobile'] = (deviceTypes['Mobile'] || 0) + 1;
-                else if (type.includes('tablet') || type.includes('ipad')) deviceTypes['Tablet'] = (deviceTypes['Tablet'] || 0) + 1;
-                else deviceTypes['Desktop'] = (deviceTypes['Desktop'] || 0) + 1;
+                const t = (v.device_type||'desktop').toLowerCase();
+                if (t.includes('mobile')) dTypes['Mobile']=(dTypes['Mobile']||0)+1;
+                else if (t.includes('tablet')) dTypes['Tablet']=(dTypes['Tablet']||0)+1;
+                else dTypes['Desktop']=(dTypes['Desktop']||0)+1;
             });
-
             const ctx1 = document.getElementById('deviceTypeChart');
             if (ctx1) {
                 if (deviceTypeChartInstance) deviceTypeChartInstance.destroy();
                 deviceTypeChartInstance = new Chart(ctx1, {
                     type: 'doughnut',
-                    data: {
-                        labels: Object.keys(deviceTypes),
-                        datasets: [{
-                            data: Object.values(deviceTypes),
-                            backgroundColor: ['#0071e3', '#34c759', '#5856d6']
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        plugins: { legend: { position: 'bottom' } }
-                    }
+                    data: { labels: Object.keys(dTypes), datasets: [{ data: Object.values(dTypes), backgroundColor: ['#0a0a0a','#525252','#d4d4d4'] }] },
+                    options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
                 });
             }
 
-            // Connection Type Chart
-            const connections = {};
-            allVisitors.forEach(v => {
-                const conn = v.connection_type || 'unknown';
-                connections[conn] = (connections[conn] || 0) + 1;
-            });
-
+            const conns = {};
+            allVisitors.forEach(v => { const c = v.connection_type||'unknown'; conns[c]=(conns[c]||0)+1; });
             const ctx2 = document.getElementById('connectionChart');
             if (ctx2) {
                 if (connectionChartInstance) connectionChartInstance.destroy();
                 connectionChartInstance = new Chart(ctx2, {
                     type: 'doughnut',
-                    data: {
-                        labels: Object.keys(connections),
-                        datasets: [{
-                            data: Object.values(connections),
-                            backgroundColor: ['#f97316', '#8b5cf6', '#06b6d4', '#84cc16', '#ec4899']
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        plugins: { legend: { position: 'bottom' } }
-                    }
+                    data: { labels: Object.keys(conns), datasets: [{ data: Object.values(conns), backgroundColor: ['#0a0a0a','#404040','#737373','#a3a3a3','#d4d4d4'] }] },
+                    options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
                 });
             }
         }
 
-        function goToPage(page) {
-            const totalPages = Math.ceil(filteredVisitors.length / itemsPerPage);
-            if (page < 1 || page > totalPages) return;
-            currentPage = page;
-            renderVisitorTable();
-        }
-
-        function filterVisitorTable() {
-            const query = document.getElementById('visitor-search').value.toLowerCase();
-            if (query) {
-                filteredVisitors = allVisitors.filter(v => 
-                    (v.ip_address || '').toLowerCase().includes(query) ||
-                    (v.page_visited || '').toLowerCase().includes(query) ||
-                    (v.device_info || '').toLowerCase().includes(query) ||
-                    (v.device_type || '').toLowerCase().includes(query) ||
-                    (v.session_id || '').toLowerCase().includes(query)
-                );
-            } else {
-                filteredVisitors = [...allVisitors];
-            }
-            currentPage = 1;
-            renderVisitorTable();
-        }
-
-        // ==================== DELETE OPERATIONS ====================
+        // ==================== DELETE OPS ====================
         function openDeleteModal(id) {
             deleteTargetId = id;
-            document.getElementById('delete-modal-message').textContent = 
-                `Are you sure you want to permanently delete visitor record #${id}? This action cannot be undone.`;
+            document.getElementById('delete-modal-message').textContent = `Delete visitor record #${id}?`;
             document.getElementById('delete-modal').classList.remove('hidden');
-            
-            document.getElementById('delete-confirm-btn').onclick = async () => {
-                await deleteVisitorById(deleteTargetId);
-                closeDeleteModal();
-            };
+            document.getElementById('delete-confirm-btn').onclick = async () => { await deleteById(id); closeDeleteModal(); };
         }
-
-        function closeDeleteModal() {
-            document.getElementById('delete-modal').classList.add('hidden');
-            deleteTargetId = null;
-        }
-
-        async function deleteVisitorById(id) {
+        function closeDeleteModal() { document.getElementById('delete-modal').classList.add('hidden'); deleteTargetId = null; }
+        async function deleteById(id) {
             try {
-                const { error } = await _supabase
-                    .from('visitor_logs')
-                    .delete()
-                    .eq('id', id);
-
-                if (error) throw error;
-
-                showToast(`Visitor record #${id} deleted`, 'success');
+                await _supabase.from('visitor_logs').delete().eq('id', id);
+                showToast('Deleted');
                 await loadVisitors();
-            } catch (error) {
-                console.error('Error deleting visitor:', error);
-                showToast('Failed to delete visitor record', 'error');
-            }
+            } catch(e) { showToast('Error'); }
         }
-
         async function deleteAllVisitors() {
-            if (!confirm('⚠️ WARNING: This will permanently delete ALL visitor records. Are you sure?')) return;
-            
-            try {
-                showToast('Deleting all visitor records...', 'info');
-                const { error } = await _supabase
-                    .from('visitor_logs')
-                    .delete()
-                    .neq('id', 0);
-
-                if (error) throw error;
-
-                showToast('All visitor records deleted successfully', 'success');
-                await loadVisitors();
-            } catch (error) {
-                console.error('Error deleting all visitors:', error);
-                showToast('Failed to delete all visitors', 'error');
-            }
+            if (!confirm('Delete ALL records?')) return;
+            await _supabase.from('visitor_logs').delete().neq('id',0);
+            showToast('All deleted');
+            await loadVisitors();
         }
-
         async function cleanupOldVisitors() {
-            if (!confirm('This will delete visitor records older than 30 days. Continue?')) return;
-
-            try {
-                showToast('Cleaning up old records...', 'info');
-                const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
-                
-                const { error } = await _supabase
-                    .from('visitor_logs')
-                    .delete()
-                    .lt('created_at', thirtyDaysAgo);
-
-                if (error) throw error;
-
-                showToast('Old visitor records cleaned successfully', 'success');
-                await loadVisitors();
-            } catch (error) {
-                console.error('Error cleaning old visitors:', error);
-                showToast('Failed to clean old records', 'error');
-            }
+            if (!confirm('Delete records older than 30 days?')) return;
+            await _supabase.from('visitor_logs').delete().lt('created_at', new Date(Date.now()-30*86400000).toISOString());
+            showToast('Cleaned');
+            await loadVisitors();
         }
-
         async function cleanupDuplicateVisitors() {
-            if (!confirm('This will remove duplicate visitor records. Continue?')) return;
-
-            try {
-                showToast('Removing duplicate records...', 'info');
-                
-                const { data, error } = await _supabase
-                    .from('visitor_logs')
-                    .select('*')
-                    .order('created_at', { ascending: true });
-
-                if (error) throw error;
-
-                const seen = new Map();
-                const duplicateIds = [];
-
-                data.forEach(record => {
-                    const key = `${record.ip_address}_${record.session_id}_${record.page_visited}_${record.created_at}`;
-                    if (seen.has(key)) {
-                        duplicateIds.push(record.id);
-                    } else {
-                        seen.set(key, record.id);
-                    }
-                });
-
-                if (duplicateIds.length === 0) {
-                    showToast('No duplicate records found!', 'success');
-                    return;
-                }
-
-                for (const id of duplicateIds) {
-                    await _supabase.from('visitor_logs').delete().eq('id', id);
-                }
-
-                showToast(`${duplicateIds.length} duplicate records removed`, 'success');
-                await loadVisitors();
-            } catch (error) {
-                console.error('Error removing duplicates:', error);
-                showToast('Failed to remove duplicates', 'error');
-            }
+            if (!confirm('Remove duplicates?')) return;
+            const { data } = await _supabase.from('visitor_logs').select('*').order('created_at',{ascending:true});
+            const seen = new Map(), ids = [];
+            data.forEach(r => { const k = `${r.ip_address}_${r.session_id}_${r.page_visited}`; if(seen.has(k)) ids.push(r.id); else seen.set(k,r.id); });
+            for (const id of ids) await _supabase.from('visitor_logs').delete().eq('id',id);
+            showToast(ids.length ? `${ids.length} duplicates removed` : 'No duplicates');
+            await loadVisitors();
         }
 
-        // ==================== SESSION CHECK ====================
+        // ==================== SESSION ====================
         async function checkSession() {
             const { data: { session } } = await _supabase.auth.getSession();
-
-            if (!session || session.user.email !== ADMIN_EMAIL) {
-                window.location.href = LOGIN_URL;
-                return;
-            }
-
+            if (!session || session.user.email !== ADMIN_EMAIL) { window.location.href = LOGIN_URL; return; }
             document.getElementById('global-loader').style.display = 'none';
             document.getElementById('main-layout').classList.remove('hidden');
-
-            if (localStorage.getItem('darkMode') === 'true') {
-                isDarkMode = true;
-                document.body.classList.add('dark');
-            }
-
-            if (window.innerWidth < 769) {
-                document.querySelector('.bottom-nav').classList.remove('hidden');
-            }
-
+            if (window.innerWidth < 769) document.querySelector('.bottom-nav').classList.remove('hidden');
             await loadVisitors();
-
-            // Auto-refresh every 30 seconds
-            setInterval(() => {
-                loadVisitors();
-            }, 30000);
+            setInterval(loadVisitors, 30000);
         }
 
-        // ==================== KEYBOARD SHORTCUTS ====================
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') closeDeleteModal();
-        });
-
-        // ==================== INITIALIZATION ====================
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDeleteModal(); });
         window.onload = checkSession;
-
         window.addEventListener('resize', () => {
-            if (window.innerWidth >= 769) {
-                document.querySelector('.bottom-nav').classList.add('hidden');
-            } else {
-                document.querySelector('.bottom-nav').classList.remove('hidden');
-            }
+            document.querySelector('.bottom-nav').classList.toggle('hidden', window.innerWidth >= 769);
         });
     </script>
 </body>

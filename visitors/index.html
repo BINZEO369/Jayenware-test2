@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Visitors | JAYENWARE Admin</title>
+    <title>Visitors Analytics | JAYENWARE Admin</title>
     <meta name="theme-color" content="#0071e3">
     <link rel="icon" type="image/png" href="https://ozuwazkqyrxiwwfjceth.supabase.co/storage/v1/object/public/images/Beige%20Black%20Minimal%20Simple%20Modern%20Handwritten%20Graffiti%20Typographic%20Arts%20and_20251212_154142_0000.png">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -150,6 +150,11 @@
             50% { opacity: 0.6; transform: scale(1.1); }
         }
 
+        @keyframes botPulse {
+            0%, 100% { background-color: rgba(239, 68, 68, 0.1); }
+            50% { background-color: rgba(239, 68, 68, 0.2); }
+        }
+
         .stat-card {
             animation: fadeSlideIn 0.5s ease-out forwards;
             opacity: 0;
@@ -159,6 +164,8 @@
         .stat-card:nth-child(2) { animation-delay: 0.1s; }
         .stat-card:nth-child(3) { animation-delay: 0.2s; }
         .stat-card:nth-child(4) { animation-delay: 0.3s; }
+        .stat-card:nth-child(5) { animation-delay: 0.4s; }
+        .stat-card:nth-child(6) { animation-delay: 0.5s; }
 
         .live-counter {
             animation: pulse-glow 3s infinite;
@@ -166,6 +173,10 @@
 
         .live-dot {
             animation: livePulse 1.5s infinite;
+        }
+
+        .bot-alert {
+            animation: botPulse 2s infinite;
         }
 
         .toast-enter {
@@ -198,6 +209,14 @@
             background: rgba(0, 113, 227, 0.03);
         }
 
+        .visitor-row.bot-row {
+            background: rgba(239, 68, 68, 0.05);
+        }
+
+        .visitor-row.bot-row:hover {
+            background: rgba(239, 68, 68, 0.1);
+        }
+
         .page-badge {
             display: inline-block;
             padding: 2px 10px;
@@ -206,6 +225,50 @@
             font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 0.03em;
+        }
+
+        .bot-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 99px;
+            font-size: 9px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+        }
+
+        .consent-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 99px;
+            font-size: 9px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            background: rgba(34, 197, 94, 0.1);
+            color: #22c55e;
+        }
+
+        .tab-button {
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .tab-button.active {
+            color: #0071e3;
+        }
+
+        .tab-button.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #0071e3;
+            border-radius: 2px;
         }
 
         @media (max-width: 768px) {
@@ -245,7 +308,7 @@
     <div id="global-loader" style="position:fixed;inset:0;background:white;z-index:9999;display:flex;justify-content:center;align-items:center;transition:opacity 0.5s;">
         <div class="flex flex-col items-center">
             <div class="w-14 h-14 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-            <p class="mt-5 font-bold text-gray-400 text-sm">Loading Visitor Data...</p>
+            <p class="mt-5 font-bold text-gray-400 text-sm">Loading Advanced Analytics...</p>
         </div>
     </div>
 
@@ -258,124 +321,271 @@
                     <div class="flex items-center gap-2 text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">
                         <a href="/home" class="hover:text-blue-600 transition"><i class="fa-solid fa-house"></i> Home</a>
                         <i class="fa-solid fa-chevron-right text-[8px]"></i>
-                        <span class="text-blue-600">Visitors</span>
+                        <span class="text-blue-600">Visitors Analytics</span>
                         <span class="flex items-center gap-1 ml-2 px-2 py-0.5 bg-green-100 text-green-600 rounded-full">
-                            <span class="live-dot w-1.5 h-1.5 bg-green-500 rounded-full"></span> Live
+                            <span class="live-dot w-1.5 h-1.5 bg-green-500 rounded-full"></span> Live v2.0
                         </span>
                     </div>
                     <h2 class="text-2xl md:text-3xl font-black uppercase tracking-tight flex items-center gap-2">
-                        <i class="fa-solid fa-radar text-blue-600"></i> Live Traffic Monitor
+                        <i class="fa-solid fa-chart-simple text-blue-600"></i> Advanced Visitor Analytics
                     </h2>
                 </div>
                 <!-- ACTION BUTTONS -->
                 <div class="flex flex-wrap gap-2">
-                    <button onclick="refreshVisitors()" class="px-4 py-2.5 bg-blue-100 text-blue-600 rounded-xl font-black text-[10px] uppercase btn-action flex items-center gap-2">
-                        <i class="fa-solid fa-rotate"></i> Refresh
+                    <button onclick="switchTab('overview')" id="tab-overview" class="tab-button active px-4 py-2.5 bg-blue-50 text-blue-600 rounded-xl font-black text-[10px] uppercase flex items-center gap-2">
+                        <i class="fa-solid fa-chart-pie"></i> Overview
                     </button>
-                    <button onclick="cleanupDuplicateVisitors()" class="px-4 py-2.5 bg-purple-100 text-purple-600 rounded-xl font-black text-[10px] uppercase btn-action flex items-center gap-2">
-                        <i class="fa-solid fa-clone"></i> Deduplicate
+                    <button onclick="switchTab('bots')" id="tab-bots" class="tab-button px-4 py-2.5 bg-red-50 text-red-600 rounded-xl font-black text-[10px] uppercase flex items-center gap-2">
+                        <i class="fa-solid fa-robot"></i> Bot Detection
                     </button>
-                    <button onclick="cleanupOldVisitors()" class="px-4 py-2.5 bg-orange-100 text-orange-600 rounded-xl font-black text-[10px] uppercase btn-action flex items-center gap-2">
-                        <i class="fa-solid fa-broom"></i> Clean 30d
+                    <button onclick="switchTab('locations')" id="tab-locations" class="tab-button px-4 py-2.5 bg-purple-50 text-purple-600 rounded-xl font-black text-[10px] uppercase flex items-center gap-2">
+                        <i class="fa-solid fa-map-pin"></i> Locations
                     </button>
-                    <button onclick="deleteAllVisitors()" class="px-4 py-2.5 bg-red-100 text-red-600 rounded-xl font-black text-[10px] uppercase btn-danger flex items-center gap-2">
-                        <i class="fa-solid fa-trash-can"></i> Clear All
+                    <button onclick="switchTab('devices')" id="tab-devices" class="tab-button px-4 py-2.5 bg-green-50 text-green-600 rounded-xl font-black text-[10px] uppercase flex items-center gap-2">
+                        <i class="fa-solid fa-mobile-screen"></i> Devices
                     </button>
                 </div>
             </header>
 
-            <!-- LIVE COUNTER CARD -->
-            <div class="live-counter glass-card p-6 md:p-10 rounded-[2.5rem] mb-6 text-center bg-gradient-to-r from-blue-600 via-blue-700 to-purple-700 text-white border-0 shadow-xl">
-                <div class="flex items-center justify-center gap-3 mb-2">
-                    <span class="live-dot w-3 h-3 bg-green-400 rounded-full"></span>
-                    <p class="text-[10px] font-black uppercase tracking-widest opacity-80">Now Online</p>
+            <!-- TAB CONTENT: OVERVIEW -->
+            <div id="content-overview">
+                <!-- LIVE COUNTER + BOT ALERT -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                    <div class="live-counter glass-card p-6 rounded-[2.5rem] text-center bg-gradient-to-r from-blue-600 via-blue-700 to-purple-700 text-white border-0 shadow-xl col-span-2">
+                        <div class="flex items-center justify-center gap-3 mb-2">
+                            <span class="live-dot w-3 h-3 bg-green-400 rounded-full"></span>
+                            <p class="text-[10px] font-black uppercase tracking-widest opacity-80">Real-Time Visitors</p>
+                        </div>
+                        <h3 id="live-online-count" class="text-6xl md:text-7xl font-black">0</h3>
+                        <p class="text-xs opacity-70 mt-2 font-medium">active visitors in last 15 minutes</p>
+                        <p class="text-[8px] opacity-50 mt-1 uppercase tracking-widest">Updated: <span id="last-updated">just now</span></p>
+                    </div>
+                    <div id="bot-alert-card" class="glass-card p-6 rounded-[2.5rem] bg-gradient-to-r from-red-50 to-orange-50 border-red-200 shadow-sm bot-alert">
+                        <div class="flex items-center gap-3 mb-2">
+                            <i class="fa-solid fa-shield-halved text-red-500 text-2xl"></i>
+                            <p class="text-[10px] font-black text-red-600 uppercase tracking-widest">Bot Protection</p>
+                        </div>
+                        <h3 class="text-4xl font-black text-red-600" id="bot-blocked-count">0</h3>
+                        <p class="text-xs text-red-500 mt-2 font-medium">bots blocked today</p>
+                        <p class="text-[8px] text-red-400 mt-1 uppercase">AI-Powered Detection</p>
+                    </div>
                 </div>
-                <h3 id="live-online-count" class="text-6xl md:text-7xl font-black">0</h3>
-                <p class="text-xs opacity-70 mt-2 font-medium">active visitors in real-time</p>
-                <p class="text-[8px] opacity-50 mt-1 uppercase tracking-widest">Last updated: <span id="last-updated">just now</span></p>
+
+                <!-- STATS OVERVIEW -->
+                <div class="grid grid-cols-2 md:grid-cols-6 gap-4 mb-6" id="visitor-stats-container">
+                    <div class="glass-card p-5 rounded-[2rem] shadow-sm stat-card">
+                        <p class="text-[10px] font-black text-gray-400 uppercase mb-1"><i class="fa-solid fa-eye mr-1"></i> Total</p>
+                        <h3 class="text-2xl font-black" id="stat-total-visits">0</h3>
+                    </div>
+                    <div class="glass-card p-5 rounded-[2rem] shadow-sm stat-card">
+                        <p class="text-[10px] font-black text-blue-400 uppercase mb-1"><i class="fa-solid fa-users mr-1"></i> Unique IPs</p>
+                        <h3 class="text-2xl font-black" id="stat-unique-ips">0</h3>
+                    </div>
+                    <div class="glass-card p-5 rounded-[2rem] shadow-sm stat-card">
+                        <p class="text-[10px] font-black text-purple-400 uppercase mb-1"><i class="fa-solid fa-clock mr-1"></i> Sessions</p>
+                        <h3 class="text-2xl font-black" id="stat-sessions">0</h3>
+                    </div>
+                    <div class="glass-card p-5 rounded-[2rem] shadow-sm stat-card">
+                        <p class="text-[10px] font-black text-green-400 uppercase mb-1"><i class="fa-solid fa-user-plus mr-1"></i> First Time</p>
+                        <h3 class="text-2xl font-black" id="stat-first-time">0</h3>
+                    </div>
+                    <div class="glass-card p-5 rounded-[2rem] shadow-sm stat-card">
+                        <p class="text-[10px] font-black text-emerald-400 uppercase mb-1"><i class="fa-solid fa-cookie-bite mr-1"></i> Consented</p>
+                        <h3 class="text-2xl font-black" id="stat-consented">0</h3>
+                    </div>
+                    <div class="glass-card p-5 rounded-[2rem] shadow-sm stat-card">
+                        <p class="text-[10px] font-black text-amber-400 uppercase mb-1"><i class="fa-solid fa-clock mr-1"></i> Avg Duration</p>
+                        <h3 class="text-2xl font-black" id="stat-avg-duration">0s</h3>
+                    </div>
+                </div>
+
+                <!-- CHARTS ROW -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                    <!-- Device Breakdown -->
+                    <div class="glass-card p-6 md:p-8 rounded-[2.5rem] shadow-sm">
+                        <h4 class="text-sm font-black uppercase mb-6 text-gray-400 flex items-center gap-2">
+                            <i class="fa-solid fa-mobile-screen text-blue-600"></i> Device Breakdown
+                        </h4>
+                        <canvas id="deviceChart" height="250"></canvas>
+                    </div>
+
+                    <!-- Top Pages -->
+                    <div class="glass-card p-6 md:p-8 rounded-[2.5rem] shadow-sm">
+                        <h4 class="text-sm font-black uppercase mb-6 text-gray-400 flex items-center gap-2">
+                            <i class="fa-solid fa-file-lines text-purple-600"></i> Top Pages
+                        </h4>
+                        <div id="top-pages" class="space-y-1">
+                            <div class="text-center py-8 text-xs text-gray-400">Loading page data...</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- VISITOR TABLE -->
+                <div class="glass-card p-4 md:p-6 rounded-[2.5rem] shadow-sm">
+                    <div class="flex justify-between items-center mb-4">
+                        <h4 class="text-sm font-black uppercase text-gray-400 flex items-center gap-2">
+                            <i class="fa-solid fa-list text-green-600"></i> Visitor Log
+                            <span id="visitor-count-badge" class="text-[10px] bg-gray-100 px-2 py-0.5 rounded-full">0 records</span>
+                        </h4>
+                        <div class="flex gap-2">
+                            <input type="text" id="visitor-search" placeholder="Search IP, page, device..." 
+                                   class="px-4 py-2 bg-gray-50 border rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-blue-500 w-40 md:w-56"
+                                   onkeyup="filterVisitorTable()">
+                        </div>
+                    </div>
+                    <div class="overflow-x-auto custom-scroll">
+                        <table class="w-full text-left table-responsive">
+                            <thead>
+                                <tr class="text-[10px] font-black uppercase text-gray-400 border-b">
+                                    <th class="pb-3 min-w-[100px]">IP Address</th>
+                                    <th class="pb-3 min-w-[80px]">Session</th>
+                                    <th class="pb-3 min-w-[100px]">Location</th>
+                                    <th class="pb-3 min-w-[100px]">Device</th>
+                                    <th class="pb-3 min-w-[100px]">Page</th>
+                                    <th class="pb-3 min-w-[70px]">Duration</th>
+                                    <th class="pb-3 min-w-[80px]">Status</th>
+                                    <th class="pb-3 min-w-[100px]">Time</th>
+                                    <th class="pb-3 text-right min-w-[60px]">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="visitor-table-body" class="text-xs font-bold text-slate-700">
+                                <tr><td colspan="9" class="py-8 text-center text-xs text-gray-400">Loading visitors...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- Pagination -->
+                    <div class="flex justify-between items-center mt-4 pt-4 border-t" id="pagination-container">
+                        <p class="text-[10px] font-bold text-gray-400" id="pagination-info">Showing 0 of 0</p>
+                        <div class="flex gap-2" id="pagination-buttons"></div>
+                    </div>
+                </div>
             </div>
 
-            <!-- STATS OVERVIEW -->
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6" id="visitor-stats-container">
-                <div class="glass-card p-5 rounded-[2rem] shadow-sm stat-card">
-                    <p class="text-[10px] font-black text-gray-400 uppercase mb-1"><i class="fa-solid fa-eye mr-1"></i> Total Visits</p>
-                    <h3 class="text-2xl font-black" id="stat-total-visits">0</h3>
-                </div>
-                <div class="glass-card p-5 rounded-[2rem] shadow-sm stat-card">
-                    <p class="text-[10px] font-black text-blue-400 uppercase mb-1"><i class="fa-solid fa-users mr-1"></i> Unique IPs</p>
-                    <h3 class="text-2xl font-black" id="stat-unique-ips">0</h3>
-                </div>
-                <div class="glass-card p-5 rounded-[2rem] shadow-sm stat-card">
-                    <p class="text-[10px] font-black text-purple-400 uppercase mb-1"><i class="fa-solid fa-clock mr-1"></i> Sessions</p>
-                    <h3 class="text-2xl font-black" id="stat-sessions">0</h3>
-                </div>
-                <div class="glass-card p-5 rounded-[2rem] shadow-sm stat-card">
-                    <p class="text-[10px] font-black text-green-400 uppercase mb-1"><i class="fa-solid fa-user-plus mr-1"></i> First Time</p>
-                    <h3 class="text-2xl font-black" id="stat-first-time">0</h3>
-                </div>
-            </div>
-
-            <!-- DEVICE & PAGES BREAKDOWN -->
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-                <!-- Device Breakdown -->
-                <div class="glass-card p-6 md:p-8 rounded-[2.5rem] shadow-sm">
+            <!-- TAB CONTENT: BOT DETECTION -->
+            <div id="content-bots" class="hidden">
+                <div class="glass-card p-6 rounded-[2.5rem] shadow-sm mb-6">
                     <h4 class="text-sm font-black uppercase mb-6 text-gray-400 flex items-center gap-2">
-                        <i class="fa-solid fa-mobile-screen text-blue-600"></i> Device Breakdown
+                        <i class="fa-solid fa-robot text-red-600"></i> Bot Detection Analytics
                     </h4>
-                    <div id="device-breakdown" class="space-y-4">
-                        <div class="text-center py-8 text-xs text-gray-400">Loading device data...</div>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                        <div class="bg-red-50 p-4 rounded-2xl">
+                            <p class="text-[10px] font-black text-red-500">Total Bots Blocked</p>
+                            <h3 class="text-2xl font-black text-red-600" id="bot-total-blocked">0</h3>
+                        </div>
+                        <div class="bg-orange-50 p-4 rounded-2xl">
+                            <p class="text-[10px] font-black text-orange-500">High Risk (≥0.7)</p>
+                            <h3 class="text-2xl font-black text-orange-600" id="bot-high-risk">0</h3>
+                        </div>
+                        <div class="bg-yellow-50 p-4 rounded-2xl">
+                            <p class="text-[10px] font-black text-yellow-500">Medium Risk (0.4-0.7)</p>
+                            <h3 class="text-2xl font-black text-yellow-600" id="bot-medium-risk">0</h3>
+                        </div>
+                        <div class="bg-green-50 p-4 rounded-2xl">
+                            <p class="text-[10px] font-black text-green-500">Clean Traffic</p>
+                            <h3 class="text-2xl font-black text-green-600" id="bot-clean">0</h3>
+                        </div>
                     </div>
-                    <canvas id="deviceChart" class="mt-4" height="200"></canvas>
+                    <canvas id="botChart" height="250"></canvas>
                 </div>
-
-                <!-- Top Pages -->
-                <div class="glass-card p-6 md:p-8 rounded-[2.5rem] shadow-sm">
-                    <h4 class="text-sm font-black uppercase mb-6 text-gray-400 flex items-center gap-2">
-                        <i class="fa-solid fa-file-lines text-purple-600"></i> Top Pages
+                <div class="glass-card p-6 rounded-[2.5rem] shadow-sm">
+                    <h4 class="text-sm font-black uppercase mb-4 text-gray-400 flex items-center gap-2">
+                        <i class="fa-solid fa-shield-halved text-red-600"></i> Recent Bot Activity
                     </h4>
-                    <div id="top-pages" class="space-y-1">
-                        <div class="text-center py-8 text-xs text-gray-400">Loading page data...</div>
+                    <div class="overflow-x-auto custom-scroll">
+                        <table class="w-full text-left">
+                            <thead>
+                                <tr class="text-[10px] font-black uppercase text-gray-400 border-b">
+                                    <th class="pb-3">IP Address</th>
+                                    <th class="pb-3">User Agent</th>
+                                    <th class="pb-3">Bot Score</th>
+                                    <th class="pb-3">Risk Level</th>
+                                    <th class="pb-3">Time</th>
+                                </tr>
+                            </thead>
+                            <tbody id="bot-table-body" class="text-xs font-bold">
+                                <tr><td colspan="5" class="py-8 text-center text-xs text-gray-400">Loading bot data...</td></tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
 
-            <!-- VISITOR TABLE -->
-            <div class="glass-card p-4 md:p-6 rounded-[2.5rem] shadow-sm">
-                <div class="flex justify-between items-center mb-4">
-                    <h4 class="text-sm font-black uppercase text-gray-400 flex items-center gap-2">
-                        <i class="fa-solid fa-list text-green-600"></i> Visitor Log
-                        <span id="visitor-count-badge" class="text-[10px] bg-gray-100 px-2 py-0.5 rounded-full">0 records</span>
+            <!-- TAB CONTENT: LOCATIONS -->
+            <div id="content-locations" class="hidden">
+                <div class="glass-card p-6 rounded-[2.5rem] shadow-sm">
+                    <h4 class="text-sm font-black uppercase mb-6 text-gray-400 flex items-center gap-2">
+                        <i class="fa-solid fa-map-pin text-purple-600"></i> Location Analytics
                     </h4>
-                    <div class="flex gap-2">
-                        <input type="text" id="visitor-search" placeholder="Search IP or page..." 
-                               class="px-4 py-2 bg-gray-50 border rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-blue-500 w-40 md:w-56"
-                               onkeyup="filterVisitorTable()">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                        <div class="bg-purple-50 p-4 rounded-2xl">
+                            <p class="text-[10px] font-black text-purple-500">GPS Accuracy</p>
+                            <h3 class="text-2xl font-black text-purple-600" id="loc-gps-count">0</h3>
+                            <p class="text-[9px] text-purple-400">High precision</p>
+                        </div>
+                        <div class="bg-indigo-50 p-4 rounded-2xl">
+                            <p class="text-[10px] font-black text-indigo-500">IP-Based</p>
+                            <h3 class="text-2xl font-black text-indigo-600" id="loc-ip-count">0</p>
+                            <p class="text-[9px] text-indigo-400">Approximate</p>
+                        </div>
+                        <div class="bg-violet-50 p-4 rounded-2xl">
+                            <p class="text-[10px] font-black text-violet-500">Unknown</p>
+                            <h3 class="text-2xl font-black text-violet-600" id="loc-unknown-count">0</p>
+                            <p class="text-[9px] text-violet-400">No location data</p>
+                        </div>
+                    </div>
+                    <div class="overflow-x-auto custom-scroll">
+                        <table class="w-full text-left">
+                            <thead>
+                                <tr class="text-[10px] font-black uppercase text-gray-400 border-b">
+                                    <th class="pb-3">IP Address</th>
+                                    <th class="pb-3">City/Country</th>
+                                    <th class="pb-3">Location Type</th>
+                                    <th class="pb-3">ISP</th>
+                                    <th class="pb-3">Connection</th>
+                                    <th class="pb-3">Time</th>
+                                </tr>
+                            </thead>
+                            <tbody id="location-table-body" class="text-xs font-bold">
+                                <tr><td colspan="6" class="py-8 text-center text-xs text-gray-400">Loading location data...</td></tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
-                <div class="overflow-x-auto custom-scroll">
-                    <table class="w-full text-left table-responsive">
-                        <thead>
-                            <tr class="text-[10px] font-black uppercase text-gray-400 border-b">
-                                <th class="pb-3 min-w-[100px]">IP Address</th>
-                                <th class="pb-3 min-w-[100px]">Session ID</th>
-                                <th class="pb-3 min-w-[100px]">Location</th>
-                                <th class="pb-3 min-w-[140px]">Device & Browser</th>
-                                <th class="pb-3 min-w-[100px]">Page</th>
-                                <th class="pb-3 min-w-[80px]">Duration</th>
-                                <th class="pb-3 min-w-[100px]">Time</th>
-                                <th class="pb-3 text-right min-w-[60px]">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody id="visitor-table-body" class="text-xs font-bold text-slate-700">
-                            <tr><td colspan="8" class="py-8 text-center text-xs text-gray-400">Loading visitors...</td></tr>
-                        </tbody>
-                    </table>
+            </div>
+
+            <!-- TAB CONTENT: DEVICES -->
+            <div id="content-devices" class="hidden">
+                <div class="glass-card p-6 rounded-[2.5rem] shadow-sm">
+                    <h4 class="text-sm font-black uppercase mb-6 text-gray-400 flex items-center gap-2">
+                        <i class="fa-solid fa-mobile-screen text-green-600"></i> Device & Connection Analytics
+                    </h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <h5 class="text-xs font-black text-gray-500 mb-4">Device Types</h5>
+                            <canvas id="deviceTypeChart" height="200"></canvas>
+                        </div>
+                        <div>
+                            <h5 class="text-xs font-black text-gray-500 mb-4">Connection Types</h5>
+                            <canvas id="connectionChart" height="200"></canvas>
+                        </div>
+                    </div>
                 </div>
-                <!-- Pagination -->
-                <div class="flex justify-between items-center mt-4 pt-4 border-t" id="pagination-container">
-                    <p class="text-[10px] font-bold text-gray-400" id="pagination-info">Showing 0 of 0</p>
-                    <div class="flex gap-2" id="pagination-buttons"></div>
-                </div>
+            </div>
+
+            <!-- ACTION BAR -->
+            <div class="flex flex-wrap gap-2 mt-6">
+                <button onclick="refreshVisitors()" class="px-4 py-2.5 bg-blue-100 text-blue-600 rounded-xl font-black text-[10px] uppercase btn-action flex items-center gap-2">
+                    <i class="fa-solid fa-rotate"></i> Refresh
+                </button>
+                <button onclick="cleanupDuplicateVisitors()" class="px-4 py-2.5 bg-purple-100 text-purple-600 rounded-xl font-black text-[10px] uppercase btn-action flex items-center gap-2">
+                    <i class="fa-solid fa-clone"></i> Deduplicate
+                </button>
+                <button onclick="cleanupOldVisitors()" class="px-4 py-2.5 bg-orange-100 text-orange-600 rounded-xl font-black text-[10px] uppercase btn-action flex items-center gap-2">
+                    <i class="fa-solid fa-broom"></i> Clean 30d
+                </button>
+                <button onclick="deleteAllVisitors()" class="px-4 py-2.5 bg-red-100 text-red-600 rounded-xl font-black text-[10px] uppercase btn-danger flex items-center gap-2">
+                    <i class="fa-solid fa-trash-can"></i> Clear All
+                </button>
             </div>
         </main>
     </div>
@@ -420,7 +630,6 @@
         const SUPABASE_URL = "https://vdqbjwzixppbtkbgvhlq.supabase.co";
         const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZkcWJqd3ppeHBwYnRrYmd2aGxxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgwMDc3MzQsImV4cCI6MjA5MzU4MzczNH0.E6C0_7SWIrTMJlFe5t8EbNAW5fzlpg-fKV3ZV0XYd3k";
         const ADMIN_EMAIL = "binzeo369@gmail.com";
-        const LOGO_URL = "https://ozuwazkqyrxiwwfjceth.supabase.co/storage/v1/object/public/images/Beige%20Black%20Minimal%20Simple%20Modern%20Handwritten%20Graffiti%20Typographic%20Arts%20and_20251212_154142_0000.png";
         const HOME_URL = "/home";
         const LOGIN_URL = "/login";
 
@@ -433,7 +642,13 @@
         const itemsPerPage = 25;
         let isDarkMode = false;
         let deleteTargetId = null;
+        let currentTab = 'overview';
+        
+        // Chart instances
         let deviceChartInstance = null;
+        let botChartInstance = null;
+        let deviceTypeChartInstance = null;
+        let connectionChartInstance = null;
 
         // ==================== UTILITY FUNCTIONS ====================
         function showToast(message, type = 'success') {
@@ -463,10 +678,30 @@
             return date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
         }
 
-        function formatDate(dateString) {
-            return new Date(dateString).toLocaleString('en-US', {
-                day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit'
-            });
+        function getRiskLevel(score) {
+            if (score >= 0.7) return { level: 'High', class: 'text-red-600 bg-red-50' };
+            if (score >= 0.4) return { level: 'Medium', class: 'text-yellow-600 bg-yellow-50' };
+            return { level: 'Low', class: 'text-green-600 bg-green-50' };
+        }
+
+        // ==================== TAB SWITCHING ====================
+        function switchTab(tab) {
+            currentTab = tab;
+            
+            // Hide all content
+            document.querySelectorAll('[id^="content-"]').forEach(el => el.classList.add('hidden'));
+            
+            // Show selected content
+            document.getElementById(`content-${tab}`).classList.remove('hidden');
+            
+            // Update tab buttons
+            document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`tab-${tab}`).classList.add('active');
+            
+            // Render tab-specific content
+            if (tab === 'bots') renderBotData();
+            if (tab === 'locations') renderLocationData();
+            if (tab === 'devices') renderDeviceAnalytics();
         }
 
         // ==================== LOAD VISITORS ====================
@@ -499,20 +734,34 @@
         // ==================== RENDER ALL DATA ====================
         function renderAllVisitorData() {
             renderStats();
-            renderDeviceBreakdown();
+            renderDeviceChart();
             renderTopPages();
             renderVisitorTable();
             updateLiveCount();
+            updateBotAlert();
+            
+            if (currentTab === 'bots') renderBotData();
+            if (currentTab === 'locations') renderLocationData();
+            if (currentTab === 'devices') renderDeviceAnalytics();
         }
 
         // ==================== LIVE COUNT ====================
         function updateLiveCount() {
-            // Count visitors from last 15 minutes as "online"
             const fifteenMinutesAgo = new Date(Date.now() - 15 * 60 * 1000);
-            const onlineVisitors = allVisitors.filter(v => new Date(v.created_at) >= fifteenMinutesAgo);
+            const onlineVisitors = allVisitors.filter(v => 
+                new Date(v.created_at) >= fifteenMinutesAgo && !v.is_bot
+            );
             const uniqueOnlineIPs = new Set(onlineVisitors.map(v => v.ip_address)).size;
             
             document.getElementById('live-online-count').textContent = Math.min(uniqueOnlineIPs, 999);
+        }
+
+        function updateBotAlert() {
+            const today = new Date().toISOString().split('T')[0];
+            const botsToday = allVisitors.filter(v => 
+                v.is_bot && v.created_at.startsWith(today)
+            );
+            document.getElementById('bot-blocked-count').textContent = botsToday.length;
         }
 
         // ==================== STATS ====================
@@ -521,51 +770,39 @@
             const uniqueIps = new Set(allVisitors.map(v => v.ip_address)).size;
             const uniqueSessions = new Set(allVisitors.map(v => v.session_id)).size;
             const firstTime = allVisitors.filter(v => v.is_unique_visit).length;
+            const consented = allVisitors.filter(v => v.consent_given).length;
+            const avgDuration = allVisitors.length > 0 
+                ? Math.round(allVisitors.reduce((sum, v) => sum + (v.visit_duration || 0), 0) / allVisitors.length)
+                : 0;
 
             document.getElementById('stat-total-visits').textContent = totalVisits.toLocaleString();
             document.getElementById('stat-unique-ips').textContent = uniqueIps.toLocaleString();
             document.getElementById('stat-sessions').textContent = uniqueSessions.toLocaleString();
             document.getElementById('stat-first-time').textContent = firstTime.toLocaleString();
+            document.getElementById('stat-consented').textContent = consented.toLocaleString();
+            document.getElementById('stat-avg-duration').textContent = `${avgDuration}s`;
             document.getElementById('visitor-count-badge').textContent = `${totalVisits} records`;
         }
 
-        // ==================== DEVICE BREAKDOWN ====================
-        function renderDeviceBreakdown() {
+        // ==================== DEVICE CHART ====================
+        function renderDeviceChart() {
             const devices = {};
             allVisitors.forEach(v => {
-                const info = v.device_info || 'Unknown';
-                let deviceType = 'Desktop';
-                if (info.includes('Mobile') || info.includes('iPhone') || info.includes('Android')) {
-                    deviceType = 'Mobile';
-                } else if (info.includes('Tablet') || info.includes('iPad')) {
-                    deviceType = 'Tablet';
+                if (v.is_bot) return;
+                const deviceType = v.device_type || 'desktop';
+                const type = deviceType.toLowerCase();
+                if (type.includes('mobile') || type.includes('phone')) {
+                    devices['Mobile'] = (devices['Mobile'] || 0) + 1;
+                } else if (type.includes('tablet') || type.includes('ipad')) {
+                    devices['Tablet'] = (devices['Tablet'] || 0) + 1;
+                } else {
+                    devices['Desktop'] = (devices['Desktop'] || 0) + 1;
                 }
-                devices[deviceType] = (devices[deviceType] || 0) + 1;
             });
 
-            const total = allVisitors.length || 1;
-            const deviceColors = { Mobile: '#0071e3', Desktop: '#5856d6', Tablet: '#34c759' };
-            const deviceIcons = { Mobile: 'fa-mobile-screen', Desktop: 'fa-desktop', Tablet: 'fa-tablet-screen-button' };
-
-            document.getElementById('device-breakdown').innerHTML = Object.entries(devices)
-                .sort((a, b) => b[1] - a[1])
-                .map(([name, count]) => `
-                    <div>
-                        <div class="flex justify-between items-center mb-2">
-                            <span class="text-[11px] font-bold flex items-center gap-2">
-                                <i class="fa-solid ${deviceIcons[name] || 'fa-circle'}" style="color:${deviceColors[name] || '#94a3b8'}"></i>
-                                ${name}
-                            </span>
-                            <span class="text-[10px] font-black text-gray-500">${count} (${Math.round(count / total * 100)}%)</span>
-                        </div>
-                        <div class="w-full bg-gray-100 rounded-full h-2.5 overflow-hidden">
-                            <div class="h-2.5 rounded-full progress-bar" style="width:${count / total * 100}%; background:${deviceColors[name] || '#94a3b8'}"></div>
-                        </div>
-                    </div>
-                `).join('');
-
-            // Device chart
-            const ctx = document.getElementById('deviceChart').getContext('2d');
+            const ctx = document.getElementById('deviceChart');
+            if (!ctx) return;
+            
             if (deviceChartInstance) deviceChartInstance.destroy();
 
             deviceChartInstance = new Chart(ctx, {
@@ -574,8 +811,9 @@
                     labels: Object.keys(devices),
                     datasets: [{
                         data: Object.values(devices),
-                        backgroundColor: Object.keys(devices).map(d => deviceColors[d] || '#94a3b8'),
-                        borderWidth: 0
+                        backgroundColor: ['#0071e3', '#5856d6', '#34c759'],
+                        borderWidth: 2,
+                        borderColor: '#fff'
                     }]
                 },
                 options: {
@@ -583,7 +821,10 @@
                     maintainAspectRatio: true,
                     cutout: '65%',
                     plugins: {
-                        legend: { display: false }
+                        legend: { 
+                            position: 'bottom',
+                            labels: { padding: 20, usePointStyle: true }
+                        }
                     }
                 }
             });
@@ -593,6 +834,7 @@
         function renderTopPages() {
             const pages = {};
             allVisitors.forEach(v => {
+                if (v.is_bot) return;
                 const page = v.page_visited || 'Home';
                 pages[page] = (pages[page] || 0) + 1;
             });
@@ -629,7 +871,7 @@
 
             if (pageVisitors.length === 0) {
                 document.getElementById('visitor-table-body').innerHTML = 
-                    '<tr><td colspan="8" class="py-8 text-center text-xs text-gray-400">No visitors found</td></tr>';
+                    '<tr><td colspan="9" class="py-8 text-center text-xs text-gray-400">No visitors found</td></tr>';
             } else {
                 document.getElementById('visitor-table-body').innerHTML = pageVisitors.map(v => {
                     let loc = "Unknown";
@@ -638,18 +880,18 @@
                         loc = l?.city || l?.country || l?.region || "Unknown";
                     } catch (e) {}
 
-                    let deviceInfo = v.device_info || 'Unknown';
-                    // Truncate long device info
-                    if (deviceInfo.length > 40) deviceInfo = deviceInfo.substring(0, 37) + '...';
-
+                    const deviceInfo = (v.device_type || v.device_info || 'Unknown');
+                    const truncatedDevice = deviceInfo.length > 25 ? deviceInfo.substring(0, 22) + '...' : deviceInfo;
                     const sessionShort = v.session_id ? v.session_id.substring(0, 8) + '...' : 'N/A';
-                    const isNew = v.is_unique_visit;
+                    const isBot = v.is_bot;
+                    const hasConsent = v.consent_given;
+                    const botScore = v.bot_score || 0;
 
                     return `
-                        <tr class="border-b border-gray-50 visitor-row">
+                        <tr class="border-b border-gray-50 visitor-row ${isBot ? 'bot-row' : ''}">
                             <td class="py-3">
                                 <div class="font-black text-xs">${v.ip_address || '?'}</div>
-                                ${isNew ? '<span class="text-[8px] bg-green-100 text-green-600 px-1.5 py-0.5 rounded-full font-black">NEW</span>' : ''}
+                                ${v.is_unique_visit ? '<span class="text-[8px] bg-green-100 text-green-600 px-1.5 py-0.5 rounded-full font-black">NEW</span>' : ''}
                             </td>
                             <td class="py-3">
                                 <span class="text-[10px] text-gray-500 font-mono" title="${v.session_id || ''}">${sessionShort}</span>
@@ -658,13 +900,21 @@
                                 <span class="text-xs font-bold">${loc}</span>
                             </td>
                             <td class="py-3">
-                                <span class="text-[10px] text-gray-500 block truncate max-w-[130px]" title="${v.device_info || ''}">${deviceInfo}</span>
+                                <span class="text-[10px] text-gray-500 block truncate max-w-[100px]" title="${deviceInfo}">${truncatedDevice}</span>
                             </td>
                             <td class="py-3">
                                 <span class="page-badge bg-blue-50 text-blue-600">${v.page_visited || 'Home'}</span>
                             </td>
                             <td class="py-3">
                                 <span class="text-[10px] font-bold">${v.visit_duration || 0}s</span>
+                            </td>
+                            <td class="py-3">
+                                ${isBot 
+                                    ? `<span class="bot-badge" title="Bot Score: ${botScore}">🤖 BOT</span>`
+                                    : hasConsent 
+                                        ? '<span class="consent-badge">✓ Consent</span>'
+                                        : '<span class="text-[10px] text-gray-400">-</span>'
+                                }
                             </td>
                             <td class="py-3">
                                 <span class="text-[10px] text-gray-400" title="${v.created_at}">${timeAgo(v.created_at)}</span>
@@ -717,6 +967,168 @@
             document.getElementById('pagination-buttons').innerHTML = paginationHTML;
         }
 
+        // ==================== BOT DATA ====================
+        function renderBotData() {
+            const bots = allVisitors.filter(v => v.is_bot || v.bot_score > 0.7);
+            const highRisk = allVisitors.filter(v => v.bot_score >= 0.7 && !v.is_bot);
+            const mediumRisk = allVisitors.filter(v => v.bot_score >= 0.4 && v.bot_score < 0.7);
+            const clean = allVisitors.filter(v => v.bot_score < 0.4 && !v.is_bot);
+
+            document.getElementById('bot-total-blocked').textContent = bots.length;
+            document.getElementById('bot-high-risk').textContent = highRisk.length;
+            document.getElementById('bot-medium-risk').textContent = mediumRisk.length;
+            document.getElementById('bot-clean').textContent = clean.length;
+
+            // Bot Chart
+            const ctx = document.getElementById('botChart');
+            if (!ctx) return;
+            
+            if (botChartInstance) botChartInstance.destroy();
+
+            botChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Blocked Bots', 'High Risk', 'Medium Risk', 'Clean'],
+                    datasets: [{
+                        label: 'Traffic Analysis',
+                        data: [bots.length, highRisk.length, mediumRisk.length, clean.length],
+                        backgroundColor: ['#ef4444', '#f97316', '#eab308', '#22c55e'],
+                        borderRadius: 10
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: { stepSize: 1 }
+                        }
+                    }
+                }
+            });
+
+            // Bot Table
+            const recentBots = [...bots, ...highRisk].sort((a, b) => new Date(b.created_at) - new Date(a.created_at)).slice(0, 20);
+            
+            document.getElementById('bot-table-body').innerHTML = recentBots.length > 0
+                ? recentBots.map(v => {
+                    const risk = getRiskLevel(v.bot_score || 0);
+                    return `
+                        <tr class="border-b visitor-row bot-row">
+                            <td class="py-2 text-xs font-bold">${v.ip_address || '?'}</td>
+                            <td class="py-2 text-[10px] text-gray-500 max-w-[200px] truncate">${v.user_agent || 'N/A'}</td>
+                            <td class="py-2 text-xs font-bold">${(v.bot_score * 100).toFixed(0)}%</td>
+                            <td class="py-2">
+                                <span class="text-[10px] font-black px-2 py-0.5 rounded-full ${risk.class}">${risk.level}</span>
+                            </td>
+                            <td class="py-2 text-[10px] text-gray-400">${timeAgo(v.created_at)}</td>
+                        </tr>
+                    `;
+                }).join('')
+                : '<tr><td colspan="5" class="py-8 text-center text-xs text-green-500">🎉 No bot activity detected!</td></tr>';
+        }
+
+        // ==================== LOCATION DATA ====================
+        function renderLocationData() {
+            const gpsCount = allVisitors.filter(v => v.location_type === 'gps').length;
+            const ipCount = allVisitors.filter(v => v.location_type === 'ip').length;
+            const unknownCount = allVisitors.filter(v => !v.location_type || v.location_type === 'unknown').length;
+
+            document.getElementById('loc-gps-count').textContent = gpsCount;
+            document.getElementById('loc-ip-count').textContent = ipCount;
+            document.getElementById('loc-unknown-count').textContent = unknownCount;
+
+            const recentLocations = allVisitors.slice(0, 50);
+            
+            document.getElementById('location-table-body').innerHTML = recentLocations.length > 0
+                ? recentLocations.map(v => {
+                    let loc = { city: 'Unknown', country: 'Unknown' };
+                    try {
+                        const l = typeof v.location_info === 'string' ? JSON.parse(v.location_info) : v.location_info;
+                        if (l) loc = l;
+                    } catch (e) {}
+
+                    return `
+                        <tr class="border-b visitor-row">
+                            <td class="py-2 text-xs font-bold">${v.ip_address || '?'}</td>
+                            <td class="py-2 text-xs">${loc.city || 'Unknown'}, ${loc.country || 'Unknown'}</td>
+                            <td class="py-2">
+                                <span class="text-[10px] font-black px-2 py-0.5 rounded-full ${
+                                    v.location_type === 'gps' ? 'bg-green-50 text-green-600' : 
+                                    v.location_type === 'ip' ? 'bg-blue-50 text-blue-600' : 
+                                    'bg-gray-50 text-gray-600'
+                                }">${(v.location_type || 'unknown').toUpperCase()}</span>
+                            </td>
+                            <td class="py-2 text-[10px] text-gray-500">${v.isp_info || 'N/A'}</td>
+                            <td class="py-2 text-[10px] text-gray-500">${v.connection_type || 'N/A'}</td>
+                            <td class="py-2 text-[10px] text-gray-400">${timeAgo(v.created_at)}</td>
+                        </tr>
+                    `;
+                }).join('')
+                : '<tr><td colspan="6" class="py-8 text-center text-xs text-gray-400">No location data available</td></tr>';
+        }
+
+        // ==================== DEVICE ANALYTICS ====================
+        function renderDeviceAnalytics() {
+            // Device Type Chart
+            const deviceTypes = {};
+            allVisitors.forEach(v => {
+                if (v.is_bot) return;
+                const type = (v.device_type || 'desktop').toLowerCase();
+                if (type.includes('mobile') || type.includes('phone')) deviceTypes['Mobile'] = (deviceTypes['Mobile'] || 0) + 1;
+                else if (type.includes('tablet') || type.includes('ipad')) deviceTypes['Tablet'] = (deviceTypes['Tablet'] || 0) + 1;
+                else deviceTypes['Desktop'] = (deviceTypes['Desktop'] || 0) + 1;
+            });
+
+            const ctx1 = document.getElementById('deviceTypeChart');
+            if (ctx1) {
+                if (deviceTypeChartInstance) deviceTypeChartInstance.destroy();
+                deviceTypeChartInstance = new Chart(ctx1, {
+                    type: 'doughnut',
+                    data: {
+                        labels: Object.keys(deviceTypes),
+                        datasets: [{
+                            data: Object.values(deviceTypes),
+                            backgroundColor: ['#0071e3', '#34c759', '#5856d6']
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: { legend: { position: 'bottom' } }
+                    }
+                });
+            }
+
+            // Connection Type Chart
+            const connections = {};
+            allVisitors.forEach(v => {
+                const conn = v.connection_type || 'unknown';
+                connections[conn] = (connections[conn] || 0) + 1;
+            });
+
+            const ctx2 = document.getElementById('connectionChart');
+            if (ctx2) {
+                if (connectionChartInstance) connectionChartInstance.destroy();
+                connectionChartInstance = new Chart(ctx2, {
+                    type: 'doughnut',
+                    data: {
+                        labels: Object.keys(connections),
+                        datasets: [{
+                            data: Object.values(connections),
+                            backgroundColor: ['#f97316', '#8b5cf6', '#06b6d4', '#84cc16', '#ec4899']
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: { legend: { position: 'bottom' } }
+                    }
+                });
+            }
+        }
+
         function goToPage(page) {
             const totalPages = Math.ceil(filteredVisitors.length / itemsPerPage);
             if (page < 1 || page > totalPages) return;
@@ -731,6 +1143,7 @@
                     (v.ip_address || '').toLowerCase().includes(query) ||
                     (v.page_visited || '').toLowerCase().includes(query) ||
                     (v.device_info || '').toLowerCase().includes(query) ||
+                    (v.device_type || '').toLowerCase().includes(query) ||
                     (v.session_id || '').toLowerCase().includes(query)
                 );
             } else {
@@ -776,16 +1189,14 @@
         }
 
         async function deleteAllVisitors() {
-            if (!confirm('⚠️ WARNING: This will permanently delete ALL visitor records. This action cannot be undone. Are you sure?')) {
-                return;
-            }
+            if (!confirm('⚠️ WARNING: This will permanently delete ALL visitor records. Are you sure?')) return;
             
             try {
                 showToast('Deleting all visitor records...', 'info');
                 const { error } = await _supabase
                     .from('visitor_logs')
                     .delete()
-                    .neq('id', 0); // Delete all
+                    .neq('id', 0);
 
                 if (error) throw error;
 
@@ -798,9 +1209,7 @@
         }
 
         async function cleanupOldVisitors() {
-            if (!confirm('This will delete visitor records older than 30 days. Continue?')) {
-                return;
-            }
+            if (!confirm('This will delete visitor records older than 30 days. Continue?')) return;
 
             try {
                 showToast('Cleaning up old records...', 'info');
@@ -822,14 +1231,11 @@
         }
 
         async function cleanupDuplicateVisitors() {
-            if (!confirm('This will remove duplicate visitor records (same IP + session). Continue?')) {
-                return;
-            }
+            if (!confirm('This will remove duplicate visitor records. Continue?')) return;
 
             try {
                 showToast('Removing duplicate records...', 'info');
                 
-                // Get all records grouped by IP and session
                 const { data, error } = await _supabase
                     .from('visitor_logs')
                     .select('*')
@@ -837,12 +1243,11 @@
 
                 if (error) throw error;
 
-                // Find duplicates
                 const seen = new Map();
                 const duplicateIds = [];
 
                 data.forEach(record => {
-                    const key = `${record.ip_address}_${record.session_id}`;
+                    const key = `${record.ip_address}_${record.session_id}_${record.page_visited}_${record.created_at}`;
                     if (seen.has(key)) {
                         duplicateIds.push(record.id);
                     } else {
@@ -855,7 +1260,6 @@
                     return;
                 }
 
-                // Delete duplicates in batches
                 for (const id of duplicateIds) {
                     await _supabase.from('visitor_logs').delete().eq('id', id);
                 }
@@ -877,22 +1281,18 @@
                 return;
             }
 
-            // Show main content
             document.getElementById('global-loader').style.display = 'none';
             document.getElementById('main-layout').classList.remove('hidden');
 
-            // Apply dark mode
             if (localStorage.getItem('darkMode') === 'true') {
                 isDarkMode = true;
                 document.body.classList.add('dark');
             }
 
-            // Show mobile nav if needed
             if (window.innerWidth < 769) {
                 document.querySelector('.bottom-nav').classList.remove('hidden');
             }
 
-            // Load visitors
             await loadVisitors();
 
             // Auto-refresh every 30 seconds
@@ -903,9 +1303,7 @@
 
         // ==================== KEYBOARD SHORTCUTS ====================
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                closeDeleteModal();
-            }
+            if (e.key === 'Escape') closeDeleteModal();
         });
 
         // ==================== INITIALIZATION ====================

@@ -4,15 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Visitors | JAYENWARE Admin</title>
-    <meta name="theme-color" content="#ff6b35">
+    <meta name="theme-color" content="#0071e3">
     <link rel="icon" type="image/png" href="https://ozuwazkqyrxiwwfjceth.supabase.co/storage/v1/object/public/images/Beige%20Black%20Minimal%20Simple%20Modern%20Handwritten%20Graffiti%20Typographic%20Arts%20and_20251212_154142_0000.png">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         :root {
             --glass-bg: rgba(255, 255, 255, 0.75);
@@ -24,9 +25,6 @@
             --radius-xl: 1.5rem;
             --radius-2xl: 2rem;
             --radius-3xl: 2.5rem;
-            --accent-orange: #ff6b35;
-            --accent-yellow: #ffc107;
-            --accent-deep: #1a1a2e;
         }
 
         * {
@@ -49,16 +47,6 @@
             color: #f5f5f7;
         }
 
-        body.deep-dark {
-            background: #1a1a2e;
-            color: #e0e0e0;
-        }
-
-        body.deep-dark .glass-card {
-            background: rgba(26, 26, 46, 0.9);
-            border-color: rgba(255, 107, 53, 0.2);
-        }
-
         body.dark .glass-card {
             background: rgba(28, 28, 30, 0.8);
             border-color: rgba(255, 255, 255, 0.08);
@@ -68,18 +56,9 @@
             background: #1c1c1e;
         }
 
-        body.deep-dark .bg-white {
-            background: #1a1a2e;
-        }
-
         body.dark .bg-gray-50,
         body.dark .bg-gray-100 {
             background: #2c2c2e;
-        }
-
-        body.deep-dark .bg-gray-50,
-        body.deep-dark .bg-gray-100 {
-            background: #16213e;
         }
 
         body.dark .text-slate-800,
@@ -88,18 +67,8 @@
             color: #f5f5f7;
         }
 
-        body.deep-dark .text-slate-800,
-        body.deep-dark .text-slate-900,
-        body.deep-dark .text-slate-700 {
-            color: #e0e0e0;
-        }
-
         body.dark .text-gray-400 {
             color: #8e8e93;
-        }
-
-        body.deep-dark .text-gray-400 {
-            color: #a0a0b0;
         }
 
         body.dark .text-gray-500 {
@@ -112,18 +81,25 @@
             border-color: #2c2c2e;
         }
 
-        body.deep-dark .border,
-        body.deep-dark .border-b,
-        body.deep-dark .border-t {
-            border-color: #2a2a4a;
-        }
-
         body.dark .hover\:bg-slate-50:hover {
             background: #2c2c2e;
         }
 
         body.dark table {
             color: #f5f5f7;
+        }
+
+        body.dark .apexcharts-text {
+            fill: #f5f5f7 !important;
+        }
+
+        body.dark .apexcharts-gridline {
+            stroke: #2c2c2e !important;
+        }
+
+        body.dark .apexcharts-tooltip {
+            background: #1c1c1e !important;
+            color: #f5f5f7 !important;
         }
 
         .glass-card {
@@ -144,7 +120,7 @@
         }
 
         .custom-scroll::-webkit-scrollbar-thumb {
-            background: linear-gradient(180deg, #ff6b35, #ffc107);
+            background: linear-gradient(180deg, #0071e3, #5856d6);
             border-radius: 10px;
         }
 
@@ -172,49 +148,47 @@
         }
 
         @keyframes fadeSlideIn {
-            from { opacity: 0; transform: translateY(16px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes floatAnimation {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-        }
-
-        @keyframes glowPulse {
-            0%, 100% { box-shadow: 0 0 20px rgba(255, 107, 53, 0.3); }
-            50% { box-shadow: 0 0 40px rgba(255, 107, 53, 0.6), 0 0 60px rgba(255, 193, 7, 0.3); }
+            from {
+                opacity: 0;
+                transform: translateY(16px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         @keyframes pulse-glow {
-            0%, 100% {
-                box-shadow: 0 0 20px rgba(255, 107, 53, 0.3);
+            0%,
+            100% {
+                box-shadow: 0 0 20px rgba(0, 113, 227, 0.3);
             }
             50% {
-                box-shadow: 0 0 40px rgba(255, 107, 53, 0.6), 0 0 60px rgba(255, 193, 7, 0.3);
+                box-shadow: 0 0 40px rgba(0, 113, 227, 0.6), 0 0 60px rgba(88, 86, 214, 0.3);
             }
         }
 
         @keyframes livePulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.6; transform: scale(1.1); }
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.6;
+                transform: scale(1.1);
+            }
         }
 
-        @keyframes spin-slow {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        .animate-float {
-            animation: floatAnimation 3s ease-in-out infinite;
-        }
-
-        .animate-glow {
-            animation: glowPulse 2s infinite;
-        }
-
-        .animate-spin-slow {
-            animation: spin-slow 10s linear infinite;
+        @keyframes modalPopIn {
+            from {
+                transform: scale(0.9);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
         }
 
         .stat-card {
@@ -222,10 +196,18 @@
             opacity: 0;
         }
 
-        .stat-card:nth-child(1) { animation-delay: 0s; }
-        .stat-card:nth-child(2) { animation-delay: 0.1s; }
-        .stat-card:nth-child(3) { animation-delay: 0.2s; }
-        .stat-card:nth-child(4) { animation-delay: 0.3s; }
+        .stat-card:nth-child(1) {
+            animation-delay: 0s;
+        }
+        .stat-card:nth-child(2) {
+            animation-delay: 0.1s;
+        }
+        .stat-card:nth-child(3) {
+            animation-delay: 0.2s;
+        }
+        .stat-card:nth-child(4) {
+            animation-delay: 0.3s;
+        }
 
         .live-counter {
             animation: pulse-glow 3s infinite;
@@ -244,13 +226,25 @@
         }
 
         @keyframes slideUp {
-            from { transform: translateY(100px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
+            from {
+                transform: translateY(100px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
         }
 
         @keyframes slideDown {
-            from { transform: translateY(0); opacity: 1; }
-            to { transform: translateY(100px); opacity: 0; }
+            from {
+                transform: translateY(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateY(100px);
+                opacity: 0;
+            }
         }
 
         .progress-bar {
@@ -262,7 +256,9 @@
         }
 
         .visitor-row:hover {
-            background: rgba(255, 107, 53, 0.05);
+            background: rgba(0, 113, 227, 0.03);
+            transform: scale(1.002);
+            box-shadow: 0 4px 20px rgba(0, 113, 227, 0.08);
         }
 
         .page-badge {
@@ -275,17 +271,27 @@
             letter-spacing: 0.03em;
         }
 
-        .country-badge {
-            background: linear-gradient(135deg, var(--accent-orange), var(--accent-yellow));
-            color: white;
-            padding: 2px 8px;
-            border-radius: 12px;
-            font-size: 10px;
-            font-weight: 700;
+        #map-modal {
+            transition: opacity 0.3s ease;
         }
 
-        #location-map-modal {
-            transition: opacity 0.3s ease;
+        #map-modal.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        #map-modal:not(.hidden) {
+            animation: modalPopIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .glass-card canvas,
+        .glass-card .apexcharts-canvas {
+            transition: transform 0.3s ease;
+        }
+
+        .glass-card:hover canvas,
+        .glass-card:hover .apexcharts-canvas {
+            transform: scale(1.02);
         }
 
         @media (max-width: 768px) {
@@ -305,15 +311,24 @@
                 background: rgba(28, 28, 30, 0.95);
                 border-color: rgba(255, 255, 255, 0.08);
             }
-            body.deep-dark .bottom-nav {
-                background: rgba(26, 26, 46, 0.95);
-                border-color: rgba(255, 107, 53, 0.2);
-            }
             main {
                 padding-bottom: 100px !important;
             }
             .table-responsive {
+                display: block;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
                 font-size: 10px;
+            }
+            .table-responsive table {
+                min-width: 1200px;
+            }
+            #map-modal>div {
+                margin: 10px;
+                border-radius: 1.5rem;
+            }
+            #visitor-map {
+                height: 250px !important;
             }
         }
 
@@ -328,12 +343,7 @@
     <!-- GLOBAL LOADER -->
     <div id="global-loader" style="position:fixed;inset:0;background:white;z-index:9999;display:flex;justify-content:center;align-items:center;transition:opacity 0.5s;">
         <div class="flex flex-col items-center">
-            <div class="relative">
-                <div class="w-16 h-16 border-4 border-orange-500 border-t-transparent rounded-full animate-spin"></div>
-                <div class="absolute inset-0 flex items-center justify-center">
-                    <i class="fa-solid fa-radar text-orange-500 text-xl animate-pulse"></i>
-                </div>
-            </div>
+            <div class="w-14 h-14 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
             <p class="mt-5 font-bold text-gray-400 text-sm">Loading Visitor Data...</p>
         </div>
     </div>
@@ -345,29 +355,26 @@
             <header class="mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
                     <div class="flex items-center gap-2 text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">
-                        <a href="/home" class="hover:text-orange-500 transition"><i class="fa-solid fa-house"></i> Home</a>
+                        <a href="/home" class="hover:text-blue-600 transition"><i class="fa-solid fa-house"></i> Home</a>
                         <i class="fa-solid fa-chevron-right text-[8px]"></i>
-                        <span class="text-orange-500">Visitors</span>
+                        <span class="text-blue-600">Visitors</span>
                         <span class="flex items-center gap-1 ml-2 px-2 py-0.5 bg-green-100 text-green-600 rounded-full">
                             <span class="live-dot w-1.5 h-1.5 bg-green-500 rounded-full"></span> Live
                         </span>
                     </div>
                     <h2 class="text-2xl md:text-3xl font-black uppercase tracking-tight flex items-center gap-2">
-                        <i class="fa-solid fa-radar text-orange-500"></i> Live Traffic Monitor
+                        <i class="fa-solid fa-radar text-blue-600"></i> Live Traffic Monitor
                     </h2>
                 </div>
                 <!-- ACTION BUTTONS -->
                 <div class="flex flex-wrap gap-2">
-                    <button onclick="refreshVisitors()" class="px-4 py-2.5 bg-orange-100 text-orange-600 rounded-xl font-black text-[10px] uppercase btn-action flex items-center gap-2 hover:bg-orange-200">
+                    <button onclick="refreshVisitors()" class="px-4 py-2.5 bg-blue-100 text-blue-600 rounded-xl font-black text-[10px] uppercase btn-action flex items-center gap-2">
                         <i class="fa-solid fa-rotate"></i> Refresh
-                    </button>
-                    <button onclick="toggleTheme()" class="px-4 py-2.5 bg-yellow-100 text-yellow-700 rounded-xl font-black text-[10px] uppercase btn-action flex items-center gap-2 hover:bg-yellow-200">
-                        <i class="fa-solid fa-palette"></i> Theme
                     </button>
                     <button onclick="cleanupDuplicateVisitors()" class="px-4 py-2.5 bg-purple-100 text-purple-600 rounded-xl font-black text-[10px] uppercase btn-action flex items-center gap-2">
                         <i class="fa-solid fa-clone"></i> Deduplicate
                     </button>
-                    <button onclick="cleanupOldVisitors()" class="px-4 py-2.5 bg-blue-100 text-blue-600 rounded-xl font-black text-[10px] uppercase btn-action flex items-center gap-2">
+                    <button onclick="cleanupOldVisitors()" class="px-4 py-2.5 bg-orange-100 text-orange-600 rounded-xl font-black text-[10px] uppercase btn-action flex items-center gap-2">
                         <i class="fa-solid fa-broom"></i> Clean 30d
                     </button>
                     <button onclick="deleteAllVisitors()" class="px-4 py-2.5 bg-red-100 text-red-600 rounded-xl font-black text-[10px] uppercase btn-danger flex items-center gap-2">
@@ -377,57 +384,33 @@
             </header>
 
             <!-- LIVE COUNTER CARD -->
-            <div class="live-counter glass-card p-6 md:p-10 rounded-[2.5rem] mb-6 text-center bg-gradient-to-r from-orange-600 via-orange-700 to-yellow-600 text-white border-0 shadow-xl">
+            <div class="live-counter glass-card p-6 md:p-10 rounded-[2.5rem] mb-6 text-center bg-gradient-to-r from-blue-600 via-blue-700 to-purple-700 text-white border-0 shadow-xl">
                 <div class="flex items-center justify-center gap-3 mb-2">
                     <span class="live-dot w-3 h-3 bg-green-400 rounded-full"></span>
                     <p class="text-[10px] font-black uppercase tracking-widest opacity-80">Now Online</p>
                 </div>
-                <h3 id="live-online-count" class="text-6xl md:text-7xl font-black animate-float">0</h3>
+                <h3 id="live-online-count" class="text-6xl md:text-7xl font-black">0</h3>
                 <p class="text-xs opacity-70 mt-2 font-medium">active visitors in real-time</p>
                 <p class="text-[8px] opacity-50 mt-1 uppercase tracking-widest">Last updated: <span id="last-updated">just now</span></p>
             </div>
 
             <!-- STATS OVERVIEW -->
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6" id="visitor-stats-container">
-                <div class="glass-card p-5 rounded-[2rem] shadow-sm stat-card hover:shadow-lg transition-shadow">
+                <div class="glass-card p-5 rounded-[2rem] shadow-sm stat-card">
                     <p class="text-[10px] font-black text-gray-400 uppercase mb-1"><i class="fa-solid fa-eye mr-1"></i> Total Visits</p>
                     <h3 class="text-2xl font-black" id="stat-total-visits">0</h3>
                 </div>
-                <div class="glass-card p-5 rounded-[2rem] shadow-sm stat-card hover:shadow-lg transition-shadow">
-                    <p class="text-[10px] font-black text-orange-400 uppercase mb-1"><i class="fa-solid fa-users mr-1"></i> Unique IPs</p>
+                <div class="glass-card p-5 rounded-[2rem] shadow-sm stat-card">
+                    <p class="text-[10px] font-black text-blue-400 uppercase mb-1"><i class="fa-solid fa-users mr-1"></i> Unique IPs</p>
                     <h3 class="text-2xl font-black" id="stat-unique-ips">0</h3>
                 </div>
-                <div class="glass-card p-5 rounded-[2rem] shadow-sm stat-card hover:shadow-lg transition-shadow">
-                    <p class="text-[10px] font-black text-yellow-500 uppercase mb-1"><i class="fa-solid fa-clock mr-1"></i> Sessions</p>
+                <div class="glass-card p-5 rounded-[2rem] shadow-sm stat-card">
+                    <p class="text-[10px] font-black text-purple-400 uppercase mb-1"><i class="fa-solid fa-clock mr-1"></i> Sessions</p>
                     <h3 class="text-2xl font-black" id="stat-sessions">0</h3>
                 </div>
-                <div class="glass-card p-5 rounded-[2rem] shadow-sm stat-card hover:shadow-lg transition-shadow">
+                <div class="glass-card p-5 rounded-[2rem] shadow-sm stat-card">
                     <p class="text-[10px] font-black text-green-400 uppercase mb-1"><i class="fa-solid fa-user-plus mr-1"></i> First Time</p>
                     <h3 class="text-2xl font-black" id="stat-first-time">0</h3>
-                </div>
-            </div>
-
-            <!-- COUNTRY ANALYTICS SECTION -->
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-                <!-- Country Breakdown -->
-                <div class="glass-card p-6 md:p-8 rounded-[2.5rem] shadow-sm">
-                    <h4 class="text-sm font-black uppercase mb-6 text-gray-400 flex items-center gap-2">
-                        <i class="fa-solid fa-globe-americas text-orange-500"></i> Top Countries
-                    </h4>
-                    <div id="country-breakdown" class="space-y-3 max-h-[400px] overflow-y-auto custom-scroll">
-                        <div class="text-center py-8 text-xs text-gray-400">Loading country data...</div>
-                    </div>
-                    <canvas id="countryChart" class="mt-4" height="200"></canvas>
-                </div>
-
-                <!-- City/Region Breakdown -->
-                <div class="glass-card p-6 md:p-8 rounded-[2.5rem] shadow-sm">
-                    <h4 class="text-sm font-black uppercase mb-6 text-gray-400 flex items-center gap-2">
-                        <i class="fa-solid fa-city text-yellow-600"></i> Top Cities
-                    </h4>
-                    <div id="city-breakdown" class="space-y-3 max-h-[400px] overflow-y-auto custom-scroll">
-                        <div class="text-center py-8 text-xs text-gray-400">Loading city data...</div>
-                    </div>
                 </div>
             </div>
 
@@ -436,7 +419,7 @@
                 <!-- Device Breakdown -->
                 <div class="glass-card p-6 md:p-8 rounded-[2.5rem] shadow-sm">
                     <h4 class="text-sm font-black uppercase mb-6 text-gray-400 flex items-center gap-2">
-                        <i class="fa-solid fa-mobile-screen text-orange-500"></i> Device Breakdown
+                        <i class="fa-solid fa-mobile-screen text-blue-600"></i> Device Breakdown
                     </h4>
                     <div id="device-breakdown" class="space-y-4">
                         <div class="text-center py-8 text-xs text-gray-400">Loading device data...</div>
@@ -447,11 +430,57 @@
                 <!-- Top Pages -->
                 <div class="glass-card p-6 md:p-8 rounded-[2.5rem] shadow-sm">
                     <h4 class="text-sm font-black uppercase mb-6 text-gray-400 flex items-center gap-2">
-                        <i class="fa-solid fa-file-lines text-yellow-600"></i> Top Pages
+                        <i class="fa-solid fa-file-lines text-purple-600"></i> Top Pages
                     </h4>
                     <div id="top-pages" class="space-y-1">
                         <div class="text-center py-8 text-xs text-gray-400">Loading page data...</div>
                     </div>
+                </div>
+            </div>
+
+            <!-- COUNTRY & CITY ANALYTICS -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                <!-- Top Countries Chart -->
+                <div class="glass-card p-6 md:p-8 rounded-[2.5rem] shadow-sm">
+                    <h4 class="text-sm font-black uppercase mb-4 text-gray-400 flex items-center gap-2">
+                        <i class="fa-solid fa-globe-americas text-green-600"></i> Top Countries
+                    </h4>
+                    <div id="country-chart" style="height: 320px;"></div>
+                </div>
+
+                <!-- Top Cities Chart -->
+                <div class="glass-card p-6 md:p-8 rounded-[2.5rem] shadow-sm">
+                    <h4 class="text-sm font-black uppercase mb-4 text-gray-400 flex items-center gap-2">
+                        <i class="fa-solid fa-city text-orange-600"></i> Top Cities
+                    </h4>
+                    <div id="city-chart" style="height: 320px;"></div>
+                </div>
+            </div>
+
+            <!-- BOT DETECTION & CONSENT ANALYTICS -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+                <!-- Bot Detection -->
+                <div class="glass-card p-6 md:p-8 rounded-[2.5rem] shadow-sm">
+                    <h4 class="text-sm font-black uppercase mb-4 text-gray-400 flex items-center gap-2">
+                        <i class="fa-solid fa-robot text-red-600"></i> Bot Detection
+                    </h4>
+                    <div id="bot-chart" style="height: 240px;"></div>
+                </div>
+
+                <!-- Consent Rate -->
+                <div class="glass-card p-6 md:p-8 rounded-[2.5rem] shadow-sm">
+                    <h4 class="text-sm font-black uppercase mb-4 text-gray-400 flex items-center gap-2">
+                        <i class="fa-solid fa-cookie-bite text-yellow-600"></i> Cookie Consent
+                    </h4>
+                    <div id="consent-chart" style="height: 240px;"></div>
+                </div>
+
+                <!-- Connection Type -->
+                <div class="glass-card p-6 md:p-8 rounded-[2.5rem] shadow-sm">
+                    <h4 class="text-sm font-black uppercase mb-4 text-gray-400 flex items-center gap-2">
+                        <i class="fa-solid fa-wifi text-purple-600"></i> Connection Type
+                    </h4>
+                    <div id="connection-chart" style="height: 240px;"></div>
                 </div>
             </div>
 
@@ -460,108 +489,40 @@
                 <div class="flex justify-between items-center mb-4">
                     <h4 class="text-sm font-black uppercase text-gray-400 flex items-center gap-2">
                         <i class="fa-solid fa-list text-green-600"></i> Visitor Log
-                        <span id="visitor-count-badge" class="text-[10px] bg-gray-100 dark:bg-gray-800 px-2 py-0.5 rounded-full">0 records</span>
+                        <span id="visitor-count-badge" class="text-[10px] bg-gray-100 px-2 py-0.5 rounded-full">0 records</span>
                     </h4>
                     <div class="flex gap-2">
-                        <input type="text" id="visitor-search" placeholder="Search IP, country or page..." 
-                               class="px-4 py-2 bg-gray-50 dark:bg-gray-800 border dark:border-gray-700 rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-orange-500 w-40 md:w-56"
-                               onkeyup="filterVisitorTable()">
+                        <input type="text" id="visitor-search" placeholder="Search IP, country, city, device..." class="px-4 py-2 bg-gray-50 border rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-blue-500 w-40 md:w-56" onkeyup="filterVisitorTable()">
                     </div>
                 </div>
-                <div class="overflow-x-auto custom-scroll">
-                    <table class="w-full text-left table-responsive">
+                <div class="overflow-x-auto custom-scroll table-responsive">
+                    <table class="w-full text-left">
                         <thead>
-                            <tr class="text-[10px] font-black uppercase text-gray-400 border-b dark:border-gray-700">
-                                <th class="pb-3 min-w-[120px]">IP Address <i class="fa-solid fa-map-pin text-orange-500 ml-1"></i></th>
-                                <th class="pb-3 min-w-[100px]">Session ID</th>
-                                <th class="pb-3 min-w-[120px]">Country/City</th>
-                                <th class="pb-3 min-w-[140px]">Device & Browser</th>
-                                <th class="pb-3 min-w-[100px]">Page</th>
+                            <tr class="text-[10px] font-black uppercase text-gray-400 border-b">
+                                <th class="pb-3 min-w-[110px]">IP Address</th>
+                                <th class="pb-3 min-w-[90px]">Session</th>
+                                <th class="pb-3 min-w-[100px]">Location</th>
+                                <th class="pb-3 min-w-[90px]">Device</th>
+                                <th class="pb-3 min-w-[90px]">Browser</th>
+                                <th class="pb-3 min-w-[90px]">Page</th>
                                 <th class="pb-3 min-w-[80px]">Duration</th>
-                                <th class="pb-3 min-w-[100px]">Time</th>
-                                <th class="pb-3 text-right min-w-[80px]">Actions</th>
+                                <th class="pb-3 min-w-[90px]">Consent/Time</th>
+                                <th class="pb-3 min-w-[100px]">Fingerprint</th>
+                                <th class="pb-3 text-right min-w-[60px]">Action</th>
                             </tr>
                         </thead>
-                        <tbody id="visitor-table-body" class="text-xs font-bold text-slate-700 dark:text-gray-300">
-                            <tr><td colspan="8" class="py-8 text-center text-xs text-gray-400">Loading visitors...</td></tr>
+                        <tbody id="visitor-table-body" class="text-xs font-bold text-slate-700">
+                            <tr><td colspan="10" class="py-8 text-center text-xs text-gray-400">Loading visitors...</td></tr>
                         </tbody>
                     </table>
                 </div>
                 <!-- Pagination -->
-                <div class="flex justify-between items-center mt-4 pt-4 border-t dark:border-gray-700" id="pagination-container">
+                <div class="flex justify-between items-center mt-4 pt-4 border-t" id="pagination-container">
                     <p class="text-[10px] font-bold text-gray-400" id="pagination-info">Showing 0 of 0</p>
                     <div class="flex gap-2" id="pagination-buttons"></div>
                 </div>
             </div>
         </main>
-    </div>
-
-    <!-- LOCATION MAP MODAL -->
-    <div id="location-map-modal" class="hidden fixed inset-0 z-[600] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-        <div class="bg-white dark:bg-gray-900 rounded-[2.5rem] p-6 md:p-8 max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-xl font-black flex items-center gap-2 dark:text-white">
-                    <i class="fa-solid fa-map-pin text-orange-500"></i> 
-                    Visitor Location: <span id="map-ip-display" class="text-orange-600"></span>
-                </h3>
-                <button onclick="closeLocationMap()" class="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition">
-                    <i class="fa-solid fa-xmark text-2xl dark:text-white"></i>
-                </button>
-            </div>
-            
-            <!-- Map Container -->
-            <div id="leaflet-map" class="w-full h-[400px] rounded-2xl border-2 border-gray-200 dark:border-gray-700 mb-4"></div>
-            
-            <!-- Location Details -->
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-3" id="location-details-container">
-                <div class="bg-gray-50 dark:bg-gray-800 p-3 rounded-xl">
-                    <p class="text-[10px] font-bold text-gray-400 uppercase">Country</p>
-                    <p class="text-sm font-black dark:text-white" id="detail-country">-</p>
-                </div>
-                <div class="bg-gray-50 dark:bg-gray-800 p-3 rounded-xl">
-                    <p class="text-[10px] font-bold text-gray-400 uppercase">City</p>
-                    <p class="text-sm font-black dark:text-white" id="detail-city">-</p>
-                </div>
-                <div class="bg-gray-50 dark:bg-gray-800 p-3 rounded-xl">
-                    <p class="text-[10px] font-bold text-gray-400 uppercase">Region</p>
-                    <p class="text-sm font-black dark:text-white" id="detail-region">-</p>
-                </div>
-                <div class="bg-gray-50 dark:bg-gray-800 p-3 rounded-xl">
-                    <p class="text-[10px] font-bold text-gray-400 uppercase">Latitude</p>
-                    <p class="text-sm font-black dark:text-white" id="detail-lat">-</p>
-                </div>
-                <div class="bg-gray-50 dark:bg-gray-800 p-3 rounded-xl">
-                    <p class="text-[10px] font-bold text-gray-400 uppercase">Longitude</p>
-                    <p class="text-sm font-black dark:text-white" id="detail-lon">-</p>
-                </div>
-                <div class="bg-gray-50 dark:bg-gray-800 p-3 rounded-xl">
-                    <p class="text-[10px] font-bold text-gray-400 uppercase">ISP</p>
-                    <p class="text-sm font-black dark:text-white" id="detail-isp">-</p>
-                </div>
-                <div class="bg-gray-50 dark:bg-gray-800 p-3 rounded-xl">
-                    <p class="text-[10px] font-bold text-gray-400 uppercase">Timezone</p>
-                    <p class="text-sm font-black dark:text-white" id="detail-timezone">-</p>
-                </div>
-                <div class="bg-gray-50 dark:bg-gray-800 p-3 rounded-xl">
-                    <p class="text-[10px] font-bold text-gray-400 uppercase">Location Type</p>
-                    <p class="text-sm font-black dark:text-white" id="detail-location-type">-</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- DELETE CONFIRMATION MODAL -->
-    <div id="delete-modal" class="hidden fixed inset-0 z-[500] bg-black/40 backdrop-blur-sm flex items-center justify-center p-4">
-        <div class="bg-white dark:bg-gray-900 rounded-[2rem] p-6 md:p-8 max-w-md w-full shadow-2xl">
-            <h3 class="text-lg font-black uppercase mb-4 flex items-center gap-2 text-red-600">
-                <i class="fa-solid fa-triangle-exclamation"></i> Confirm Delete
-            </h3>
-            <p class="text-sm text-gray-600 dark:text-gray-300 mb-6" id="delete-modal-message">Are you sure you want to delete this visitor record?</p>
-            <div class="flex gap-3">
-                <button onclick="closeDeleteModal()" class="flex-1 py-3 bg-gray-100 dark:bg-gray-800 dark:text-white rounded-xl font-black text-xs uppercase btn-action">Cancel</button>
-                <button id="delete-confirm-btn" class="flex-1 py-3 bg-red-500 text-white rounded-xl font-black text-xs uppercase btn-danger">Delete</button>
-            </div>
-        </div>
     </div>
 
     <!-- BOTTOM NAVIGATION (MOBILE) -->
@@ -573,7 +534,7 @@
             <a href="/analytics" class="flex flex-col items-center gap-1 p-2 text-[10px] font-black text-gray-400 no-underline">
                 <i class="fa-solid fa-chart-line text-lg"></i> Analytics
             </a>
-            <a href="/visitors" class="flex flex-col items-center gap-1 p-2 text-[10px] font-black text-orange-500 no-underline">
+            <a href="/visitors" class="flex flex-col items-center gap-1 p-2 text-[10px] font-black text-blue-600 no-underline">
                 <i class="fa-solid fa-users-viewfinder text-lg"></i> Visitors
             </a>
             <a href="/orders" class="flex flex-col items-center gap-1 p-2 text-[10px] font-black text-gray-400 no-underline">
@@ -585,12 +546,42 @@
         </div>
     </nav>
 
+    <!-- DELETE CONFIRMATION MODAL -->
+    <div id="delete-modal" class="hidden fixed inset-0 z-[500] bg-black/40 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-[2rem] p-6 md:p-8 max-w-md w-full shadow-2xl">
+            <h3 class="text-lg font-black uppercase mb-4 flex items-center gap-2 text-red-600">
+                <i class="fa-solid fa-triangle-exclamation"></i> Confirm Delete
+            </h3>
+            <p class="text-sm text-gray-600 mb-6" id="delete-modal-message">Are you sure you want to delete this visitor record?</p>
+            <div class="flex gap-3">
+                <button onclick="closeDeleteModal()" class="flex-1 py-3 bg-gray-100 rounded-xl font-black text-xs uppercase btn-action">Cancel</button>
+                <button id="delete-confirm-btn" class="flex-1 py-3 bg-red-500 text-white rounded-xl font-black text-xs uppercase btn-danger">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- LOCATION MAP MODAL -->
+    <div id="map-modal" class="hidden fixed inset-0 z-[600] bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-gray-900 rounded-[2.5rem] p-6 w-full max-w-2xl shadow-2xl">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-black uppercase flex items-center gap-2">
+                    <i class="fa-solid fa-map-pin text-red-500"></i>
+                    <span id="map-ip-display">IP Location</span>
+                </h3>
+                <button onclick="closeMapModal()" class="p-2 bg-gray-100 dark:bg-gray-800 rounded-full btn-action">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div id="location-details" class="mb-4 grid grid-cols-2 gap-3 text-xs"></div>
+            <div id="visitor-map" class="rounded-2xl overflow-hidden" style="height: 350px;"></div>
+        </div>
+    </div>
+
     <script>
         // ==================== CONFIGURATION ====================
         const SUPABASE_URL = "https://vdqbjwzixppbtkbgvhlq.supabase.co";
         const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZkcWJqd3ppeHBwYnRrYmd2aGxxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgwMDc3MzQsImV4cCI6MjA5MzU4MzczNH0.E6C0_7SWIrTMJlFe5t8EbNAW5fzlpg-fKV3ZV0XYd3k";
         const ADMIN_EMAIL = "binzeo369@gmail.com";
-        const LOGO_URL = "https://ozuwazkqyrxiwwfjceth.supabase.co/storage/v1/object/public/images/Beige%20Black%20Minimal%20Simple%20Modern%20Handwritten%20Graffiti%20Typographic%20Arts%20and_20251212_154142_0000.png";
         const HOME_URL = "/home";
         const LOGIN_URL = "/login";
 
@@ -601,18 +592,22 @@
         let filteredVisitors = [];
         let currentPage = 1;
         const itemsPerPage = 25;
-        let currentTheme = 'light';
+        let isDarkMode = false;
         let deleteTargetId = null;
         let deviceChartInstance = null;
         let countryChartInstance = null;
-        let leafletMap = null;
-        let locationMarker = null;
+        let cityChartInstance = null;
+        let botChartInstance = null;
+        let consentChartInstance = null;
+        let connectionChartInstance = null;
+        let visitorMap = null;
+        let mapMarker = null;
 
         // ==================== UTILITY FUNCTIONS ====================
         function showToast(message, type = 'success') {
             const toast = document.createElement('div');
             toast.className = `fixed bottom-20 md:bottom-6 right-4 md:right-6 px-5 py-3.5 rounded-2xl font-black text-sm text-white shadow-2xl z-[9999] toast-enter ${
-                type === 'success' ? 'bg-green-500' : type === 'error' ? 'bg-red-500' : 'bg-orange-500'
+                type === 'success' ? 'bg-green-500' : type === 'error' ? 'bg-red-500' : 'bg-blue-500'
             }`;
             toast.innerHTML = `<span class="flex items-center gap-2"><i class="fa-solid fa-${
                 type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'
@@ -628,7 +623,7 @@
             const now = new Date();
             const date = new Date(dateString);
             const seconds = Math.floor((now - date) / 1000);
-            
+
             if (seconds < 60) return 'Just now';
             if (seconds < 3600) return Math.floor(seconds / 60) + 'm ago';
             if (seconds < 86400) return Math.floor(seconds / 3600) + 'h ago';
@@ -638,42 +633,11 @@
 
         function formatDate(dateString) {
             return new Date(dateString).toLocaleString('en-US', {
-                day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit'
+                day: 'numeric',
+                month: 'short',
+                hour: '2-digit',
+                minute: '2-digit'
             });
-        }
-
-        // ==================== THEME MANAGEMENT ====================
-        function toggleTheme() {
-            const themes = ['light', 'dark', 'deep-dark'];
-            const currentIndex = themes.indexOf(currentTheme);
-            const nextIndex = (currentIndex + 1) % themes.length;
-            currentTheme = themes[nextIndex];
-            
-            // Remove all theme classes
-            document.body.classList.remove('dark', 'deep-dark');
-            
-            // Apply new theme
-            if (currentTheme === 'dark') {
-                document.body.classList.add('dark');
-            } else if (currentTheme === 'deep-dark') {
-                document.body.classList.add('deep-dark');
-            }
-            
-            localStorage.setItem('theme', currentTheme);
-            
-            const themeIcons = { light: '☀️ Light', dark: '🌙 Dark', 'deep-dark': '🌑 Deep Dark' };
-            showToast(`Theme: ${themeIcons[currentTheme]}`, 'info');
-        }
-
-        function initializeTheme() {
-            const savedTheme = localStorage.getItem('theme') || 'light';
-            currentTheme = savedTheme;
-            
-            if (savedTheme === 'dark') {
-                document.body.classList.add('dark');
-            } else if (savedTheme === 'deep-dark') {
-                document.body.classList.add('deep-dark');
-            }
         }
 
         // ==================== LOAD VISITORS ====================
@@ -685,33 +649,13 @@
                     .order('created_at', { ascending: false });
 
                 if (error) throw error;
-                
+
                 allVisitors = data || [];
-                
-                // Parse location info and add country/city fields
-                allVisitors = allVisitors.map(v => {
-                    try {
-                        const loc = typeof v.location_info === 'string' ? JSON.parse(v.location_info) : v.location_info;
-                        return {
-                            ...v,
-                            country: loc?.country || 'Unknown',
-                            city: loc?.city || '',
-                            region: loc?.region || '',
-                            latitude: loc?.latitude || null,
-                            longitude: loc?.longitude || null,
-                            isp: loc?.isp || '',
-                            timezone: loc?.timezone || ''
-                        };
-                    } catch (e) {
-                        return { ...v, country: 'Unknown', city: '', region: '' };
-                    }
-                });
-                
                 filteredVisitors = [...allVisitors];
-                
+
                 renderAllVisitorData();
                 document.getElementById('last-updated').textContent = 'just now';
-                
+
             } catch (error) {
                 console.error('Error loading visitors:', error);
                 showToast('Failed to load visitor data', 'error');
@@ -726,11 +670,15 @@
         // ==================== RENDER ALL DATA ====================
         function renderAllVisitorData() {
             renderStats();
-            renderCountryAnalytics();
             renderDeviceBreakdown();
             renderTopPages();
             renderVisitorTable();
             updateLiveCount();
+            renderCountryChart();
+            renderCityChart();
+            renderBotChart();
+            renderConsentChart();
+            renderConnectionChart();
         }
 
         // ==================== LIVE COUNT ====================
@@ -738,7 +686,7 @@
             const fifteenMinutesAgo = new Date(Date.now() - 15 * 60 * 1000);
             const onlineVisitors = allVisitors.filter(v => new Date(v.created_at) >= fifteenMinutesAgo);
             const uniqueOnlineIPs = new Set(onlineVisitors.map(v => v.ip_address)).size;
-            
+
             document.getElementById('live-online-count').textContent = Math.min(uniqueOnlineIPs, 999);
         }
 
@@ -756,123 +704,11 @@
             document.getElementById('visitor-count-badge').textContent = `${totalVisits} records`;
         }
 
-        // ==================== COUNTRY ANALYTICS ====================
-        function renderCountryAnalytics() {
-            const countries = {};
-            const cities = {};
-            
-            allVisitors.forEach(v => {
-                const country = v.country || 'Unknown';
-                const city = v.city || 'Unknown';
-                
-                countries[country] = (countries[country] || 0) + 1;
-                
-                if (city !== 'Unknown') {
-                    const cityKey = `${city}, ${country}`;
-                    cities[cityKey] = (cities[cityKey] || 0) + 1;
-                }
-            });
-            
-            // Sort countries
-            const sortedCountries = Object.entries(countries)
-                .sort((a, b) => b[1] - a[1])
-                .slice(0, 10);
-            
-            const maxCountry = sortedCountries[0]?.[1] || 1;
-            
-            // Country flags mapping (emoji)
-            const countryFlags = {
-                'Bangladesh': '🇧🇩', 'United States': '🇺🇸', 'India': '🇮🇳',
-                'United Kingdom': '🇬🇧', 'Germany': '🇩🇪', 'France': '🇫🇷',
-                'Canada': '🇨🇦', 'Australia': '🇦🇺', 'Japan': '🇯🇵',
-                'Brazil': '🇧🇷', 'China': '🇨🇳', 'Russia': '🇷🇺',
-                'South Korea': '🇰🇷', 'Italy': '🇮🇹', 'Spain': '🇪🇸',
-                'Netherlands': '🇳🇱', 'Sweden': '🇸🇪', 'Norway': '🇳🇴',
-                'Denmark': '🇩🇰', 'Finland': '🇫🇮', 'Singapore': '🇸🇬',
-                'Malaysia': '🇲🇾', 'Indonesia': '🇮🇩', 'Thailand': '🇹🇭',
-                'Vietnam': '🇻🇳', 'Philippines': '🇵🇭', 'Pakistan': '🇵🇰',
-                'Unknown': '🌍'
-            };
-            
-            // Render country breakdown
-            document.getElementById('country-breakdown').innerHTML = sortedCountries.length > 0
-                ? sortedCountries.map(([country, count], index) => `
-                    <div class="flex items-center gap-3 py-2.5 border-b last:border-0 dark:border-gray-700">
-                        <span class="text-xl">${countryFlags[country] || '🏳️'}</span>
-                        <div class="flex-grow">
-                            <div class="flex justify-between items-center mb-1">
-                                <span class="text-xs font-bold dark:text-white">${country}</span>
-                                <span class="text-[10px] font-black text-gray-500 dark:text-gray-400">${count} (${Math.round(count / allVisitors.length * 100)}%)</span>
-                            </div>
-                            <div class="w-full bg-gray-100 dark:bg-gray-700 rounded-full h-2">
-                                <div class="h-2 rounded-full progress-bar" style="width:${(count / maxCountry) * 100}%; background: linear-gradient(90deg, #ff6b35, #ffc107);"></div>
-                            </div>
-                        </div>
-                        <span class="text-[10px] font-black text-gray-400">#${index + 1}</span>
-                    </div>
-                `).join('')
-                : '<p class="text-xs text-gray-400 text-center py-8">No country data available</p>';
-            
-            // Render city breakdown
-            const sortedCities = Object.entries(cities)
-                .sort((a, b) => b[1] - a[1])
-                .slice(0, 10);
-            
-            document.getElementById('city-breakdown').innerHTML = sortedCities.length > 0
-                ? sortedCities.map(([city, count], index) => `
-                    <div class="flex items-center gap-3 py-2.5 border-b last:border-0 dark:border-gray-700">
-                        <i class="fa-solid fa-city text-orange-500"></i>
-                        <div class="flex-grow">
-                            <div class="flex justify-between items-center">
-                                <span class="text-xs font-bold dark:text-white">${city}</span>
-                                <span class="text-[10px] font-black text-gray-500 dark:text-gray-400">${count} visits</span>
-                            </div>
-                        </div>
-                        <span class="text-[10px] font-black text-gray-400">#${index + 1}</span>
-                    </div>
-                `).join('')
-                : '<p class="text-xs text-gray-400 text-center py-8">No city data available</p>';
-            
-            // Country chart
-            const ctx = document.getElementById('countryChart').getContext('2d');
-            if (countryChartInstance) countryChartInstance.destroy();
-            
-            if (sortedCountries.length > 0) {
-                countryChartInstance = new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: sortedCountries.map(([country]) => country),
-                        datasets: [{
-                            label: 'Visitors',
-                            data: sortedCountries.map(([, count]) => count),
-                            backgroundColor: ['#ff6b35', '#ffc107', '#ff9800', '#ff5722', '#ffeb3b', 
-                                              '#ff7043', '#ffa726', '#ff8f00', '#ffd54f', '#ffab40'],
-                            borderWidth: 0,
-                            borderRadius: 8
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: true,
-                        indexAxis: 'y',
-                        plugins: {
-                            legend: { display: false }
-                        },
-                        scales: {
-                            x: {
-                                grid: { display: false }
-                            }
-                        }
-                    }
-                });
-            }
-        }
-
         // ==================== DEVICE BREAKDOWN ====================
         function renderDeviceBreakdown() {
             const devices = {};
             allVisitors.forEach(v => {
-                const info = v.device_info || 'Unknown';
+                const info = v.device_info || v.device_type || 'Unknown';
                 let deviceType = 'Desktop';
                 if (info.includes('Mobile') || info.includes('iPhone') || info.includes('Android')) {
                     deviceType = 'Mobile';
@@ -883,7 +719,7 @@
             });
 
             const total = allVisitors.length || 1;
-            const deviceColors = { Mobile: '#ff6b35', Desktop: '#ffc107', Tablet: '#34c759' };
+            const deviceColors = { Mobile: '#0071e3', Desktop: '#5856d6', Tablet: '#34c759' };
             const deviceIcons = { Mobile: 'fa-mobile-screen', Desktop: 'fa-desktop', Tablet: 'fa-tablet-screen-button' };
 
             document.getElementById('device-breakdown').innerHTML = Object.entries(devices)
@@ -891,19 +727,18 @@
                 .map(([name, count]) => `
                     <div>
                         <div class="flex justify-between items-center mb-2">
-                            <span class="text-[11px] font-bold flex items-center gap-2 dark:text-white">
+                            <span class="text-[11px] font-bold flex items-center gap-2">
                                 <i class="fa-solid ${deviceIcons[name] || 'fa-circle'}" style="color:${deviceColors[name] || '#94a3b8'}"></i>
                                 ${name}
                             </span>
-                            <span class="text-[10px] font-black text-gray-500 dark:text-gray-400">${count} (${Math.round(count / total * 100)}%)</span>
+                            <span class="text-[10px] font-black text-gray-500">${count} (${Math.round(count / total * 100)}%)</span>
                         </div>
-                        <div class="w-full bg-gray-100 dark:bg-gray-700 rounded-full h-2.5 overflow-hidden">
+                        <div class="w-full bg-gray-100 rounded-full h-2.5 overflow-hidden">
                             <div class="h-2.5 rounded-full progress-bar" style="width:${count / total * 100}%; background:${deviceColors[name] || '#94a3b8'}"></div>
                         </div>
                     </div>
                 `).join('');
 
-            // Device chart
             const ctx = document.getElementById('deviceChart').getContext('2d');
             if (deviceChartInstance) deviceChartInstance.destroy();
 
@@ -942,22 +777,250 @@
 
             const maxCount = sortedPages[0]?.[1] || 1;
 
-            document.getElementById('top-pages').innerHTML = sortedPages.length > 0
-                ? sortedPages.map(([page, count], index) => `
-                    <div class="flex items-center gap-3 py-2.5 border-b last:border-0 dark:border-gray-700">
+            document.getElementById('top-pages').innerHTML = sortedPages.length > 0 ?
+                sortedPages.map(([page, count], index) => `
+                    <div class="flex items-center gap-3 py-2.5 border-b last:border-0">
                         <span class="text-[10px] font-black text-gray-400 w-5">${index + 1}</span>
                         <div class="flex-grow">
                             <div class="flex justify-between items-center mb-1">
-                                <span class="text-xs font-bold truncate max-w-[200px] dark:text-white">${page}</span>
-                                <span class="text-[10px] font-black text-gray-500 dark:text-gray-400 ml-2">${count}</span>
+                                <span class="text-xs font-bold truncate max-w-[200px]">${page}</span>
+                                <span class="text-[10px] font-black text-gray-500 ml-2">${count}</span>
                             </div>
-                            <div class="w-full bg-gray-100 dark:bg-gray-700 rounded-full h-1.5">
-                                <div class="h-1.5 rounded-full progress-bar" style="width:${(count / maxCount) * 100}%; background: linear-gradient(90deg, #ff6b35, #ffc107);"></div>
+                            <div class="w-full bg-gray-100 rounded-full h-1.5">
+                                <div class="h-1.5 rounded-full bg-blue-500 progress-bar" style="width:${(count / maxCount) * 100}%"></div>
                             </div>
                         </div>
                     </div>
-                `).join('')
-                : '<p class="text-xs text-gray-400 text-center py-8">No page data available</p>';
+                `).join('') :
+                '<p class="text-xs text-gray-400 text-center py-8">No page data available</p>';
+        }
+
+        // ==================== COUNTRY CHART ====================
+        function renderCountryChart() {
+            const countries = {};
+            allVisitors.forEach(v => {
+                let loc = {};
+                try {
+                    loc = typeof v.location_info === 'string' ? JSON.parse(v.location_info) : v.location_info || {};
+                } catch (e) { loc = {}; }
+                const country = loc.country || loc.country_name || 'Unknown';
+                countries[country] = (countries[country] || 0) + 1;
+            });
+
+            const sorted = Object.entries(countries).sort((a, b) => b[1] - a[1]).slice(0, 10);
+
+            const options = {
+                chart: {
+                    type: 'bar',
+                    height: 320,
+                    toolbar: { show: false },
+                    animations: { enabled: true, easing: 'easeinout', speed: 800 },
+                    fontFamily: 'Inter, sans-serif'
+                },
+                series: [{ name: 'Visitors', data: sorted.map(s => s[1]) }],
+                xaxis: {
+                    categories: sorted.map(s => s[0]),
+                    labels: { style: { fontSize: '10px', fontWeight: 'bold' } }
+                },
+                colors: ['#0071e3'],
+                plotOptions: { bar: { borderRadius: 8, columnWidth: '60%', distributed: false } },
+                grid: { borderColor: '#f1f5f9' },
+                dataLabels: { enabled: false },
+                title: { text: undefined }
+            };
+
+            if (countryChartInstance) countryChartInstance.destroy();
+            countryChartInstance = new ApexCharts(document.getElementById('country-chart'), options);
+            countryChartInstance.render();
+        }
+
+        // ==================== CITY CHART ====================
+        function renderCityChart() {
+            const cities = {};
+            allVisitors.forEach(v => {
+                let loc = {};
+                try {
+                    loc = typeof v.location_info === 'string' ? JSON.parse(v.location_info) : v.location_info || {};
+                } catch (e) { loc = {}; }
+                const city = loc.city || 'Unknown';
+                if (city !== 'Unknown') {
+                    cities[city] = (cities[city] || 0) + 1;
+                }
+            });
+
+            const sorted = Object.entries(cities).sort((a, b) => b[1] - a[1]).slice(0, 8);
+
+            const options = {
+                chart: {
+                    type: 'treemap',
+                    height: 320,
+                    toolbar: { show: false },
+                    animations: { enabled: true, easing: 'easeinout', speed: 800 },
+                    fontFamily: 'Inter, sans-serif'
+                },
+                series: [{ data: sorted.map(s => ({ x: s[0], y: s[1] })) }],
+                colors: ['#0071e3', '#5856d6', '#34c759', '#ff9500', '#ff3b30', '#af52de', '#5ac8fa', '#ff2d55'],
+                dataLabels: { style: { fontSize: '11px', fontWeight: 'bold' } }
+            };
+
+            if (cityChartInstance) cityChartInstance.destroy();
+            cityChartInstance = new ApexCharts(document.getElementById('city-chart'), options);
+            cityChartInstance.render();
+        }
+
+        // ==================== BOT CHART ====================
+        function renderBotChart() {
+            const botCount = allVisitors.filter(v => v.is_bot).length;
+            const humanCount = allVisitors.length - botCount;
+
+            const options = {
+                chart: {
+                    type: 'donut',
+                    height: 240,
+                    animations: { enabled: true, easing: 'easeinout', speed: 800 },
+                    fontFamily: 'Inter, sans-serif'
+                },
+                series: [humanCount, botCount],
+                labels: ['Human', 'Bot'],
+                colors: ['#34c759', '#ff3b30'],
+                legend: { position: 'bottom', fontSize: '11px', fontWeight: 'bold' },
+                plotOptions: { pie: { donut: { size: '60%' } } },
+                dataLabels: { enabled: true, style: { fontSize: '12px', fontWeight: 'bold' } }
+            };
+
+            if (botChartInstance) botChartInstance.destroy();
+            botChartInstance = new ApexCharts(document.getElementById('bot-chart'), options);
+            botChartInstance.render();
+        }
+
+        // ==================== CONSENT CHART ====================
+        function renderConsentChart() {
+            const consented = allVisitors.filter(v => v.consent_given).length;
+            const notConsented = allVisitors.length - consented;
+
+            const options = {
+                chart: {
+                    type: 'pie',
+                    height: 240,
+                    animations: { enabled: true, easing: 'easeinout', speed: 800 },
+                    fontFamily: 'Inter, sans-serif'
+                },
+                series: [consented, notConsented],
+                labels: ['Consented', 'No Consent'],
+                colors: ['#ff9500', '#e5e7eb'],
+                legend: { position: 'bottom', fontSize: '11px', fontWeight: 'bold' },
+                dataLabels: { enabled: true, style: { fontSize: '12px', fontWeight: 'bold' } }
+            };
+
+            if (consentChartInstance) consentChartInstance.destroy();
+            consentChartInstance = new ApexCharts(document.getElementById('consent-chart'), options);
+            consentChartInstance.render();
+        }
+
+        // ==================== CONNECTION TYPE CHART ====================
+        function renderConnectionChart() {
+            const connections = {};
+            allVisitors.forEach(v => {
+                const conn = v.connection_type || 'Unknown';
+                connections[conn] = (connections[conn] || 0) + 1;
+            });
+
+            const sorted = Object.entries(connections).sort((a, b) => b[1] - a[1]);
+
+            const options = {
+                chart: {
+                    type: 'polarArea',
+                    height: 240,
+                    animations: { enabled: true, easing: 'easeinout', speed: 800 },
+                    fontFamily: 'Inter, sans-serif'
+                },
+                series: sorted.map(s => s[1]),
+                labels: sorted.map(s => s[0]),
+                colors: ['#0071e3', '#5856d6', '#34c759', '#ff9500'],
+                legend: { position: 'bottom', fontSize: '10px', fontWeight: 'bold' }
+            };
+
+            if (connectionChartInstance) connectionChartInstance.destroy();
+            connectionChartInstance = new ApexCharts(document.getElementById('connection-chart'), options);
+            connectionChartInstance.render();
+        }
+
+        // ==================== MAP FUNCTIONS ====================
+        function openMapModal(visitorData) {
+            const modal = document.getElementById('map-modal');
+            modal.classList.remove('hidden');
+
+            document.getElementById('map-ip-display').textContent = `📍 ${visitorData.ip_address || 'Unknown IP'}`;
+
+            let loc = {};
+            try {
+                loc = typeof visitorData.location_info === 'string' ?
+                    JSON.parse(visitorData.location_info) :
+                    visitorData.location_info || {};
+            } catch (e) { loc = {}; }
+
+            const lat = parseFloat(loc.latitude || loc.lat || 23.6850);
+            const lng = parseFloat(loc.longitude || loc.lon || loc.lng || 90.3563);
+
+            document.getElementById('location-details').innerHTML = `
+                <div class="bg-blue-50 dark:bg-blue-900/20 p-3 rounded-xl">
+                    <p class="text-[10px] text-gray-400 uppercase font-black">Country</p>
+                    <p class="font-black text-sm">${loc.country || loc.country_name || 'Unknown'}</p>
+                </div>
+                <div class="bg-green-50 dark:bg-green-900/20 p-3 rounded-xl">
+                    <p class="text-[10px] text-gray-400 uppercase font-black">City</p>
+                    <p class="font-black text-sm">${loc.city || 'Unknown'}</p>
+                </div>
+                <div class="bg-purple-50 dark:bg-purple-900/20 p-3 rounded-xl">
+                    <p class="text-[10px] text-gray-400 uppercase font-black">Region</p>
+                    <p class="font-black text-sm">${loc.region || 'Unknown'}</p>
+                </div>
+                <div class="bg-orange-50 dark:bg-orange-900/20 p-3 rounded-xl">
+                    <p class="text-[10px] text-gray-400 uppercase font-black">Coordinates</p>
+                    <p class="font-black text-sm">${lat.toFixed(4)}, ${lng.toFixed(4)}</p>
+                </div>
+                <div class="bg-pink-50 dark:bg-pink-900/20 p-3 rounded-xl col-span-2">
+                    <p class="text-[10px] text-gray-400 uppercase font-black">Location Type / ISP</p>
+                    <p class="font-black text-sm">${visitorData.location_type || 'N/A'} | ${visitorData.isp_info || 'N/A'}</p>
+                </div>
+            `;
+
+            setTimeout(() => {
+                if (visitorMap) {
+                    visitorMap.remove();
+                    visitorMap = null;
+                }
+
+                visitorMap = L.map('visitor-map').setView([lat, lng], 13);
+
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '© OpenStreetMap contributors',
+                    maxZoom: 19
+                }).addTo(visitorMap);
+
+                mapMarker = L.marker([lat, lng])
+                    .addTo(visitorMap)
+                    .bindPopup(
+                        `<b>${loc.city || 'Visitor'}</b><br>${loc.country || ''}<br><small>${visitorData.ip_address}</small>`)
+                    .openPopup();
+
+                if (visitorData.location_accuracy) {
+                    L.circle([lat, lng], {
+                        radius: visitorData.location_accuracy * 1000,
+                        color: '#0071e3',
+                        fillColor: '#0071e3',
+                        fillOpacity: 0.1
+                    }).addTo(visitorMap);
+                }
+            }, 300);
+        }
+
+        function closeMapModal() {
+            document.getElementById('map-modal').classList.add('hidden');
+            if (visitorMap) {
+                visitorMap.remove();
+                visitorMap = null;
+            }
         }
 
         // ==================== VISITOR TABLE ====================
@@ -967,87 +1030,85 @@
             const pageVisitors = filteredVisitors.slice(start, end);
 
             if (pageVisitors.length === 0) {
-                document.getElementById('visitor-table-body').innerHTML = 
-                    '<tr><td colspan="8" class="py-8 text-center text-xs text-gray-400 dark:text-gray-500">No visitors found</td></tr>';
+                document.getElementById('visitor-table-body').innerHTML =
+                    '<tr><td colspan="10" class="py-8 text-center text-xs text-gray-400">No visitors found</td></tr>';
             } else {
                 document.getElementById('visitor-table-body').innerHTML = pageVisitors.map(v => {
-                    const isNew = v.is_unique_visit;
-                    const isBot = v.is_bot || v.bot_score > 0.7;
-                    const sessionShort = v.session_id ? v.session_id.substring(0, 8) + '...' : 'N/A';
-                    
-                    let deviceInfo = v.device_info || 'Unknown';
-                    if (deviceInfo.length > 40) deviceInfo = deviceInfo.substring(0, 37) + '...';
+                    let loc = {};
+                    try {
+                        loc = typeof v.location_info === 'string' ? JSON.parse(v.location_info) : v
+                            .location_info || {};
+                    } catch (e) { loc = {}; }
 
-                    // Prepare location info for map
-                    const locationData = encodeURIComponent(JSON.stringify({
-                        country: v.country,
-                        city: v.city,
-                        region: v.region,
-                        latitude: v.latitude,
-                        longitude: v.longitude,
-                        isp: v.isp,
-                        timezone: v.timezone
-                    }));
+                    const country = loc.country || loc.country_name || '?';
+                    const city = loc.city || '?';
+                    const isBot = v.is_bot;
+                    const hasConsent = v.consent_given;
+                    const fingerprint = v.visit_fingerprint ? v.visit_fingerprint.substring(0, 12) + '...' :
+                        'N/A';
+                    const visitorJson = JSON.stringify(v).replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 
                     return `
-                        <tr class="border-b border-gray-50 dark:border-gray-700 visitor-row hover:bg-orange-50 dark:hover:bg-gray-800">
-                            <td class="py-3 cursor-pointer" onclick="openLocationMap('${v.ip_address}', '${locationData}', ${v.id})">
-                                <div class="font-black text-xs text-orange-600 hover:text-orange-700 transition flex items-center gap-1">
+                        <tr class="border-b border-gray-50 dark:border-gray-800 visitor-row ${isBot ? 'bg-red-50/50 dark:bg-red-900/20' : ''}">
+                            <td class="py-3">
+                                <button onclick="openMapModalFromString('${visitorJson}')" 
+                                        class="font-black text-xs text-blue-600 hover:underline cursor-pointer flex items-center gap-1">
                                     <i class="fa-solid fa-map-pin text-[10px]"></i> ${v.ip_address || '?'}
-                                </div>
-                                ${isNew ? '<span class="text-[8px] bg-green-100 text-green-600 px-1.5 py-0.5 rounded-full font-black">NEW</span>' : ''}
+                                </button>
+                                ${v.is_unique_visit ? '<span class="text-[8px] bg-green-100 text-green-600 px-1.5 py-0.5 rounded-full font-black ml-1">NEW</span>' : ''}
                                 ${isBot ? '<span class="text-[8px] bg-red-100 text-red-600 px-1.5 py-0.5 rounded-full font-black ml-1">BOT</span>' : ''}
                             </td>
                             <td class="py-3">
-                                <span class="text-[10px] text-gray-500 dark:text-gray-400 font-mono" title="${v.session_id || ''}">${sessionShort}</span>
+                                <span class="text-[10px] text-gray-500 font-mono" title="${v.session_id || ''}">${(v.session_id || '').substring(0, 8)}...</span>
                             </td>
                             <td class="py-3">
-                                <div class="flex flex-col gap-1">
-                                    <span class="text-xs font-bold dark:text-white">${v.country || 'Unknown'}</span>
-                                    ${v.city ? `<span class="text-[9px] text-gray-400 dark:text-gray-500">${v.city}</span>` : ''}
+                                <div class="flex items-center gap-1">
+                                    <span class="text-xs font-bold">${country}</span>
+                                    <span class="text-[9px] text-gray-400">${city}</span>
                                 </div>
                             </td>
                             <td class="py-3">
-                                <span class="text-[10px] text-gray-500 dark:text-gray-400 block truncate max-w-[130px]" title="${v.device_info || ''}">${deviceInfo}</span>
+                                <span class="text-[10px] block truncate max-w-[100px]" title="${v.device_type || v.device_info || ''}">${v.device_type || v.device_info || '?'}</span>
                             </td>
                             <td class="py-3">
-                                <span class="page-badge bg-orange-50 text-orange-600 dark:bg-orange-900 dark:text-orange-300">${v.page_visited || 'Home'}</span>
+                                <span class="text-[10px] block text-gray-400 truncate max-w-[100px]" title="${v.browser_info || ''}">${v.browser_info || '?'}</span>
                             </td>
                             <td class="py-3">
-                                <span class="text-[10px] font-bold dark:text-white">${v.visit_duration || 0}s</span>
+                                <span class="page-badge bg-blue-50 text-blue-600">${v.page_visited || 'Home'}</span>
                             </td>
                             <td class="py-3">
-                                <span class="text-[10px] text-gray-400 dark:text-gray-500" title="${v.created_at}">${timeAgo(v.created_at)}</span>
+                                <span class="text-[10px] font-bold">${v.visit_duration || 0}s</span>
+                                ${v.visit_count > 1 ? `<span class="text-[8px] text-purple-500 ml-1">x${v.visit_count}</span>` : ''}
+                            </td>
+                            <td class="py-3">
+                                <div class="flex items-center gap-1">
+                                    ${hasConsent ? '<i class="fa-solid fa-shield-check text-green-500 text-[10px]" title="Cookie Consent"></i>' : '<i class="fa-solid fa-shield-xmark text-gray-400 text-[10px]" title="No Consent"></i>'}
+                                    <span class="text-[10px] text-gray-400" title="${v.created_at}">${timeAgo(v.created_at)}</span>
+                                </div>
+                            </td>
+                            <td class="py-3">
+                                <span class="text-[9px] text-gray-400 font-mono" title="${v.visit_fingerprint || ''}">${fingerprint}</span>
                             </td>
                             <td class="py-3 text-right">
-                                <div class="flex gap-1 justify-end">
-                                    <button onclick="event.stopPropagation(); openLocationMap('${v.ip_address}', '${locationData}', ${v.id})" 
-                                            class="p-2 bg-orange-50 dark:bg-orange-900 text-orange-500 rounded-lg text-[10px] btn-action hover:bg-orange-100 dark:hover:bg-orange-800"
-                                            title="View on Map">
-                                        <i class="fa-solid fa-map-pin"></i>
-                                    </button>
-                                    <button onclick="event.stopPropagation(); openDeleteModal(${v.id})" 
-                                            class="p-2 bg-red-50 dark:bg-red-900 text-red-500 rounded-lg text-[10px] btn-action hover:bg-red-100 dark:hover:bg-red-800"
-                                            title="Delete this record">
-                                        <i class="fa-solid fa-trash"></i>
-                                    </button>
-                                </div>
+                                <button onclick="openDeleteModal(${v.id})" 
+                                        class="p-2 bg-red-50 text-red-500 rounded-lg text-[10px] btn-action hover:bg-red-100">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
                             </td>
                         </tr>
                     `;
                 }).join('');
             }
 
-            // Pagination
             const totalPages = Math.ceil(filteredVisitors.length / itemsPerPage);
-            document.getElementById('pagination-info').textContent = 
+            document.getElementById('pagination-info').textContent =
                 `Showing ${start + 1}-${Math.min(end, filteredVisitors.length)} of ${filteredVisitors.length}`;
 
             let paginationHTML = '';
             if (totalPages > 1) {
                 paginationHTML += `
                     <button onclick="goToPage(${currentPage - 1})" 
-                            class="px-3 py-1.5 bg-gray-100 dark:bg-gray-800 dark:text-white rounded-lg text-[10px] font-black btn-action ${currentPage === 1 ? 'opacity-50 cursor-not-allowed' : ''}"
+                            class="px-3 py-1.5 bg-gray-100 rounded-lg text-[10px] font-black btn-action ${currentPage === 1 ? 'opacity-50 cursor-not-allowed' : ''}"
                             ${currentPage === 1 ? 'disabled' : ''}>
                         <i class="fa-solid fa-chevron-left"></i>
                     </button>`;
@@ -1056,22 +1117,31 @@
                     if (i === 1 || i === totalPages || (i >= currentPage - 2 && i <= currentPage + 2)) {
                         paginationHTML += `
                             <button onclick="goToPage(${i})" 
-                                    class="px-3 py-1.5 rounded-lg text-[10px] font-black btn-action ${i === currentPage ? 'bg-orange-500 text-white' : 'bg-gray-100 dark:bg-gray-800 dark:text-white'}">
+                                    class="px-3 py-1.5 rounded-lg text-[10px] font-black btn-action ${i === currentPage ? 'bg-blue-600 text-white' : 'bg-gray-100'}">
                                 ${i}
                             </button>`;
                     } else if (i === currentPage - 3 || i === currentPage + 3) {
-                        paginationHTML += '<span class="px-2 text-gray-400 dark:text-gray-500">...</span>';
+                        paginationHTML += '<span class="px-2 text-gray-400">...</span>';
                     }
                 }
 
                 paginationHTML += `
                     <button onclick="goToPage(${currentPage + 1})" 
-                            class="px-3 py-1.5 bg-gray-100 dark:bg-gray-800 dark:text-white rounded-lg text-[10px] font-black btn-action ${currentPage === totalPages ? 'opacity-50 cursor-not-allowed' : ''}"
+                            class="px-3 py-1.5 bg-gray-100 rounded-lg text-[10px] font-black btn-action ${currentPage === totalPages ? 'opacity-50 cursor-not-allowed' : ''}"
                             ${currentPage === totalPages ? 'disabled' : ''}>
                         <i class="fa-solid fa-chevron-right"></i>
                     </button>`;
             }
             document.getElementById('pagination-buttons').innerHTML = paginationHTML;
+        }
+
+        function openMapModalFromString(visitorJsonString) {
+            try {
+                const visitorData = JSON.parse(visitorJsonString.replace(/&quot;/g, '"').replace(/&#39;/g, "'"));
+                openMapModal(visitorData);
+            } catch (e) {
+                showToast('Error loading map data', 'error');
+            }
         }
 
         function goToPage(page) {
@@ -1084,14 +1154,26 @@
         function filterVisitorTable() {
             const query = document.getElementById('visitor-search').value.toLowerCase();
             if (query) {
-                filteredVisitors = allVisitors.filter(v => 
-                    (v.ip_address || '').toLowerCase().includes(query) ||
-                    (v.page_visited || '').toLowerCase().includes(query) ||
-                    (v.device_info || '').toLowerCase().includes(query) ||
-                    (v.session_id || '').toLowerCase().includes(query) ||
-                    (v.country || '').toLowerCase().includes(query) ||
-                    (v.city || '').toLowerCase().includes(query)
-                );
+                filteredVisitors = allVisitors.filter(v => {
+                    let loc = {};
+                    try {
+                        loc = typeof v.location_info === 'string' ? JSON.parse(v.location_info) : v
+                            .location_info || {};
+                    } catch (e) { loc = {}; }
+
+                    return (v.ip_address || '').toLowerCase().includes(query) ||
+                        (v.page_visited || '').toLowerCase().includes(query) ||
+                        (v.device_info || '').toLowerCase().includes(query) ||
+                        (v.device_type || '').toLowerCase().includes(query) ||
+                        (v.browser_info || '').toLowerCase().includes(query) ||
+                        (v.connection_type || '').toLowerCase().includes(query) ||
+                        (v.isp_info || '').toLowerCase().includes(query) ||
+                        (loc.country || '').toLowerCase().includes(query) ||
+                        (loc.city || '').toLowerCase().includes(query) ||
+                        (loc.region || '').toLowerCase().includes(query) ||
+                        (v.session_id || '').toLowerCase().includes(query) ||
+                        (v.visit_fingerprint || '').toLowerCase().includes(query);
+                });
             } else {
                 filteredVisitors = [...allVisitors];
             }
@@ -1099,158 +1181,13 @@
             renderVisitorTable();
         }
 
-        // ==================== LOCATION MAP FUNCTIONS ====================
-        async function openLocationMap(ipAddress, locationInfoEncoded, visitorId) {
-            try {
-                const locationInfo = JSON.parse(decodeURIComponent(locationInfoEncoded));
-                
-                // Display IP
-                document.getElementById('map-ip-display').textContent = ipAddress;
-                
-                // Show modal
-                const modal = document.getElementById('location-map-modal');
-                modal.classList.remove('hidden');
-                
-                // Update location details
-                document.getElementById('detail-country').textContent = locationInfo.country || 'Unknown';
-                document.getElementById('detail-city').textContent = locationInfo.city || 'Unknown';
-                document.getElementById('detail-region').textContent = locationInfo.region || 'Unknown';
-                document.getElementById('detail-lat').textContent = locationInfo.latitude || 'N/A';
-                document.getElementById('detail-lon').textContent = locationInfo.longitude || 'N/A';
-                document.getElementById('detail-isp').textContent = locationInfo.isp || 'N/A';
-                document.getElementById('detail-timezone').textContent = locationInfo.timezone || 'N/A';
-                document.getElementById('detail-location-type').textContent = locationInfo.location_type || 'N/A';
-                
-                // Initialize map if not already
-                setTimeout(() => {
-                    initLeafletMap(locationInfo, ipAddress);
-                }, 100);
-                
-                // Fetch additional location data if coordinates are missing
-                if (!locationInfo.latitude && !locationInfo.longitude) {
-                    await fetchLocationFromIP(ipAddress);
-                }
-                
-            } catch (error) {
-                console.error('Error opening location map:', error);
-                showToast('Failed to load location data', 'error');
-            }
-        }
-
-        function initLeafletMap(locationInfo, ipAddress) {
-            // Destroy existing map instance
-            if (leafletMap) {
-                leafletMap.remove();
-                leafletMap = null;
-            }
-            
-            const lat = parseFloat(locationInfo.latitude) || 23.6850; // Default: Bangladesh
-            const lon = parseFloat(locationInfo.longitude) || 90.3563;
-            
-            // Initialize map
-            leafletMap = L.map('leaflet-map').setView([lat, lon], 13);
-            
-            // Add tile layer (OpenStreetMap - Free)
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-                maxZoom: 19
-            }).addTo(leafletMap);
-            
-            // Add marker
-            if (locationMarker) {
-                leafletMap.removeLayer(locationMarker);
-            }
-            
-            const popupContent = `
-                <div style="font-family: 'Inter', sans-serif; padding: 5px;">
-                    <b style="color: #ff6b35;">IP:</b> ${ipAddress}<br>
-                    <b style="color: #ff6b35;">Location:</b> ${locationInfo.city || 'Unknown'}, ${locationInfo.country || 'Unknown'}<br>
-                    <b style="color: #ff6b35;">Lat/Lon:</b> ${lat.toFixed(4)}, ${lon.toFixed(4)}<br>
-                    ${locationInfo.isp ? `<b style="color: #ff6b35;">ISP:</b> ${locationInfo.isp}<br>` : ''}
-                    <small style="color: #666;">Click for more details</small>
-                </div>
-            `;
-            
-            locationMarker = L.marker([lat, lon])
-                .addTo(leafletMap)
-                .bindPopup(popupContent)
-                .openPopup();
-            
-            // Add accuracy circle if available
-            if (locationInfo.accuracy) {
-                L.circle([lat, lon], {
-                    color: '#ff6b35',
-                    fillColor: '#ffc107',
-                    fillOpacity: 0.2,
-                    radius: locationInfo.accuracy
-                }).addTo(leafletMap);
-            }
-            
-            // Invalidate size after modal shown
-            setTimeout(() => {
-                if (leafletMap) {
-                    leafletMap.invalidateSize();
-                }
-            }, 200);
-        }
-
-        async function fetchLocationFromIP(ipAddress) {
-            try {
-                // Free IP Geolocation API (no key required)
-                const response = await fetch(`https://ipapi.co/${ipAddress}/json/`);
-                const data = await response.json();
-                
-                if (data.latitude && data.longitude) {
-                    document.getElementById('detail-lat').textContent = data.latitude;
-                    document.getElementById('detail-lon').textContent = data.longitude;
-                    document.getElementById('detail-country').textContent = data.country_name || 'Unknown';
-                    document.getElementById('detail-city').textContent = data.city || 'Unknown';
-                    document.getElementById('detail-region').textContent = data.region || 'Unknown';
-                    document.getElementById('detail-isp').textContent = data.org || 'N/A';
-                    document.getElementById('detail-timezone').textContent = data.timezone || 'N/A';
-                    
-                    // Update map
-                    if (leafletMap) {
-                        leafletMap.setView([data.latitude, data.longitude], 13);
-                        if (locationMarker) {
-                            leafletMap.removeLayer(locationMarker);
-                        }
-                        
-                        const popupContent = `
-                            <div style="font-family: 'Inter', sans-serif; padding: 5px;">
-                                <b style="color: #ff6b35;">IP:</b> ${ipAddress}<br>
-                                <b style="color: #ff6b35;">City:</b> ${data.city}<br>
-                                <b style="color: #ff6b35;">Country:</b> ${data.country_name}<br>
-                                <b style="color: #ff6b35;">ISP:</b> ${data.org}<br>
-                            </div>
-                        `;
-                        
-                        locationMarker = L.marker([data.latitude, data.longitude])
-                            .addTo(leafletMap)
-                            .bindPopup(popupContent)
-                            .openPopup();
-                    }
-                }
-            } catch (error) {
-                console.error('Error fetching location:', error);
-            }
-        }
-
-        function closeLocationMap() {
-            document.getElementById('location-map-modal').classList.add('hidden');
-            if (leafletMap) {
-                leafletMap.remove();
-                leafletMap = null;
-            }
-        }
-
         // ==================== DELETE OPERATIONS ====================
         function openDeleteModal(id) {
             deleteTargetId = id;
-            document.getElementById('delete-modal-message').textContent = 
+            document.getElementById('delete-modal-message').textContent =
                 `Are you sure you want to permanently delete visitor record #${id}? This action cannot be undone.`;
             document.getElementById('delete-modal').classList.remove('hidden');
-            
+
             document.getElementById('delete-confirm-btn').onclick = async () => {
                 await deleteVisitorById(deleteTargetId);
                 closeDeleteModal();
@@ -1280,20 +1217,17 @@
         }
 
         async function deleteAllVisitors() {
-            if (!confirm('⚠️ WARNING: This will permanently delete ALL visitor records. This action cannot be undone. Are you sure?')) {
+            if (!confirm(
+                    '⚠️ WARNING: This will permanently delete ALL visitor records. This action cannot be undone. Are you sure?'
+                    )) {
                 return;
             }
-            
+
             try {
                 showToast('Deleting all visitor records...', 'info');
-                const { error } = await _supabase
-                    .from('visitor_logs')
-                    .delete()
-                    .neq('id', 0);
-
+                const { data, error } = await _supabase.rpc('admin_delete_all_visitors');
                 if (error) throw error;
-
-                showToast('All visitor records deleted successfully', 'success');
+                showToast(data || 'All visitor records deleted successfully', 'success');
                 await loadVisitors();
             } catch (error) {
                 console.error('Error deleting all visitors:', error);
@@ -1308,16 +1242,9 @@
 
             try {
                 showToast('Cleaning up old records...', 'info');
-                const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
-                
-                const { error } = await _supabase
-                    .from('visitor_logs')
-                    .delete()
-                    .lt('created_at', thirtyDaysAgo);
-
+                const { data, error } = await _supabase.rpc('cleanup_old_visitor_logs', { days_to_keep: 30 });
                 if (error) throw error;
-
-                showToast('Old visitor records cleaned successfully', 'success');
+                showToast(data || 'Old visitor records cleaned successfully', 'success');
                 await loadVisitors();
             } catch (error) {
                 console.error('Error cleaning old visitors:', error);
@@ -1332,36 +1259,9 @@
 
             try {
                 showToast('Removing duplicate records...', 'info');
-                
-                const { data, error } = await _supabase
-                    .from('visitor_logs')
-                    .select('*')
-                    .order('created_at', { ascending: true });
-
+                const { data, error } = await _supabase.rpc('admin_cleanup_duplicate_visitors');
                 if (error) throw error;
-
-                const seen = new Map();
-                const duplicateIds = [];
-
-                data.forEach(record => {
-                    const key = `${record.ip_address}_${record.session_id}`;
-                    if (seen.has(key)) {
-                        duplicateIds.push(record.id);
-                    } else {
-                        seen.set(key, record.id);
-                    }
-                });
-
-                if (duplicateIds.length === 0) {
-                    showToast('No duplicate records found!', 'success');
-                    return;
-                }
-
-                for (const id of duplicateIds) {
-                    await _supabase.from('visitor_logs').delete().eq('id', id);
-                }
-
-                showToast(`${duplicateIds.length} duplicate records removed`, 'success');
+                showToast(data || 'Duplicate records removed', 'success');
                 await loadVisitors();
             } catch (error) {
                 console.error('Error removing duplicates:', error);
@@ -1381,33 +1281,42 @@
             document.getElementById('global-loader').style.display = 'none';
             document.getElementById('main-layout').classList.remove('hidden');
 
-            // Initialize theme
-            initializeTheme();
+            if (localStorage.getItem('darkMode') === 'true') {
+                isDarkMode = true;
+                document.body.classList.add('dark');
+            }
 
-            // Show mobile nav if needed
             if (window.innerWidth < 769) {
                 document.querySelector('.bottom-nav').classList.remove('hidden');
             }
 
-            // Load visitors
             await loadVisitors();
 
-            // Auto-refresh every 30 seconds
             setInterval(() => {
                 loadVisitors();
             }, 30000);
+
+            // Real-time subscription (optional)
+            try {
+                _supabase
+                    .channel('visitor-changes')
+                    .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'visitor_logs' },
+                        (payload) => {
+                            showToast('🔔 New visitor: ' + (payload.new.ip_address || 'Unknown'), 'info');
+                            loadVisitors();
+                        }
+                    )
+                    .subscribe();
+            } catch (e) {
+                console.log('Realtime subscription not available');
+            }
         }
 
         // ==================== KEYBOARD SHORTCUTS ====================
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
                 closeDeleteModal();
-                closeLocationMap();
-            }
-            // Toggle theme with Ctrl+T
-            if (e.ctrlKey && e.key === 't') {
-                e.preventDefault();
-                toggleTheme();
+                closeMapModal();
             }
         });
 

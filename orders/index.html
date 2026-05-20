@@ -73,40 +73,13 @@
             background: #1c1c1e;
             box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
         }
-        body.dark .eml-box {
-            background: #2c2c2e;
-            border-color: #3a3a3c;
-        }
-        body.dark .eml-section-title {
-            color: #e5e7eb;
-        }
-        body.dark .eml-text {
-            color: #d1d5db;
-        }
-        body.dark .eml-label {
-            color: #9ca3af;
-        }
-        body.dark .eml-value {
-            color: #f3f4f6;
-        }
-        body.dark .eml-table th {
-            background: #374151;
-            color: #9ca3af;
-        }
-        body.dark .eml-table td {
-            border-color: #374151;
-            color: #e5e7eb;
-        }
-        body.dark .eml-divider {
-            border-color: #374151;
-        }
 
         /* Email Full Preview Overlay */
         .email-full-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(12px);
+            background: rgba(0, 0, 0, 0.88);
+            backdrop-filter: blur(16px);
             z-index: 800;
             display: flex;
             justify-content: center;
@@ -116,18 +89,18 @@
         }
         .email-full-preview {
             background: #ffffff;
-            border-radius: 16px;
+            border-radius: 20px;
             width: 100%;
-            max-width: 620px;
+            max-width: 580px;
             max-height: 90vh;
             overflow-y: auto;
-            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.3);
-            animation: scaleIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.4);
+            animation: scaleIn 0.45s cubic-bezier(0.16, 1, 0.3, 1);
             position: relative;
         }
         @keyframes scaleIn {
             from {
-                transform: scale(0.9);
+                transform: scale(0.88);
                 opacity: 0;
             }
             to {
@@ -136,248 +109,352 @@
             }
         }
 
-        /* Email Inner Styles */
-        .eml-inner {
+        /* === EMAIL DESIGN SYSTEM === */
+        .eml-body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            color: #1f2937;
-            line-height: 1.6;
+            background: #ffffff;
+            color: #1a1a1a;
+            line-height: 1.5;
         }
-        .eml-banner {
-            padding: 32px 24px;
+
+        /* Header Banner */
+        .eml-header {
+            background: #0a0a0a;
+            padding: 28px 28px 24px;
             text-align: center;
-            color: #ffffff;
+            position: relative;
+            overflow: hidden;
         }
-        .eml-banner-title {
-            font-size: 20px;
-            font-weight: 800;
-            letter-spacing: 0.5px;
-            margin: 8px 0 0;
-            text-transform: uppercase;
+        .eml-header::before {
+            content: '';
+            position: absolute;
+            top: -40px;
+            right: -40px;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.03);
         }
-        .eml-banner-subtitle {
-            font-size: 48px;
-            display: block;
-            margin-bottom: 4px;
+        .eml-header::after {
+            content: '';
+            position: absolute;
+            bottom: -30px;
+            left: -30px;
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.02);
         }
-        .eml-logo-section {
-            text-align: center;
-            padding: 24px;
-            border-bottom: 1px solid #e5e7eb;
-        }
-        .eml-logo-img {
-            width: 56px;
-            height: 56px;
-            border-radius: 14px;
-            object-fit: cover;
-            display: block;
-            margin: 0 auto 8px;
-        }
-        .eml-brand-name {
-            font-size: 18px;
-            font-weight: 900;
-            color: #0071e3;
-            margin: 0;
-        }
-        .eml-brand-tagline {
+        .eml-header-badge {
+            display: inline-block;
+            padding: 5px 16px;
+            border-radius: 20px;
             font-size: 9px;
-            color: #94a3b8;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 1.5px;
+            letter-spacing: 2px;
+            color: #ffffff;
+            position: relative;
+            z-index: 1;
+            margin-bottom: 10px;
         }
-        .eml-greeting {
-            padding: 20px 24px 12px;
-            font-size: 14px;
-            color: #374151;
-        }
-        .eml-greeting strong {
-            color: #1f2937;
-        }
-        .eml-section {
-            padding: 0 24px 16px;
-        }
-        .eml-section-title {
-            font-size: 13px;
+        .eml-header-title {
+            font-size: 17px;
             font-weight: 800;
-            color: #1f2937;
+            color: #ffffff;
+            letter-spacing: 0.3px;
+            margin: 0;
+            position: relative;
+            z-index: 1;
+            text-transform: uppercase;
+        }
+
+        /* Brand Bar */
+        .eml-brand-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 28px;
+            border-bottom: 1px solid #f0f0f0;
+            background: #fafafa;
+        }
+        .eml-brand-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .eml-brand-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            background: #0a0a0a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-weight: 900;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+        .eml-brand-info {}
+        .eml-brand-name {
+            font-size: 13px;
+            font-weight: 700;
+            color: #0a0a0a;
+            margin: 0;
+        }
+        .eml-brand-email {
+            font-size: 10px;
+            color: #888;
+            margin: 0;
+        }
+        .eml-brand-badge {
+            font-size: 9px;
+            font-weight: 700;
+            color: #0071e3;
+            background: #e8f0fe;
+            padding: 4px 10px;
+            border-radius: 12px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            margin: 0 0 10px;
         }
-        .eml-box {
-            background: #f8fafc;
-            border: 1px solid #e5e7eb;
-            border-radius: 12px;
-            padding: 16px;
-            margin-bottom: 12px;
+
+        /* Content Sections */
+        .eml-section {
+            padding: 22px 28px;
+        }
+        .eml-section+.eml-section {
+            padding-top: 0;
+        }
+        .eml-section-title {
+            font-size: 10px;
+            font-weight: 700;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin: 0 0 12px;
+        }
+
+        /* Account Card */
+        .eml-account-card {
+            background: #f9f9f9;
+            border: 1px solid #eee;
+            border-radius: 14px;
+            padding: 18px 20px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .eml-account-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: #0a0a0a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .eml-account-icon svg {
+            width: 22px;
+            height: 22px;
+            stroke: #ffffff;
+            fill: none;
+            stroke-width: 1.8;
+        }
+        .eml-account-details {
+            flex: 1;
+            min-width: 0;
+        }
+        .eml-account-name {
+            font-size: 14px;
+            font-weight: 700;
+            color: #0a0a0a;
+            margin: 0 0 2px;
+        }
+        .eml-account-meta {
+            font-size: 11px;
+            color: #777;
+            margin: 0;
+            line-height: 1.4;
+        }
+        .eml-account-phone {
+            font-size: 12px;
+            font-weight: 600;
+            color: #0071e3;
+            margin: 3px 0 0;
+        }
+
+        /* Info Rows */
+        .eml-info-grid {
+            background: #f9f9f9;
+            border: 1px solid #eee;
+            border-radius: 14px;
+            padding: 14px 18px;
         }
         .eml-info-row {
             display: flex;
-            padding: 4px 0;
-            font-size: 13px;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px 0;
+            font-size: 12px;
         }
-        .eml-label {
-            color: #6b7280;
+        .eml-info-row+.eml-info-row {
+            border-top: 1px solid #eee;
+        }
+        .eml-info-label {
+            color: #888;
+            font-weight: 500;
             font-size: 11px;
-            font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            min-width: 80px;
+            letter-spacing: 0.4px;
         }
-        .eml-value {
-            color: #1f2937;
+        .eml-info-value {
+            color: #1a1a1a;
             font-weight: 600;
+            font-size: 12px;
+            text-align: right;
         }
-        .eml-value.highlight {
-            color: #0071e3;
-            font-weight: 700;
-            font-size: 14px;
-        }
-        .eml-status-badge {
-            display: inline-block;
-            padding: 3px 14px;
-            border-radius: 20px;
-            font-size: 10px;
+        .eml-info-value.large {
+            font-size: 18px;
             font-weight: 800;
-            text-transform: uppercase;
-            color: #ffffff;
-            letter-spacing: 0.5px;
+            color: #0071e3;
         }
+
+        /* Product List */
+        .eml-product-list {}
+        .eml-product-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 10px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .eml-product-item:last-child {
+            border-bottom: none;
+        }
+        .eml-product-left {}
+        .eml-product-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin: 0;
+        }
+        .eml-product-id {
+            font-size: 9px;
+            color: #aaa;
+            margin: 2px 0 0;
+            font-weight: 500;
+        }
+        .eml-product-price {
+            font-size: 13px;
+            font-weight: 700;
+            color: #1a1a1a;
+            white-space: nowrap;
+        }
+
+        /* Totals */
         .eml-total-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 8px 0;
+            padding: 5px 0;
+            font-size: 12px;
         }
-        .eml-total-label {
-            font-size: 15px;
-            font-weight: 900;
-            color: #1f2937;
+        .eml-total-divider {
+            border: none;
+            border-top: 1px dashed #ddd;
+            margin: 8px 0;
         }
-        .eml-total-value {
+        .eml-total-final {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 4px 0;
+        }
+        .eml-total-final-label {
+            font-size: 14px;
+            font-weight: 800;
+            color: #0a0a0a;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .eml-total-final-value {
             font-size: 22px;
             font-weight: 900;
             color: #0071e3;
         }
-        .eml-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        .eml-table th {
-            background: #f1f5f9;
-            padding: 8px 10px;
-            font-size: 9px;
-            color: #6b7280;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            font-weight: 700;
-            text-align: left;
-        }
-        .eml-table th:first-child {
-            border-radius: 8px 0 0 0;
-        }
-        .eml-table th:last-child {
-            border-radius: 0 8px 0 0;
-            text-align: right;
-        }
-        .eml-table td {
-            padding: 10px;
-            border-bottom: 1px solid #e5e7eb;
-            font-size: 13px;
-            vertical-align: middle;
-        }
-        .eml-table td:last-child {
-            text-align: right;
-            font-weight: 700;
-        }
-        .eml-product-img {
-            width: 44px;
-            height: 44px;
-            border-radius: 8px;
-            object-fit: cover;
-            border: 1px solid #e5e7eb;
-            display: inline-block;
-            vertical-align: middle;
-            margin-right: 10px;
-        }
-        .eml-product-id {
-            font-size: 9px;
-            color: #9ca3af;
-            display: block;
-        }
-        .eml-divider {
-            border: none;
-            border-top: 1px dashed #d1d5db;
-            margin: 8px 0;
-        }
+
+        /* Footer */
         .eml-footer {
-            background: #1f2937;
-            padding: 24px;
+            background: #0a0a0a;
+            padding: 28px;
             text-align: center;
             color: #ffffff;
-            border-radius: 0 0 16px 16px;
+            border-radius: 0 0 20px 20px;
         }
-        .eml-footer-title {
-            font-size: 13px;
+        .eml-footer-brand {
+            font-size: 14px;
             font-weight: 800;
+            margin: 0 0 4px;
+            letter-spacing: 0.5px;
+        }
+        .eml-footer-tagline {
+            font-size: 9px;
+            color: #888;
+            font-weight: 500;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            margin: 0 0 14px;
+            letter-spacing: 1.5px;
+            margin: 0 0 18px;
         }
-        .eml-footer-links {
+        .eml-social-icons {
             display: flex;
-            flex-wrap: wrap;
             justify-content: center;
-            gap: 6px;
+            gap: 16px;
+            margin-bottom: 16px;
         }
-        .eml-footer-link {
-            display: inline-block;
-            padding: 8px 14px;
-            border-radius: 20px;
+        .eml-social-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             text-decoration: none;
-            font-size: 10px;
-            font-weight: 700;
-            color: #ffffff;
             transition: opacity 0.2s;
         }
-        .eml-footer-link:hover {
-            opacity: 0.85;
+        .eml-social-icon:hover {
+            opacity: 0.8;
         }
-        .eml-footer-link.blue {
-            background: #0071e3;
+        .eml-social-icon svg {
+            width: 16px;
+            height: 16px;
+            fill: #ffffff;
         }
-        .eml-footer-link.red {
-            background: #dc2626;
-        }
-        .eml-footer-link.indigo {
-            background: #4f46e5;
-        }
-        .eml-footer-link.pink {
-            background: #db2777;
+        .eml-footer-divider {
+            border: none;
+            border-top: 1px solid #222;
+            margin: 14px 0;
         }
         .eml-footer-copy {
-            font-size: 10px;
-            color: #9ca3af;
-            margin: 12px 0 0;
-        }
-        .eml-footer-copy2 {
             font-size: 9px;
-            color: #6b7280;
-            margin: 4px 0 0;
+            color: #666;
+            margin: 0;
+            letter-spacing: 0.3px;
         }
 
-        /* Close Button on Preview */
+        /* Close Button */
         .eml-close-btn {
             position: absolute;
-            top: 12px;
-            right: 12px;
-            width: 32px;
-            height: 32px;
+            top: 10px;
+            right: 10px;
+            width: 30px;
+            height: 30px;
             border-radius: 50%;
-            background: rgba(0, 0, 0, 0.6);
+            background: rgba(0, 0, 0, 0.7);
             color: #ffffff;
             border: none;
-            font-size: 16px;
+            font-size: 15px;
             cursor: pointer;
             display: flex;
             align-items: center;
@@ -386,10 +463,10 @@
             transition: background 0.2s;
         }
         .eml-close-btn:hover {
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0, 0, 0, 0.9);
         }
 
-        /* Proton Action Bar */
+        /* Action Bar */
         .eml-action-bar {
             position: sticky;
             bottom: 0;
@@ -397,19 +474,15 @@
             border-top: 1px solid #e5e7eb;
             padding: 14px 24px;
             display: flex;
-            gap: 10px;
-            border-radius: 0 0 16px 16px;
+            gap: 8px;
+            border-radius: 0 0 20px 20px;
             z-index: 5;
-        }
-        body.dark .eml-action-bar {
-            background: #1c1c1e;
-            border-color: #3a3a3c;
         }
         .eml-action-btn {
             flex: 1;
-            padding: 12px;
-            border-radius: 12px;
-            font-size: 12px;
+            padding: 11px 10px;
+            border-radius: 10px;
+            font-size: 11px;
             font-weight: 700;
             cursor: pointer;
             border: none;
@@ -417,29 +490,24 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 6px;
+            gap: 5px;
+            letter-spacing: 0.3px;
         }
         .eml-action-btn.primary {
-            background: linear-gradient(135deg, #6d28d9, #4f46e5);
+            background: #0a0a0a;
             color: #ffffff;
         }
         .eml-action-btn.primary:hover {
-            box-shadow: 0 4px 20px rgba(109, 40, 217, 0.4);
+            background: #1a1a1a;
             transform: translateY(-1px);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
         }
         .eml-action-btn.secondary {
             background: #f3f4f6;
             color: #374151;
         }
-        body.dark .eml-action-btn.secondary {
-            background: #374151;
-            color: #e5e7eb;
-        }
         .eml-action-btn.secondary:hover {
             background: #e5e7eb;
-        }
-        body.dark .eml-action-btn.secondary:hover {
-            background: #4b5563;
         }
 
         /* Toast & others */
@@ -572,12 +640,12 @@
             }
             .email-full-preview {
                 max-width: 100%;
-                border-radius: 12px;
-                max-height: 95vh;
+                border-radius: 14px;
+                max-height: 92vh;
             }
             .eml-action-bar {
                 flex-direction: column;
-                gap: 8px;
+                gap: 6px;
             }
         }
         @media (min-width: 769px) {
@@ -663,7 +731,7 @@
     <div id="email-full-overlay" class="email-full-overlay hidden" onclick="closeEmailPreview(event)">
         <div class="email-full-preview custom-scroll" id="email-full-preview-card" onclick="event.stopPropagation()">
             <button class="eml-close-btn" onclick="closeEmailPreview()">&times;</button>
-            <div id="email-full-content" class="eml-inner"></div>
+            <div id="email-full-content" class="eml-body"></div>
             <div class="eml-action-bar" id="email-action-bar"></div>
         </div>
     </div>
@@ -684,6 +752,7 @@
         const ADMIN_EMAIL = "binzeo369@gmail.com";
         const LOGO_URL = "https://ozuwazkqyrxiwwfjceth.supabase.co/storage/v1/object/public/images/Beige%20Black%20Minimal%20Simple%20Modern%20Handwritten%20Graffiti%20Typographic%20Arts%20and_20251212_154142_0000.png";
         const LOGIN_URL = "/login";
+        const MANAGER_EMAIL = "jayenware@proton.me";
 
         const SUPPORT_INFO = {
             website: "https://jayenware.com",
@@ -718,21 +787,11 @@
         }
 
         function getStageColor(s) {
-            return { 'pending': '#f59e0b', 'confirmed': '#3b82f6', 'shipped': '#8b5cf6', 'completed': '#22c55e' } [s] ||
-                '#0071e3';
+            return { 'pending': '#b45309', 'confirmed': '#1e40af', 'shipped': '#5b21b6', 'completed': '#166534' } [s] ||
+                '#0a0a0a';
         }
 
-        function getStageIcon(s) {
-            const icons = {
-                'pending': '<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
-                'confirmed': '<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>',
-                'shipped': '<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>',
-                'completed': '<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>'
-            };
-            return icons[s] || icons['pending'];
-        }
-
-        // ==================== BUILD EMAIL HTML (Pure, Clean, Professional) ====================
+        // ==================== BUILD EMAIL HTML (NEW MINIMAL DESIGN) ====================
         function buildEmailHTML(order, stage) {
             const items = order.member_info?.items || [];
             const shipping = order.member_info?.shipping || {};
@@ -745,82 +804,110 @@
             const custEmail = shipping.email || order.member_email || '';
             const sc = getStageColor(stage);
             const sl = getStageLabel(stage);
-            const icon = getStageIcon(stage);
 
             const productRows = items.map((it, idx) => `
-            <tr>
-              <td style="text-align:center;font-size:12px;color:#6b7280;">${idx+1}</td>
-              <td>
-                <img src="${it.img || LOGO_URL}" alt="${it.title}" class="eml-product-img" onerror="this.src='${LOGO_URL}'">
-                <span style="font-weight:600;font-size:13px;color:#1f2937;">${it.title}</span>
-                ${it.variant ? `<span style="font-size:10px;color:#0071e3;display:block;">Variant: ${it.variant}</span>` : ''}
-                <span class="eml-product-id">Product ID: ${it.product_id || 'N/A'}</span>
-              </td>
-              <td>৳ ${it.price || 0}</td>
-            </tr>`).join('');
+            <div class="eml-product-item">
+              <div class="eml-product-left">
+                <p class="eml-product-name">${it.title}${it.variant ? ` &mdash; <span style="font-weight:500;color:#666;">${it.variant}</span>` : ''}</p>
+                <p class="eml-product-id">ID: ${it.product_id || 'N/A'}</p>
+              </div>
+              <span class="eml-product-price">৳ ${it.price || 0}</span>
+            </div>`).join('');
 
             return `
-            <div class="eml-banner" style="background:${sc};">
-              <span class="eml-banner-subtitle">${icon}</span>
-              <h1 class="eml-banner-title">${sl}</h1>
+            <div class="eml-header">
+              <span class="eml-header-badge" style="background:${sc};">${stage}</span>
+              <h1 class="eml-header-title">${sl}</h1>
             </div>
-            <div class="eml-logo-section">
-              <img src="${LOGO_URL}" alt="JAYENWARE" class="eml-logo-img">
-              <h2 class="eml-brand-name">JAYENWARE</h2>
-              <p class="eml-brand-tagline">Systems by Binzeo</p>
+
+            <div class="eml-brand-bar">
+              <div class="eml-brand-left">
+                <div class="eml-brand-avatar">J</div>
+                <div class="eml-brand-info">
+                  <p class="eml-brand-name">JAYENWARE</p>
+                  <p class="eml-brand-email">${MANAGER_EMAIL}</p>
+                </div>
+              </div>
+              <span class="eml-brand-badge">Manager</span>
             </div>
-            <div class="eml-greeting">
-              <p>Dear <strong>${order.member_name || 'Valued Customer'}</strong>,</p>
-              <p style="color:#6b7280;font-size:13px;">Thank you for your order. Here is your updated order summary.</p>
+
+            <div class="eml-section">
+              <p style="font-size:13px;color:#555;margin:0 0 4px;">Dear <strong style="color:#0a0a0a;">${order.member_name || 'Valued Customer'}</strong>,</p>
+              <p style="font-size:12px;color:#999;margin:0;">Thank you for your order. Here is your updated summary.</p>
             </div>
+
+            <div class="eml-section">
+              <h3 class="eml-section-title">Customer Account</h3>
+              <div class="eml-account-card">
+                <div class="eml-account-icon">
+                  <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-7 8-7s8 3 8 7"/></svg>
+                </div>
+                <div class="eml-account-details">
+                  <p class="eml-account-name">${order.member_name || 'N/A'}</p>
+                  <p class="eml-account-meta">${custEmail || ''}${custEmail && shipping.phone ? ' &middot; ' : ''}${shipping.address || ''}, ${shipping.district || ''}</p>
+                  ${shipping.phone ? `<p class="eml-account-phone">${shipping.phone}</p>` : ''}
+                </div>
+              </div>
+            </div>
+
             <div class="eml-section">
               <h3 class="eml-section-title">Order Information</h3>
-              <div class="eml-box">
-                <div class="eml-info-row"><span class="eml-label">Order ID</span><span class="eml-value">#${order.id}</span></div>
-                <div class="eml-info-row"><span class="eml-label">Date</span><span class="eml-value">${date}</span></div>
-                <div class="eml-info-row"><span class="eml-label">Status</span><span class="eml-status-badge" style="background:${sc};">${stage}</span></div>
-                <hr class="eml-divider">
-                <div class="eml-total-row"><span class="eml-total-label">Total Amount</span><span class="eml-total-value">৳ ${total}</span></div>
+              <div class="eml-info-grid">
+                <div class="eml-info-row"><span class="eml-info-label">Order ID</span><span class="eml-info-value">#${order.id}</span></div>
+                <div class="eml-info-row"><span class="eml-info-label">Date</span><span class="eml-info-value">${date}</span></div>
+                <div class="eml-info-row"><span class="eml-info-label">Status</span><span class="eml-info-value" style="color:${sc};font-weight:700;">${stage}</span></div>
+                <div class="eml-info-row"><span class="eml-info-label">Total</span><span class="eml-info-value large">৳ ${total}</span></div>
               </div>
             </div>
+
             <div class="eml-section">
-              <h3 class="eml-section-title">Products Ordered</h3>
-              <table class="eml-table">
-                <thead><tr><th style="width:40px;text-align:center;">#</th><th>Product</th><th style="text-align:right;">Price</th></tr></thead>
-                <tbody>${productRows}</tbody>
-              </table>
-            </div>
-            <div class="eml-section">
-              <h3 class="eml-section-title">Price Breakdown</h3>
-              <div class="eml-box">
-                <div class="eml-info-row"><span class="eml-label">Subtotal</span><span class="eml-value">৳ ${subtotal}</span></div>
-                <div class="eml-info-row"><span class="eml-label">Delivery</span><span class="eml-value" style="color:#f59e0b;">+৳ ${del}</span></div>
-                ${disc > 0 ? `<div class="eml-info-row"><span class="eml-label">Discount</span><span class="eml-value" style="color:#22c55e;">-৳ ${disc}</span></div>` : ''}
-                <hr class="eml-divider">
-                <div class="eml-total-row"><span class="eml-total-label">Total</span><span class="eml-total-value">৳ ${total}</span></div>
+              <h3 class="eml-section-title">Products</h3>
+              <div class="eml-info-grid">
+                ${productRows}
               </div>
             </div>
+
             <div class="eml-section">
-              <h3 class="eml-section-title">Shipping Details</h3>
-              <div class="eml-box">
-                <div class="eml-info-row"><span class="eml-label">Name</span><span class="eml-value">${order.member_name || 'N/A'}</span></div>
-                ${custEmail ? `<div class="eml-info-row"><span class="eml-label">Email</span><span class="eml-value highlight">${custEmail}</span></div>` : ''}
-                <div class="eml-info-row"><span class="eml-label">Phone</span><span class="eml-value highlight">${shipping.phone || 'N/A'}</span></div>
-                <div class="eml-info-row"><span class="eml-label">Address</span><span class="eml-value">${shipping.address || 'N/A'}, ${shipping.district || ''}</span></div>
-                ${shipping.note ? `<div class="eml-info-row"><span class="eml-label">Note</span><span class="eml-value" style="color:#f59e0b;">${shipping.note}</span></div>` : ''}
+              <h3 class="eml-section-title">Payment Summary</h3>
+              <div class="eml-info-grid">
+                <div class="eml-info-row"><span class="eml-info-label">Subtotal</span><span class="eml-info-value">৳ ${subtotal}</span></div>
+                <div class="eml-info-row"><span class="eml-info-label">Delivery</span><span class="eml-info-value" style="color:#b45309;">+৳ ${del}</span></div>
+                ${disc > 0 ? `<div class="eml-info-row"><span class="eml-info-label">Discount</span><span class="eml-info-value" style="color:#166534;">&minus;৳ ${disc}</span></div>` : ''}
+                <hr class="eml-total-divider">
+                <div class="eml-total-final"><span class="eml-total-final-label">Total</span><span class="eml-total-final-value">৳ ${total}</span></div>
               </div>
             </div>
+
+            ${shipping.note ? `
+            <div class="eml-section">
+              <h3 class="eml-section-title">Customer Note</h3>
+              <div class="eml-info-grid">
+                <p style="font-size:12px;color:#555;margin:0;">${shipping.note}</p>
+              </div>
+            </div>` : ''}
+
             <div class="eml-footer">
-              <h3 class="eml-footer-title">Connect With JAYENWARE</h3>
-              <div class="eml-footer-links">
-                <a href="${SUPPORT_INFO.website}" target="_blank" class="eml-footer-link blue">Website</a>
-                <a href="mailto:${SUPPORT_INFO.supportEmail}" class="eml-footer-link blue">Support Email</a>
-                <a href="${SUPPORT_INFO.youtube}" target="_blank" class="eml-footer-link red">YouTube</a>
-                <a href="${SUPPORT_INFO.facebook}" target="_blank" class="eml-footer-link indigo">Facebook</a>
-                <a href="${SUPPORT_INFO.instagram}" target="_blank" class="eml-footer-link pink">Instagram</a>
+              <p class="eml-footer-brand">JAYENWARE</p>
+              <p class="eml-footer-tagline">Systems by Binzeo</p>
+              <div class="eml-social-icons">
+                <a href="${SUPPORT_INFO.website}" target="_blank" class="eml-social-icon" style="background:#0071e3;" title="Website">
+                  <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="none" stroke="#fff" stroke-width="1.5"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" fill="none" stroke="#fff" stroke-width="1.5"/></svg>
+                </a>
+                <a href="mailto:${SUPPORT_INFO.supportEmail}" class="eml-social-icon" style="background:#0071e3;" title="Email Support">
+                  <svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2" fill="none" stroke="#fff" stroke-width="1.5"/><path d="M2 7l10 7 10-7" fill="none" stroke="#fff" stroke-width="1.5"/></svg>
+                </a>
+                <a href="${SUPPORT_INFO.youtube}" target="_blank" class="eml-social-icon" style="background:#dc2626;" title="YouTube">
+                  <svg viewBox="0 0 24 24"><polygon points="10,8 16,12 10,16" fill="#fff"/><path d="M2 7.5C2 6 3.5 5 5 5h14c1.5 0 3 1 3 2.5v9c0 1.5-1.5 2.5-3 2.5H5c-1.5 0-3-1-3-2.5v-9z" fill="none" stroke="#fff" stroke-width="1.5"/></svg>
+                </a>
+                <a href="${SUPPORT_INFO.facebook}" target="_blank" class="eml-social-icon" style="background:#1877f2;" title="Facebook">
+                  <svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" fill="none" stroke="#fff" stroke-width="1.5"/></svg>
+                </a>
+                <a href="${SUPPORT_INFO.instagram}" target="_blank" class="eml-social-icon" style="background:#db2777;" title="Instagram">
+                  <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" fill="none" stroke="#fff" stroke-width="1.5"/><circle cx="12" cy="12" r="4" fill="none" stroke="#fff" stroke-width="1.5"/><circle cx="17.5" cy="6.5" r="1" fill="#fff"/></svg>
+                </a>
               </div>
-              <p class="eml-footer-copy">JAYENWARE &bull; SYSTEMS BY BINZEO</p>
-              <p class="eml-footer-copy2">&copy; ${new Date().getFullYear()} All Rights Reserved</p>
+              <hr class="eml-footer-divider">
+              <p class="eml-footer-copy">&copy; ${new Date().getFullYear()} JAYENWARE. All rights reserved.</p>
             </div>`;
         }
 
@@ -829,24 +916,18 @@
             const order = allOrders.find(o => o.id === orderId);
             if (!order) return;
             currentPreviewOrderId = orderId;
-            const shipping = order.member_info?.shipping || {};
-            const customerEmail = shipping.email || order.member_email || '';
-            const subject = `${getStageLabel(order.status)} - Order #${order.id}`;
-
             const emailHTML = buildEmailHTML(order, order.status);
             document.getElementById('email-full-content').innerHTML = emailHTML;
-
             document.getElementById('email-action-bar').innerHTML = `
             <button class="eml-action-btn secondary" onclick="copyEmailHTML(${order.id})">
-              <i class="fa-solid fa-copy"></i> Copy HTML
+              <i class="fa-solid fa-copy"></i> Copy
             </button>
             <button class="eml-action-btn primary" onclick="sendViaProtonMail(${order.id})">
-              <i class="fa-solid fa-paper-plane"></i> Send via Proton Mail
+              <i class="fa-solid fa-paper-plane"></i> Send via Proton
             </button>
             <button class="eml-action-btn secondary" onclick="openGmailCompose(${order.id})">
               <i class="fa-solid fa-envelope"></i> Gmail
             </button>`;
-
             document.getElementById('email-full-overlay').classList.remove('hidden');
             document.body.style.overflow = 'hidden';
         }
@@ -858,38 +939,22 @@
             currentPreviewOrderId = null;
         }
 
-        // ==================== SEND VIA PROTON MAIL ====================
         function sendViaProtonMail(orderId) {
             const order = allOrders.find(o => o.id === orderId);
             if (!order) return;
             const shipping = order.member_info?.shipping || {};
             const to = shipping.email || order.member_email || '';
             const subject = `${getStageLabel(order.status)} - Order #${order.id}`;
-
             if (!to) { showToast('No customer email found', 'error'); return; }
-
             const emailHTML = buildEmailHTML(order, order.status);
-            navigator.clipboard.writeText(emailHTML).then(() => {
-                showToast('Email design copied! Opening Proton Mail...', 'success');
-            }).catch(() => {});
-
+            navigator.clipboard.writeText(emailHTML).then(() => showToast('Design copied! Opening Proton Mail...',
+                'success')).catch(() => {});
             const protonUrl = `https://mail.proton.me/u/0/compose?to=${encodeURIComponent(to)}&subject=${encodeURIComponent(subject)}`;
             window.open(protonUrl, '_blank');
-
-            // Show paste instruction
             setTimeout(() => {
                 const popup = document.createElement('div');
-                popup.style.cssText = `
-              position:fixed;bottom:30px;left:50%;transform:translateX(-50%);
-              background:linear-gradient(135deg,#6d28d9,#4f46e5);color:#fff;padding:20px 24px;
-              border-radius:16px;z-index:9999;box-shadow:0 20px 60px rgba(0,0,0,0.4);
-              font-family:'Inter',system-ui,sans-serif;text-align:center;max-width:480px;width:90%;
-              animation:slideUp 0.5s ease;
-            `;
-                popup.innerHTML = `
-              <p style="font-weight:900;font-size:14px;margin:0 0 8px;">Proton Mail Opened</p>
-              <p style="font-size:11px;opacity:0.9;margin:0;">Design copied to clipboard. In Proton Mail, click <strong>Editor &gt; HTML</strong> mode, then press <strong>Ctrl+V</strong> to paste.</p>
-              <button onclick="this.parentElement.remove()" style="background:#fff;color:#6d28d9;border:none;padding:8px 20px;border-radius:10px;font-weight:700;font-size:11px;cursor:pointer;margin-top:10px;">Got it</button>`;
+                popup.style.cssText = `position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:#0a0a0a;color:#fff;padding:18px 24px;border-radius:14px;z-index:9999;box-shadow:0 20px 60px rgba(0,0,0,0.5);font-family:'Inter',system-ui,sans-serif;text-align:center;max-width:460px;width:90%;animation:slideUp 0.5s ease;`;
+                popup.innerHTML = `<p style="font-weight:800;font-size:13px;margin:0 0 6px;">Proton Mail Opened</p><p style="font-size:11px;opacity:0.8;margin:0;">In Proton Mail, switch to <strong>HTML mode</strong> and press <strong>Ctrl+V</strong> to paste the design.</p><button onclick="this.parentElement.remove()" style="background:#fff;color:#0a0a0a;border:none;padding:8px 20px;border-radius:8px;font-weight:700;font-size:11px;cursor:pointer;margin-top:10px;">Got it</button>`;
                 document.body.appendChild(popup);
                 setTimeout(() => { if (popup.parentElement) popup.remove(); }, 15000);
             }, 1000);
@@ -899,7 +964,7 @@
             const order = allOrders.find(o => o.id === orderId);
             if (!order) return;
             const html = buildEmailHTML(order, order.status);
-            navigator.clipboard.writeText(html).then(() => showToast('Email design copied to clipboard!', 'success'));
+            navigator.clipboard.writeText(html).then(() => showToast('Email design copied!', 'success'));
         }
 
         function openGmailCompose(orderId) {
@@ -912,11 +977,10 @@
             navigator.clipboard.writeText(html).then(() => {
                 const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(to)}&su=${encodeURIComponent(subject)}`;
                 window.open(gmailUrl, '_blank');
-                showToast('Gmail opened! Design copied. Press Ctrl+V to paste.', 'success');
+                showToast('Gmail opened! Design copied.', 'success');
             });
         }
 
-        // ==================== LOAD ORDERS ====================
         async function loadOrders() {
             try {
                 const { data, error } = await _supabase.from('orders').select('*').order('created_at',
@@ -1018,8 +1082,7 @@
                 showToast(`Order #${id} &rarr; ${status}`, 'success');
                 const o = allOrders.find(o => o.id === id);
                 if (o) { o.status = status;
-                    setTimeout(() => { if (confirm(
-                            `Status updated. Open email preview to notify customer?`)) openEmailPreview(
+                    setTimeout(() => { if (confirm(`Status updated. Open email preview?`)) openEmailPreview(
                         id); }, 400); }
                 await loadOrders();
             } catch (e) { console.error(e);
@@ -1034,7 +1097,6 @@
                 showToast('Failed to delete', 'error'); }
         }
 
-        // ==================== ORDER DRAWER ====================
         function openOrderDrawer(orderId) {
             const order = allOrders.find(o => o.id === orderId);
             if (!order) return;
@@ -1047,27 +1109,27 @@
             const date = new Date(order.created_at).toLocaleString('en-US', { day: 'numeric', month: 'long',
                 year: 'numeric', hour: '2-digit', minute: '2-digit' });
             const custEmail = shipping.email || order.member_email || 'Not provided';
-
             document.getElementById('order-drawer-content').innerHTML = `
-            <div><p class="text-[10px] font-black text-gray-400 uppercase mb-3">Order Timeline</p>
+            <div><p class="text-[10px] font-black text-gray-400 uppercase mb-3">Timeline</p>
               <div class="flex items-center gap-1 mb-2">${['pending','confirmed','shipped','completed'].map((s,i)=>{const idx=['pending','confirmed','shipped','completed'].indexOf(order.status);const done=idx>=i;const cur=idx===i;return`<div class="flex items-center flex-1"><div class="w-3 h-3 rounded-full timeline-dot ${done?'completed':cur?'active':'bg-gray-200'}"></div>${i<3?`<div class="flex-1 h-0.5 ${done?'bg-green-500':'bg-gray-200'}"></div>`:''}</div>`;}).join('')}</div>
               <div class="flex justify-between text-[7px] font-black uppercase text-gray-400"><span>Pending</span><span>Confirmed</span><span>Shipped</span><span>Completed</span></div></div>
             <div class="bg-gray-50 p-5 rounded-2xl space-y-3">
-              <div><label class="text-[10px] font-black text-gray-400 uppercase">Customer</label><div class="flex gap-2 mt-1"><input readonly value="${order.member_name||'N/A'}" class="w-full p-2.5 bg-white border rounded-xl text-xs font-bold"><button onclick="copyToClipboard('${order.member_name||''}')" class="px-3 bg-blue-100 text-blue-600 rounded-xl btn-action"><i class="fa-solid fa-copy"></i></button></div></div>
-              <div><label class="text-[10px] font-black text-gray-400 uppercase">Email</label><div class="flex gap-2 mt-1"><input readonly value="${custEmail}" class="w-full p-2.5 bg-white border rounded-xl text-xs font-bold text-blue-600"><button onclick="copyToClipboard('${custEmail}')" class="px-3 bg-blue-100 text-blue-600 rounded-xl btn-action"><i class="fa-solid fa-copy"></i></button></div></div>
-              <div><label class="text-[10px] font-black text-gray-400 uppercase">Phone</label><div class="flex gap-2 mt-1"><input readonly value="${shipping.phone||'N/A'}" class="w-full p-2.5 bg-white border rounded-xl text-xs font-bold"><button onclick="copyToClipboard('${shipping.phone||''}')" class="px-3 bg-blue-100 text-blue-600 rounded-xl btn-action"><i class="fa-solid fa-copy"></i></button></div></div>
-              <div><label class="text-[10px] font-black text-gray-400 uppercase">Address</label><p class="text-xs font-bold mt-1">${shipping.address||'N/A'}, ${shipping.district||''}</p></div>${shipping.note?`<div><label class="text-[10px] font-black text-gray-400 uppercase">Note</label><p class="text-xs mt-1 text-orange-600 font-bold">${shipping.note}</p></div>`:''}</div>
-            <div class="bg-gray-50 p-5 rounded-2xl"><h4 class="text-[10px] font-black uppercase text-gray-400 mb-3">Products (${items.length})</h4>${items.map(i=>`<div class="flex justify-between items-center py-2 border-b last:border-0"><div class="flex items-center gap-2"><img src="${i.img||LOGO_URL}" class="w-8 h-8 rounded-lg object-cover" onerror="this.src='${LOGO_URL}'"><div><span class="text-xs font-bold">${i.title} ${i.variant?`(${i.variant})`:''}</span><span class="text-[8px] text-gray-400 block">ID: ${i.product_id||'N/A'}</span></div></div><span class="text-xs font-black">৳ ${i.price||0}</span></div>`).join('')}
+              <div><label class="text-[10px] font-black text-gray-400 uppercase">Name</label><p class="text-sm font-bold mt-1">${order.member_name||'N/A'}</p></div>
+              <div><label class="text-[10px] font-black text-gray-400 uppercase">Email</label><p class="text-sm font-bold text-blue-600 mt-1">${custEmail}</p></div>
+              <div><label class="text-[10px] font-black text-gray-400 uppercase">Phone</label><p class="text-sm font-bold mt-1">${shipping.phone||'N/A'}</p></div>
+              <div><label class="text-[10px] font-black text-gray-400 uppercase">Address</label><p class="text-xs font-bold mt-1">${shipping.address||'N/A'}, ${shipping.district||''}</p></div>
+              ${shipping.note?`<div><label class="text-[10px] font-black text-gray-400 uppercase">Note</label><p class="text-xs mt-1 text-orange-600 font-bold">${shipping.note}</p></div>`:''}</div>
+            <div class="bg-gray-50 p-5 rounded-2xl"><h4 class="text-[10px] font-black uppercase text-gray-400 mb-3">Products (${items.length})</h4>${items.map(i=>`<div class="flex justify-between py-2 border-b last:border-0"><div><span class="text-xs font-bold">${i.title} ${i.variant?`(${i.variant})`:''}</span><span class="text-[8px] text-gray-400 block">ID: ${i.product_id||'N/A'}</span></div><span class="text-xs font-black">৳ ${i.price||0}</span></div>`).join('')}
               <div class="pt-3 mt-3 border-t space-y-1.5"><div class="flex justify-between text-[11px]"><span>Subtotal</span><span class="font-bold">৳ ${subtotal}</span></div><div class="flex justify-between text-[11px] text-orange-600"><span>Delivery</span><span class="font-bold">+৳ ${del}</span></div>${disc>0?`<div class="flex justify-between text-[11px] text-green-600"><span>Discount</span><span class="font-bold">-৳ ${disc}</span></div>`:''}<div class="flex justify-between text-lg font-black border-t pt-2 mt-2"><span>TOTAL</span><span class="text-blue-600">৳ ${total}</span></div></div></div>
-            <div class="bg-gradient-to-r from-purple-50 to-indigo-50 p-5 rounded-2xl border border-purple-200">
-              <h4 class="text-[10px] font-black text-purple-600 uppercase mb-3"><i class="fa-solid fa-envelope"></i> Email Customer</h4>
-              <button onclick="openEmailPreview(${order.id})" class="w-full py-3 bg-purple-600 text-white rounded-xl font-black text-xs btn-action shadow-md hover:bg-purple-700"><i class="fa-solid fa-eye mr-2"></i> Preview & Send Email</button>
+            <div class="bg-black p-5 rounded-2xl text-white">
+              <h4 class="text-[10px] font-black uppercase mb-3 text-gray-400"><i class="fa-solid fa-envelope"></i> Email</h4>
+              <button onclick="openEmailPreview(${order.id})" class="w-full py-3 bg-white text-black rounded-xl font-black text-xs btn-action"><i class="fa-solid fa-eye mr-2"></i> Preview & Send</button>
             </div>
-            <div class="text-center text-[10px] text-gray-400 font-bold">Order placed on ${date}</div>
+            <div class="text-center text-[10px] text-gray-400 font-bold">${date}</div>
             <div class="space-y-2">
               <div class="grid grid-cols-2 gap-2"><button onclick="downloadInvoice(${order.id})" class="py-3 bg-slate-900 text-white rounded-xl font-black text-xs btn-action"><i class="fa-solid fa-file-pdf mr-1"></i> Invoice</button><button onclick="downloadShippingSticker(${order.id})" class="py-3 bg-blue-600 text-white rounded-xl font-black text-xs btn-action"><i class="fa-solid fa-tag mr-1"></i> Sticker</button></div>
               <div class="grid grid-cols-3 gap-2">${order.status!=='pending'?`<button onclick="updateOrderStatus(${order.id},'pending')" class="py-2.5 bg-yellow-100 text-yellow-700 rounded-xl font-black text-[10px] btn-action">&larr; Pending</button>`:'<div></div>'}${order.status!=='confirmed'?`<button onclick="updateOrderStatus(${order.id},'confirmed')" class="py-2.5 bg-blue-100 text-blue-700 rounded-xl font-black text-[10px] btn-action">Confirm</button>`:'<div></div>'}${order.status!=='shipped'?`<button onclick="updateOrderStatus(${order.id},'shipped')" class="py-2.5 bg-purple-100 text-purple-700 rounded-xl font-black text-[10px] btn-action">Ship</button>`:'<div></div>'}${order.status!=='completed'?`<button onclick="updateOrderStatus(${order.id},'completed')" class="py-2.5 bg-green-100 text-green-700 rounded-xl font-black text-[10px] btn-action">Complete</button>`:'<div></div>'}</div>
-              <button onclick="deleteOrder(${order.id})" class="w-full py-3 bg-red-50 text-red-600 rounded-xl font-black text-xs btn-action mt-2"><i class="fa-solid fa-trash mr-1"></i> Delete Order</button></div>`;
+              <button onclick="deleteOrder(${order.id})" class="w-full py-3 bg-red-50 text-red-600 rounded-xl font-black text-xs btn-action mt-2"><i class="fa-solid fa-trash mr-1"></i> Delete</button></div>`;
             document.getElementById('order-drawer-overlay').classList.remove('hidden');
             document.getElementById('order-drawer').classList.add('open');
         }
@@ -1088,8 +1150,8 @@
             const total = order.member_info?.total?.toString().replace('৳', '') || (subtotal + del - disc);
             const div = document.createElement('div');
             div.style.cssText =
-                'padding:40px 50px;font-family:Inter,system-ui,sans-serif;color:#1e293b;max-width:800px;margin:0 auto;background:#fff;';
-            div.innerHTML = `<div style="display:flex;justify-content:space-between;border-bottom:4px solid #0f172a;padding-bottom:25px;margin-bottom:35px"><div><h1 style="font-size:32px;font-weight:900;">INVOICE</h1><p>ORDER #${order.id}</p></div><div style="text-align:right"><img src="${LOGO_URL}" style="width:55px;height:55px;border-radius:12px;"><h2 style="color:#0071e3;">JAYENWARE</h2></div></div><p style="font-weight:800;">${order.member_name||'N/A'}</p><p>${shipping.phone||''}<br>${shipping.address||''}</p><table style="width:100%;border-collapse:collapse;margin:20px 0"><thead><tr><th>Item</th><th style="text-align:right">Price</th></tr></thead><tbody>${items.map(i=>`<tr><td>${i.title}</td><td style="text-align:right">৳ ${i.price||0}</td></tr>`).join('')}</tbody></table><div style="text-align:right"><p>Subtotal: ৳ ${subtotal}</p><p>Delivery: ৳ ${del}</p>${disc>0?`<p>Discount: -৳ ${disc}</p>`:''}<h2 style="color:#0071e3;">TOTAL: ৳ ${total}</h2></div>`;
+                'padding:40px 50px;font-family:Inter,sans-serif;color:#1a1a1a;max-width:800px;margin:0 auto;background:#fff;';
+            div.innerHTML = `<div style="display:flex;justify-content:space-between;border-bottom:3px solid #0a0a0a;padding-bottom:20px;margin-bottom:30px"><div><h1 style="font-size:28px;font-weight:900;">INVOICE</h1><p>ORDER #${order.id}</p></div><div><h2 style="color:#0a0a0a;">JAYENWARE</h2></div></div><p style="font-weight:700;">${order.member_name||'N/A'}</p><p>${shipping.phone||''}<br>${shipping.address||''}</p><table style="width:100%;border-collapse:collapse;margin:20px 0"><thead><tr style="background:#f5f5f5;"><th style="text-align:left;padding:8px;">Item</th><th style="text-align:right;padding:8px;">Price</th></tr></thead><tbody>${items.map(i=>`<tr><td style="padding:8px;">${i.title}</td><td style="text-align:right;padding:8px;">৳ ${i.price||0}</td></tr>`).join('')}</tbody></table><div style="text-align:right"><p>Subtotal: ৳ ${subtotal}</p><p>Delivery: ৳ ${del}</p>${disc>0?`<p>Discount: -৳ ${disc}</p>`:''}<h2 style="color:#0071e3;">TOTAL: ৳ ${total}</h2></div>`;
             html2pdf().set({ margin: 0, filename: `Invoice_#${order.id}.pdf`, jsPDF: { format: 'a4' } }).from(div)
             .save();
         }
@@ -1100,8 +1162,8 @@
             const shipping = order.member_info?.shipping || {};
             const total = order.member_info?.total?.toString().replace('৳', '') || '0';
             const div = document.createElement('div');
-            div.style.cssText = 'padding:35px;font-family:Inter,system-ui,sans-serif;';
-            div.innerHTML = `<div style="border:8px solid #000;padding:40px;border-radius:25px;"><div style="display:flex;justify-content:space-between;"><span style="font-weight:900;font-size:32px;">JAYENWARE</span><span>#${order.id}</span></div><p style="font-size:38px;font-weight:900;">${order.member_name||'N/A'}</p><p style="font-size:28px;color:#0071e3;">${shipping.phone||'N/A'}</p><p>${shipping.address||''}</p><div style="background:#000;color:#fff;padding:25px;text-align:center;border-radius:16px;margin-top:30px;"><p style="font-size:42px;">৳ ${total}</p></div></div>`;
+            div.style.cssText = 'padding:35px;font-family:Inter,sans-serif;';
+            div.innerHTML = `<div style="border:6px solid #0a0a0a;padding:35px;border-radius:20px;"><div style="display:flex;justify-content:space-between;"><span style="font-weight:900;font-size:28px;">JAYENWARE</span><span>#${order.id}</span></div><p style="font-size:34px;font-weight:900;">${order.member_name||'N/A'}</p><p style="font-size:24px;color:#0071e3;">${shipping.phone||'N/A'}</p><p>${shipping.address||''}</p><div style="background:#0a0a0a;color:#fff;padding:22px;text-align:center;border-radius:14px;margin-top:25px;"><p style="font-size:38px;font-weight:900;">৳ ${total}</p></div></div>`;
             html2pdf().set({ margin: 0, filename: `Sticker_#${order.id}.pdf`, jsPDF: { format: 'a4' } }).from(div)
             .save();
         }

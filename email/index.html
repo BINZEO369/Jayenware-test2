@@ -114,7 +114,7 @@
             background: #ffffff;
             border-radius: 16px;
             width: 100%;
-            max-width: 620px;
+            max-width: 640px;
             max-height: 90vh;
             overflow-y: auto;
             box-shadow: 0 40px 100px rgba(0, 0, 0, 0.4);
@@ -189,9 +189,6 @@
             background: #1a1a1a;
             color: #fff;
         }
-        .eml-action-btn.primary:hover {
-            background: #333;
-        }
         .eml-action-btn.secondary {
             background: #f3f4f6;
             color: #374151;
@@ -226,6 +223,26 @@
         body.dark .campaign-card.active {
             background: #1e3a5f;
             border-color: #0071e3;
+        }
+
+        /* Selected Product Card in Builder */
+        .selected-product-card {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 1rem;
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.2s;
+        }
+        .selected-product-card:hover {
+            border-color: #0071e3;
+            box-shadow: 0 2px 8px rgba(0, 113, 227, 0.08);
+        }
+        body.dark .selected-product-card {
+            background: #2c2c2e;
+            border-color: #3a3a3c;
         }
 
         .custom-scroll::-webkit-scrollbar {
@@ -268,7 +285,7 @@
     <div id="global-loader" style="position:fixed;inset:0;background:white;z-index:9999;display:flex;justify-content:center;align-items:center;">
         <div class="flex flex-col items-center">
             <div class="w-14 h-14 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-            <p class="mt-5 font-bold text-gray-400 text-sm">Loading Campaigns...</p>
+            <p class="mt-5 font-bold text-gray-400 text-sm">Loading Campaign Studio...</p>
         </div>
     </div>
 
@@ -282,48 +299,45 @@
                         <i class="fa-solid fa-chevron-right text-[8px]"></i>
                         <a href="/orders" class="hover:text-blue-600">Orders</a>
                         <i class="fa-solid fa-chevron-right text-[8px]"></i>
-                        <span class="text-blue-600">Email Campaigns</span>
+                        <span class="text-blue-600">Campaigns</span>
                     </div>
                     <h2 class="text-2xl md:text-3xl font-black uppercase tracking-tight">Email Campaign Studio</h2>
-                    <p class="text-xs text-gray-400 mt-1">Create advertising emails, reports & notifications</p>
+                    <p class="text-xs text-gray-400 mt-1">Create beautiful advertising emails with product images & buy buttons</p>
                 </div>
-                <div class="flex gap-2">
-                    <button onclick="resetForm()" class="px-5 py-2.5 bg-gray-100 text-gray-600 rounded-xl font-black text-xs uppercase btn-action">
-                        <i class="fa-solid fa-rotate-left mr-1"></i> Reset
-                    </button>
-                </div>
+                <button onclick="resetForm()" class="px-5 py-2.5 bg-gray-100 text-gray-600 rounded-xl font-black text-xs uppercase btn-action">
+                    <i class="fa-solid fa-rotate-left mr-1"></i> Reset
+                </button>
             </header>
 
             <!-- CAMPAIGN TYPE SELECTION -->
             <div class="mb-6">
-                <h3 class="text-xs font-black text-gray-400 uppercase mb-3">Select Campaign Type</h3>
+                <h3 class="text-xs font-black text-gray-400 uppercase mb-3">Campaign Type</h3>
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-3" id="campaign-types">
-                    <div class="campaign-card active" onclick="selectCampaignType('advertisement', this)" data-type="advertisement">
+                    <div class="campaign-card active" onclick="selectCampaignType('advertisement', this)">
                         <div class="text-3xl mb-2">📢</div>
                         <h4 class="font-black text-sm uppercase">Advertisement</h4>
-                        <p class="text-[10px] text-gray-400 mt-1">Product promotion & offers</p>
+                        <p class="text-[10px] text-gray-400 mt-1">Product promotion with images</p>
                     </div>
-                    <div class="campaign-card" onclick="selectCampaignType('report', this)" data-type="report">
+                    <div class="campaign-card" onclick="selectCampaignType('report', this)">
                         <div class="text-3xl mb-2">📊</div>
                         <h4 class="font-black text-sm uppercase">Report</h4>
                         <p class="text-[10px] text-gray-400 mt-1">Order summary & analytics</p>
                     </div>
-                    <div class="campaign-card" onclick="selectCampaignType('notification', this)" data-type="notification">
+                    <div class="campaign-card" onclick="selectCampaignType('notification', this)">
                         <div class="text-3xl mb-2">🔔</div>
                         <h4 class="font-black text-sm uppercase">Notification</h4>
-                        <p class="text-[10px] text-gray-400 mt-1">Password reset, address change</p>
+                        <p class="text-[10px] text-gray-400 mt-1">Password reset, updates</p>
                     </div>
-                    <div class="campaign-card" onclick="selectCampaignType('custom', this)" data-type="custom">
+                    <div class="campaign-card" onclick="selectCampaignType('custom', this)">
                         <div class="text-3xl mb-2">✏️</div>
                         <h4 class="font-black text-sm uppercase">Custom</h4>
-                        <p class="text-[10px] text-gray-400 mt-1">Build your own email</p>
+                        <p class="text-[10px] text-gray-400 mt-1">Build your own</p>
                     </div>
                 </div>
             </div>
 
-            <!-- CAMPAIGN BUILDER FORM -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <!-- LEFT: Input Form -->
+                <!-- LEFT: Builder Form -->
                 <div class="space-y-5">
                     <div class="bg-white p-6 rounded-2xl border shadow-sm space-y-4">
                         <h3 class="font-black text-sm uppercase flex items-center gap-2">
@@ -346,7 +360,6 @@
                         <div>
                             <label class="text-[10px] font-black text-gray-400 uppercase">Recipient Email(s)</label>
                             <input type="text" id="camp-recipient" placeholder="user@email.com, user2@email.com" class="w-full p-2.5 bg-gray-50 border rounded-xl text-xs font-bold mt-1">
-                            <p class="text-[9px] text-gray-400 mt-1">Separate multiple emails with commas</p>
                         </div>
 
                         <!-- Subject -->
@@ -364,21 +377,24 @@
                         <!-- Message -->
                         <div>
                             <label class="text-[10px] font-black text-gray-400 uppercase">Message Body</label>
-                            <textarea id="camp-message" rows="3" placeholder="Write your message here..." class="w-full p-2.5 bg-gray-50 border rounded-xl text-xs font-bold mt-1 resize-none"></textarea>
+                            <textarea id="camp-message" rows="3" placeholder="Write your advertising message here..." class="w-full p-2.5 bg-gray-50 border rounded-xl text-xs font-bold mt-1 resize-none"></textarea>
                         </div>
 
-                        <!-- Products Selection -->
+                        <!-- PRODUCTS SELECTION (UPDATED) -->
                         <div id="products-selection-section">
-                            <label class="text-[10px] font-black text-gray-400 uppercase">Select Products</label>
+                            <label class="text-[10px] font-black text-gray-400 uppercase flex justify-between">
+                                <span>Select Products (with images & buy links)</span>
+                                <span class="text-blue-600" id="product-count-badge">0 selected</span>
+                            </label>
                             <div class="flex gap-2 mt-1">
                                 <select id="product-select" class="flex-1 p-2.5 bg-gray-50 border rounded-xl text-xs font-bold">
-                                    <option value="">-- Select product --</option>
+                                    <option value="">-- Choose a product --</option>
                                 </select>
                                 <button onclick="addProductToCampaign()" class="px-4 bg-blue-600 text-white rounded-xl text-xs font-black btn-action">
-                                    <i class="fa-solid fa-plus"></i>
+                                    <i class="fa-solid fa-plus"></i> Add
                                 </button>
                             </div>
-                            <div id="selected-products" class="space-y-2 mt-3"></div>
+                            <div id="selected-products" class="space-y-2 mt-3 max-h-[350px] overflow-y-auto custom-scroll"></div>
                         </div>
 
                         <!-- Discount -->
@@ -396,7 +412,7 @@
                         <!-- Links -->
                         <div class="grid grid-cols-2 gap-3">
                             <div>
-                                <label class="text-[10px] font-black text-gray-400 uppercase">Order Link</label>
+                                <label class="text-[10px] font-black text-gray-400 uppercase">Default Order Link</label>
                                 <input type="url" id="camp-order-link" value="https://jayenware.shop/order" class="w-full p-2.5 bg-gray-50 border rounded-xl text-xs font-bold mt-1">
                             </div>
                             <div>
@@ -407,7 +423,7 @@
 
                         <!-- Badge Color -->
                         <div>
-                            <label class="text-[10px] font-black text-gray-400 uppercase">Badge/Accent Color</label>
+                            <label class="text-[10px] font-black text-gray-400 uppercase">Accent Color</label>
                             <div class="flex gap-2 mt-1">
                                 <input type="color" id="camp-accent-color" value="#3b82f6" class="w-12 h-10 rounded-lg border cursor-pointer">
                                 <input type="text" id="camp-accent-color-text" value="#3b82f6" class="flex-1 p-2.5 bg-gray-50 border rounded-xl text-xs font-bold" onchange="document.getElementById('camp-accent-color').value=this.value">
@@ -426,14 +442,19 @@
                     </div>
                 </div>
 
-                <!-- RIGHT: Quick Preview Card -->
-                <div class="bg-white p-6 rounded-2xl border shadow-sm sticky top-4 max-h-[80vh] overflow-y-auto custom-scroll" id="quick-preview-container">
-                    <h3 class="font-black text-sm uppercase mb-4 flex items-center gap-2">
-                        <i class="fa-solid fa-mobile-screen text-blue-600"></i> Quick Preview
-                    </h3>
+                <!-- RIGHT: Quick Preview -->
+                <div class="bg-white p-6 rounded-2xl border shadow-sm sticky top-4 max-h-[85vh] overflow-y-auto custom-scroll" id="quick-preview-container">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="font-black text-sm uppercase flex items-center gap-2">
+                            <i class="fa-solid fa-mobile-screen text-blue-600"></i> Email Preview
+                        </h3>
+                        <button onclick="openFullPreview()" class="text-[10px] font-black text-blue-600 btn-action">
+                            <i class="fa-solid fa-expand mr-1"></i> Full Screen
+                        </button>
+                    </div>
                     <div id="quick-preview-content" class="text-center py-12">
                         <div class="text-6xl mb-4">📧</div>
-                        <p class="text-sm font-bold text-gray-400">Fill the form and click</p>
+                        <p class="text-sm font-bold text-gray-400">Add products and click</p>
                         <p class="text-xs text-gray-300 mt-1">"Generate Preview" to see your email</p>
                     </div>
                 </div>
@@ -451,7 +472,7 @@
         </main>
     </div>
 
-    <!-- EMAIL FULL PREVIEW OVERLAY -->
+    <!-- FULL PREVIEW OVERLAY -->
     <div id="email-full-overlay" class="email-full-overlay hidden" onclick="closeEmailPreview(event)">
         <div class="email-full-preview custom-scroll" onclick="event.stopPropagation()">
             <button class="eml-close-btn" onclick="closeEmailPreview()">&times;</button>
@@ -505,23 +526,22 @@
             currentCampaignType = type;
             document.querySelectorAll('.campaign-card').forEach(c => c.classList.remove('active'));
             element.classList.add('active');
-
-            // Update form presets based on type
             const presets = {
-                'advertisement': { subject: '🔥 Special Offer Just For You!', headline: 'Exclusive Deal - Limited Time!',
-                    message: 'We have an amazing offer for you! Check out our latest products with special discounts.' },
+                'advertisement': { subject: '🔥 Special Offer Just For You!', headline: 'Exclusive Deals - Limited Time!',
+                    message: 'Check out these amazing products we picked just for you. Grab them before they\'re gone!' },
                 'report': { subject: '📊 Your Monthly Report', headline: 'Your Performance Summary',
                     message: 'Here is your monthly activity report. Thank you for being with us!' },
                 'notification': { subject: '🔔 Account Notification', headline: 'Important Account Update',
-                    message: 'This is an important notification regarding your account. Please review the details below.' },
+                    message: 'This is an important notification regarding your account.' },
                 'custom': { subject: '', headline: '', message: '' }
             };
-            const preset = presets[type] || presets['custom'];
-            document.getElementById('camp-subject').value = preset.subject;
-            document.getElementById('camp-headline').value = preset.headline;
-            document.getElementById('camp-message').value = preset.message;
+            const p = presets[type] || presets['custom'];
+            document.getElementById('camp-subject').value = p.subject;
+            document.getElementById('camp-headline').value = p.headline;
+            document.getElementById('camp-message').value = p.message;
         }
 
+        // ==================== PRODUCT MANAGEMENT ====================
         function addProductToCampaign() {
             const select = document.getElementById('product-select');
             const productId = select.value;
@@ -529,43 +549,73 @@
             const product = allProducts.find(p => p.id.toString() === productId);
             if (!product) return;
             if (selectedCampaignProducts.find(p => p.id === product.id)) {
-                showToast('Product already added', 'error');
+                showToast('Product already added!', 'error');
                 return;
             }
+            // Add product with its own buy link
             selectedCampaignProducts.push({
                 id: product.id,
                 title: product.title || product.name || 'Product',
                 price: product.price || 0,
-                img: product.img || product.image_url || LOGO_URL,
-                product_id: product.product_id || product.id
+                originalPrice: product.original_price || Math.round((product.price || 0) * 1.4),
+                img: product.img || product.image_url || product.image || LOGO_URL,
+                product_id: product.product_id || product.id,
+                buyLink: product.buy_link || product.link || `https://jayenware.shop/product/${product.id}`,
+                description: product.description || ''
             });
             renderSelectedProducts();
+            updateProductCount();
             select.value = '';
         }
 
         function removeCampaignProduct(index) {
             selectedCampaignProducts.splice(index, 1);
             renderSelectedProducts();
+            updateProductCount();
+        }
+
+        function updateProductLink(index, value) {
+            if (selectedCampaignProducts[index]) {
+                selectedCampaignProducts[index].buyLink = value;
+            }
+        }
+
+        function updateProductPrice(index, value) {
+            if (selectedCampaignProducts[index]) {
+                selectedCampaignProducts[index].price = parseFloat(value) || 0;
+            }
         }
 
         function renderSelectedProducts() {
             const container = document.getElementById('selected-products');
             if (selectedCampaignProducts.length === 0) {
                 container.innerHTML =
-                    '<p class="text-[10px] text-gray-300 text-center py-2">No products selected</p>';
+                    '<p class="text-[10px] text-gray-300 text-center py-4 border border-dashed rounded-xl">No products selected. Choose from dropdown above.</p>';
                 return;
             }
             container.innerHTML = selectedCampaignProducts.map((p, i) => `
-            <div class="flex items-center justify-between bg-gray-50 p-2.5 rounded-xl border">
-              <div class="flex items-center gap-2">
-                <img src="${p.img}" alt="${p.title}" class="w-8 h-8 rounded-lg object-cover" onerror="this.src='${LOGO_URL}'">
-                <div>
-                  <p class="text-[11px] font-bold">${p.title}</p>
-                  <p class="text-[9px] text-gray-400">৳ ${p.price}</p>
+            <div class="selected-product-card">
+              <img src="${p.img}" alt="${p.title}" class="w-16 h-16 rounded-xl object-cover border flex-shrink-0" onerror="this.src='${LOGO_URL}'">
+              <div class="flex-1 min-w-0 space-y-1.5">
+                <div class="flex items-start justify-between gap-2">
+                  <p class="text-xs font-bold truncate">${p.title}</p>
+                  <button onclick="removeCampaignProduct(${i})" class="text-gray-300 hover:text-red-500 text-sm btn-action flex-shrink-0"><i class="fa-solid fa-circle-xmark"></i></button>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="text-sm font-black text-blue-600">৳ ${p.price}</span>
+                  ${p.originalPrice > p.price ? `<span class="text-[10px] text-gray-400 line-through">৳ ${p.originalPrice}</span>` : ''}
+                  <span class="text-[9px] text-gray-400">ID: ${p.product_id}</span>
+                </div>
+                <div class="flex gap-2">
+                  <input type="number" value="${p.price}" placeholder="Price" class="w-20 p-1.5 bg-white border rounded-lg text-[10px] font-bold" onchange="updateProductPrice(${i}, this.value)" title="Product price">
+                  <input type="url" value="${p.buyLink}" placeholder="Buy link URL" class="flex-1 p-1.5 bg-white border rounded-lg text-[10px]" onchange="updateProductLink(${i}, this.value)" title="Buy now link for this product">
                 </div>
               </div>
-              <button onclick="removeCampaignProduct(${i})" class="text-red-400 hover:text-red-600 text-xs btn-action"><i class="fa-solid fa-xmark"></i></button>
             </div>`).join('');
+        }
+
+        function updateProductCount() {
+            document.getElementById('product-count-badge').textContent = selectedCampaignProducts.length + ' selected';
         }
 
         // ==================== BUILD CAMPAIGN EMAIL HTML ====================
@@ -580,23 +630,92 @@
             const websiteLink = document.getElementById('camp-website-link').value || '#';
             const accentColor = document.getElementById('camp-accent-color').value || '#3b82f6';
 
+            // Build product cards with images and buy buttons
             let productsHTML = '';
             if (selectedCampaignProducts.length > 0) {
-                productsHTML = selectedCampaignProducts.map(p => `
-            <tr>
-              <td style="padding:10px;border-bottom:1px solid #f0f0f0;">
-                <table cellpadding="0" cellspacing="0" border="0"><tr>
-                  <td style="padding-right:10px;"><img src="${p.img}" alt="${p.title}" style="width:44px;height:44px;border-radius:8px;object-fit:cover;display:block;" onerror="this.src='${LOGO_URL}'"></td>
-                  <td style="vertical-align:middle;"><span style="font-size:13px;font-weight:600;color:#1a1a1a;">${p.title}</span><br><span style="font-size:9px;color:#aaa;">ID: ${p.product_id||'N/A'}</span></td>
-                </tr></table>
-              </td>
-              <td style="padding:10px;border-bottom:1px solid #f0f0f0;text-align:right;font-size:13px;font-weight:700;color:#1a1a1a;white-space:nowrap;">৳ ${p.price}</td>
-              ${discount > 0 ? `<td style="padding:10px;border-bottom:1px solid #f0f0f0;text-align:right;">
-                <span style="display:inline-block;padding:3px 10px;border-radius:10px;background:#fef2f2;color:#dc2626;font-size:10px;font-weight:700;">-${discount}%</span>
-              </td>` : ''}
-            </tr>`).join('');
+                if (selectedCampaignProducts.length === 1) {
+                    // Single product - full width card
+                    const p = selectedCampaignProducts[0];
+                    const discountedPrice = discount > 0 ? Math.round(p.price * (1 - discount / 100)) : p.price;
+                    productsHTML = `
+                <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f9f9f9;border:1px solid #eee;border-radius:16px;overflow:hidden;">
+                  <tr><td style="padding:0;">
+                    <img src="${p.img}" alt="${p.title}" style="width:100%;height:auto;max-height:280px;object-fit:cover;display:block;" onerror="this.src='${LOGO_URL}'">
+                  </td></tr>
+                  <tr><td style="padding:18px 20px;">
+                    <p style="font-size:15px;font-weight:700;color:#1a1a1a;margin:0;">${p.title}</p>
+                    <p style="font-size:10px;color:#999;margin:4px 0 0;">Product ID: ${p.product_id}</p>
+                    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:12px;">
+                      <tr>
+                        <td>
+                          ${discount > 0 ? `<span style="font-size:22px;font-weight:900;color:${accentColor};">৳ ${discountedPrice}</span>
+                          <span style="font-size:13px;color:#999;text-decoration:line-through;margin-left:8px;">৳ ${p.price}</span>
+                          <span style="display:inline-block;margin-left:8px;padding:3px 10px;border-radius:10px;background:#fef2f2;color:#dc2626;font-size:10px;font-weight:700;">-${discount}%</span>` :
+                            `<span style="font-size:22px;font-weight:900;color:${accentColor};">৳ ${p.price}</span>`}
+                        </td>
+                        <td style="text-align:right;">
+                          <a href="${p.buyLink || orderLink}" target="_blank" style="display:inline-block;padding:10px 22px;background:${accentColor};color:#fff;border-radius:25px;text-decoration:none;font-size:12px;font-weight:700;">🛒 Buy Now</a>
+                        </td>
+                      </tr>
+                    </table>
+                  </td></tr>
+                </table>`;
+                } else {
+                    // Multiple products - grid layout
+                    productsHTML = `
+                <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                  <tr><td style="padding:0 0 12px;">
+                    <span style="font-size:12px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:1px;">Featured Products</span>
+                  </td></tr>`;
+                    selectedCampaignProducts.forEach((p, idx) => {
+                        const discountedPrice = discount > 0 ? Math.round(p.price * (1 - discount /
+                            100)) : p.price;
+                        const isLast = idx === selectedCampaignProducts.length - 1;
+                        productsHTML += `
+                  <tr>
+                    <td style="padding:${isLast?'0':'0 0 16px 0'};">
+                      <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f9f9f9;border:1px solid #eee;border-radius:14px;overflow:hidden;">
+                        <tr>
+                          <td style="width:120px;padding:0;vertical-align:top;">
+                            <img src="${p.img}" alt="${p.title}" style="width:120px;height:120px;object-fit:cover;display:block;" onerror="this.src='${LOGO_URL}'">
+                          </td>
+                          <td style="padding:14px 16px;vertical-align:top;">
+                            <p style="font-size:13px;font-weight:700;color:#1a1a1a;margin:0;">${p.title}</p>
+                            <p style="font-size:9px;color:#aaa;margin:3px 0 8px;">ID: ${p.product_id}</p>
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                              <tr>
+                                <td>
+                                  ${discount > 0 ? `<span style="font-size:16px;font-weight:900;color:${accentColor};">৳ ${discountedPrice}</span>
+                                  <span style="font-size:11px;color:#999;text-decoration:line-through;margin-left:6px;">৳ ${p.price}</span>` :
+                                    `<span style="font-size:16px;font-weight:900;color:${accentColor};">৳ ${p.price}</span>`}
+                                </td>
+                                <td style="text-align:right;">
+                                  <a href="${p.buyLink || orderLink}" target="_blank" style="display:inline-block;padding:8px 16px;background:${accentColor};color:#fff;border-radius:20px;text-decoration:none;font-size:10px;font-weight:700;">Buy Now →</a>
+                                </td>
+                              </tr>
+                            </table>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>`;
+                    });
+                }
             }
 
+            // Discount code section
+            const discountSection = discountCode ? `
+          <tr><td style="padding:16px 24px;text-align:center;">
+            <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:${accentColor}08;border:1px dashed ${accentColor};border-radius:14px;">
+              <tr><td style="padding:18px;text-align:center;">
+                <p style="font-size:10px;color:#888;text-transform:uppercase;letter-spacing:1.5px;margin:0;">Discount Code</p>
+                <p style="font-size:24px;font-weight:900;color:${accentColor};margin:6px 0;letter-spacing:3px;">${discountCode}</p>
+                <p style="font-size:11px;color:#666;margin:0;">Use at checkout for ${discount}% off</p>
+              </td></tr>
+            </table>
+          </td></tr>` : '';
+
+            // Social icons
             const socialIconsHTML = `
             <td align="center" style="padding:4px 8px;">
               <a href="${SUPPORT_INFO.website}" target="_blank" style="text-decoration:none;">
@@ -625,61 +744,46 @@
             </td>`;
 
             return `
-        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#fff;font-family:Arial,Helvetica,sans-serif;">
+        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#ffffff;font-family:Arial,Helvetica,sans-serif;">
           <tr><td style="background:${accentColor};padding:28px 24px 24px;text-align:center;">
             <span style="display:inline-block;padding:5px 16px;border-radius:20px;background:rgba(255,255,255,0.2);color:#fff;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:2px;">${currentCampaignType.toUpperCase()}</span>
-            <h1 style="color:#fff;font-size:18px;font-weight:800;margin:10px 0 0;text-transform:uppercase;">${headline}</h1>
+            <h1 style="color:#fff;font-size:18px;font-weight:800;margin:10px 0 0;text-transform:uppercase;letter-spacing:0.5px;">${headline}</h1>
           </td></tr>
           <tr><td style="padding:16px 24px;border-bottom:1px solid #eee;background:#fafafa;">
             <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
-              <td><table cellpadding="0" cellspacing="0" border="0"><tr>
+              <td style="vertical-align:middle;"><table cellpadding="0" cellspacing="0" border="0"><tr>
                 <td style="width:40px;height:40px;border-radius:10px;overflow:hidden;"><img src="${LOGO_URL}" style="width:40px;height:40px;object-fit:cover;display:block;border-radius:10px;"></td>
-                <td style="padding-left:10px;"><p style="font-size:13px;font-weight:700;color:#1a1a1a;margin:0;">${senderName}</p><p style="font-size:10px;color:#888;margin:0;">${senderTitle}</p></td>
+                <td style="padding-left:10px;vertical-align:middle;"><p style="font-size:13px;font-weight:700;color:#1a1a1a;margin:0;">${senderName}</p><p style="font-size:10px;color:#888;margin:0;">${senderTitle}</p></td>
               </tr></table></td>
-              <td style="text-align:right;"><span style="display:inline-block;padding:4px 10px;border-radius:10px;background:${accentColor}20;color:${accentColor};font-size:9px;font-weight:700;">OFFICIAL</span></td>
+              <td style="text-align:right;vertical-align:middle;"><span style="display:inline-block;padding:4px 10px;border-radius:10px;background:${accentColor}20;color:${accentColor};font-size:9px;font-weight:700;">OFFICIAL</span></td>
             </tr></table>
           </td></tr>
           <tr><td style="padding:20px 24px 12px;">
-            <p style="font-size:13px;color:#666;margin:0;line-height:1.6;">Hello,</p>
-            <p style="font-size:13px;color:#444;margin:8px 0 0;line-height:1.7;">${message}</p>
+            <p style="font-size:14px;color:#444;margin:0;line-height:1.7;">${message}</p>
           </td></tr>
           ${selectedCampaignProducts.length > 0 ? `
-          <tr><td style="padding:16px 24px;">
-            <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f9f9f9;border:1px solid #eee;border-radius:12px;">
-              <tr><td style="padding:14px 18px;">
-                <span style="font-size:10px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:1px;">Featured Products</span>
-                <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:8px;">${productsHTML}</table>
-              </td></tr>
-            </table>
-          </td></tr>` : ''}
-          ${discountCode ? `
-          <tr><td style="padding:12px 24px;text-align:center;">
-            <div style="background:${accentColor}10;border:1px dashed ${accentColor};border-radius:12px;padding:16px;">
-              <p style="font-size:10px;color:#888;text-transform:uppercase;letter-spacing:1px;margin:0;">Discount Code</p>
-              <p style="font-size:22px;font-weight:900;color:${accentColor};margin:4px 0;letter-spacing:2px;">${discountCode}</p>
-              <p style="font-size:10px;color:#666;margin:0;">Use at checkout for ${discount}% off</p>
-            </div>
-          </td></tr>` : ''}
+          <tr><td style="padding:12px 24px;">${productsHTML}</td></tr>` : ''}
+          ${discountSection}
           <tr><td style="padding:16px 24px;text-align:center;">
-            <a href="${orderLink}" target="_blank" style="display:inline-block;padding:12px 32px;background:${accentColor};color:#fff;border-radius:25px;text-decoration:none;font-size:13px;font-weight:700;">🛒 Order Now</a>
+            <a href="${orderLink}" target="_blank" style="display:inline-block;padding:12px 32px;background:${accentColor};color:#fff;border-radius:25px;text-decoration:none;font-size:13px;font-weight:700;">🛒 Shop All Products</a>
           </td></tr>
           <tr><td style="background:#1a1a1a;padding:24px;text-align:center;">
             <img src="${LOGO_URL}" style="width:44px;height:44px;border-radius:10px;display:block;margin:0 auto 8px;">
             <p style="font-size:14px;font-weight:800;color:#fff;margin:0;">JAYENWARE</p>
-            <p style="font-size:9px;color:#999;margin:4px 0 14px;text-transform:uppercase;">Systems by Binzeo</p>
+            <p style="font-size:9px;color:#999;margin:4px 0 14px;text-transform:uppercase;letter-spacing:1.5px;">Systems by Binzeo</p>
             <table cellpadding="0" cellspacing="0" border="0" style="margin:0 auto 12px;"><tr>${socialIconsHTML}</tr></table>
-            <a href="${websiteLink}" target="_blank" style="color:#999;font-size:10px;">Visit Website</a>
+            <a href="${websiteLink}" target="_blank" style="color:#999;font-size:10px;text-decoration:none;">Visit Website</a>
             <hr style="border:none;border-top:1px solid #333;margin:12px 0;">
-            <p style="font-size:9px;color:#777;">&copy; ${new Date().getFullYear()} JAYENWARE.</p>
+            <p style="font-size:9px;color:#777;margin:0;">&copy; ${new Date().getFullYear()} JAYENWARE. All rights reserved.</p>
           </td></tr>
         </table>`;
         }
 
-        // ==================== GENERATE PREVIEW ====================
+        // ==================== PREVIEW ====================
         function generatePreview() {
             const html = buildCampaignEmailHTML();
             document.getElementById('quick-preview-content').innerHTML = html;
-            document.getElementById('quick-preview-content').scrollIntoView({ behavior: 'smooth' });
+            document.getElementById('quick-preview-container').scrollIntoView({ behavior: 'smooth' });
             showToast('Preview generated!', 'success');
         }
 
@@ -688,7 +792,7 @@
             document.getElementById('email-full-content').innerHTML = html;
             document.getElementById('email-action-bar').innerHTML = `
             <button class="eml-action-btn secondary" onclick="copyCampaignHTML()"><i class="fa-solid fa-copy"></i> Copy</button>
-            <button class="eml-action-btn primary" onclick="sendCampaignEmail()"><i class="fa-solid fa-paper-plane"></i> Send Campaign</button>
+            <button class="eml-action-btn primary" onclick="sendCampaignEmail()"><i class="fa-solid fa-paper-plane"></i> Send</button>
             <button class="eml-action-btn secondary" onclick="openGmailCampaign()"><i class="fa-solid fa-envelope"></i> Gmail</button>`;
             document.getElementById('email-full-overlay').classList.remove('hidden');
             document.body.style.overflow = 'hidden';
@@ -701,16 +805,17 @@
         }
 
         function copyCampaignHTML() {
-            const html = buildCampaignEmailHTML();
-            navigator.clipboard.writeText(html).then(() => showToast('Campaign HTML copied!', 'success'));
+            navigator.clipboard.writeText(buildCampaignEmailHTML()).then(() => showToast('Design copied!',
+            'success'));
         }
 
         function openGmailCampaign() {
-            const html = buildCampaignEmailHTML();
             const to = document.getElementById('camp-recipient').value || '';
             const subject = document.getElementById('camp-subject').value || 'Campaign';
-            navigator.clipboard.writeText(html).then(() => {
-                window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(to)}&su=${encodeURIComponent(subject)}`, '_blank');
+            navigator.clipboard.writeText(buildCampaignEmailHTML()).then(() => {
+                window.open(
+                    `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(to)}&su=${encodeURIComponent(subject)}`,
+                    '_blank');
                 showToast('Gmail opened! Paste the design.', 'success');
             });
         }
@@ -719,20 +824,16 @@
         function sendCampaignEmail() {
             const to = document.getElementById('camp-recipient').value.trim();
             const subject = document.getElementById('camp-subject').value.trim();
-            if (!to) { showToast('Please enter recipient email(s)', 'error'); return; }
-            if (!subject) { showToast('Please enter subject', 'error'); return; }
+            if (!to) { showToast('Enter recipient email(s)', 'error'); return; }
+            if (!subject) { showToast('Enter subject', 'error'); return; }
             const html = buildCampaignEmailHTML();
             const recipients = to.split(',').map(e => e.trim()).filter(e => e);
-
-            // Copy to clipboard
             navigator.clipboard.writeText(html).then(() => {}).catch(() => {});
-
-            // Save to recent campaigns
             const campaign = {
                 id: Date.now(),
                 type: currentCampaignType,
-                subject: subject,
-                recipients: recipients,
+                subject,
+                recipients,
                 headline: document.getElementById('camp-headline').value,
                 date: new Date().toISOString(),
                 productCount: selectedCampaignProducts.length
@@ -741,37 +842,22 @@
             if (recentCampaigns.length > 20) recentCampaigns = recentCampaigns.slice(0, 20);
             localStorage.setItem('email_campaigns', JSON.stringify(recentCampaigns));
             renderRecentCampaigns();
-
-            // Open Proton for first recipient
             const protonUrl = `https://mail.proton.me/u/0/compose?to=${encodeURIComponent(recipients[0])}&subject=${encodeURIComponent(subject)}`;
             window.open(protonUrl, '_blank');
-
-            // Also BCC others if multiple
-            if (recipients.length > 1) {
-                const bccList = recipients.slice(1).join(', ');
-                showToast(`Campaign saved! Sent to ${recipients[0]} + ${recipients.length-1} more. Design copied!`,
-                    'success');
-            } else {
-                showToast('Campaign saved! Proton Mail opened. Design copied!', 'success');
-            }
+            showToast(`Campaign sent! ${recipients.length} recipient(s). Design copied!`, 'success');
         }
 
         function renderRecentCampaigns() {
-            const container = document.getElementById('recent-campaigns');
-            if (recentCampaigns.length === 0) {
-                container.innerHTML = '<p class="text-xs text-gray-300 text-center py-4">No campaigns sent yet</p>';
-                return;
-            }
-            container.innerHTML = recentCampaigns.slice(0, 10).map(c => `
+            const c = document.getElementById('recent-campaigns');
+            if (recentCampaigns.length === 0) { c.innerHTML =
+                    '<p class="text-xs text-gray-300 text-center py-4">No campaigns yet</p>'; return; }
+            c.innerHTML = recentCampaigns.slice(0, 10).map(ca => `
             <div class="flex items-center justify-between bg-gray-50 p-3 rounded-xl border">
               <div class="flex items-center gap-3">
-                <span class="text-xl">${c.type==='advertisement'?'📢':c.type==='report'?'📊':c.type==='notification'?'🔔':'✏️'}</span>
-                <div>
-                  <p class="text-xs font-bold">${c.subject}</p>
-                  <p class="text-[9px] text-gray-400">${c.recipients.length} recipient(s) · ${new Date(c.date).toLocaleDateString()}</p>
-                </div>
+                <span class="text-xl">${ca.type==='advertisement'?'📢':ca.type==='report'?'📊':ca.type==='notification'?'🔔':'✏️'}</span>
+                <div><p class="text-xs font-bold">${ca.subject}</p><p class="text-[9px] text-gray-400">${ca.recipients.length} recipient(s) · ${ca.productCount||0} products · ${new Date(ca.date).toLocaleDateString()}</p></div>
               </div>
-              <button onclick="deleteCampaign(${c.id})" class="text-gray-300 hover:text-red-500 text-xs btn-action"><i class="fa-solid fa-trash"></i></button>
+              <button onclick="deleteCampaign(${ca.id})" class="text-gray-300 hover:text-red-500 text-xs btn-action"><i class="fa-solid fa-trash"></i></button>
             </div>`).join('');
         }
 
@@ -779,16 +865,17 @@
             recentCampaigns = recentCampaigns.filter(c => c.id !== id);
             localStorage.setItem('email_campaigns', JSON.stringify(recentCampaigns));
             renderRecentCampaigns();
-            showToast('Campaign deleted', 'error');
+            showToast('Deleted', 'error');
         }
 
         function resetForm() {
             document.getElementById('camp-sender-name').value = 'JAYENWARE';
             document.getElementById('camp-sender-title').value = 'Marketing Team';
             document.getElementById('camp-recipient').value = '';
-            document.getElementById('camp-subject').value = '';
-            document.getElementById('camp-headline').value = '';
-            document.getElementById('camp-message').value = '';
+            document.getElementById('camp-subject').value = '🔥 Special Offer Just For You!';
+            document.getElementById('camp-headline').value = 'Exclusive Deals - Limited Time!';
+            document.getElementById('camp-message').value =
+                'Check out these amazing products we picked just for you. Grab them before they\'re gone!';
             document.getElementById('camp-discount').value = '0';
             document.getElementById('camp-discount-code').value = '';
             document.getElementById('camp-order-link').value = 'https://jayenware.shop/order';
@@ -797,35 +884,39 @@
             document.getElementById('camp-accent-color-text').value = '#3b82f6';
             selectedCampaignProducts = [];
             renderSelectedProducts();
+            updateProductCount();
             document.getElementById('quick-preview-content').innerHTML = `
             <div class="text-6xl mb-4">📧</div>
-            <p class="text-sm font-bold text-gray-400">Fill the form and click</p>
+            <p class="text-sm font-bold text-gray-400">Add products and click</p>
             <p class="text-xs text-gray-300 mt-1">"Generate Preview" to see your email</p>`;
             showToast('Form reset!', 'info');
         }
 
-        // ==================== LOAD PRODUCTS ====================
         async function loadProducts() {
             try {
                 const { data, error } = await _supabase.from('products').select('*').order('created_at',
                 { ascending: false });
                 if (error) throw error;
                 allProducts = data || [];
-                const select = document.getElementById('product-select');
-                select.innerHTML = '<option value="">-- Select product --</option>' +
-                    allProducts.map(p => `<option value="${p.id}">${p.title || p.name || 'Product'} - ৳ ${p.price||0}</option>`).join('');
             } catch (e) {
-                console.error('Error loading products:', e);
-                // Fallback dummy products
+                console.error('Error:', e);
                 allProducts = [
-                    { id: 1, title: 'Premium T-Shirt', price: 599, img: LOGO_URL, product_id: 'TSH-001' },
-                    { id: 2, title: 'Wireless Earbuds', price: 1299, img: LOGO_URL, product_id: 'AUD-002' },
-                    { id: 3, title: 'Smart Watch', price: 2499, img: LOGO_URL, product_id: 'WCH-003' },
+                    { id: 1, title: 'Premium Cotton T-Shirt', price: 599, original_price: 899, img: LOGO_URL,
+                        product_id: 'TSH-001', buy_link: 'https://jayenware.shop/product/1' },
+                    { id: 2, title: 'Wireless Bluetooth Earbuds', price: 1299, original_price: 1999, img: LOGO_URL,
+                        product_id: 'AUD-002', buy_link: 'https://jayenware.shop/product/2' },
+                    { id: 3, title: 'Smart Fitness Watch', price: 2499, original_price: 3499, img: LOGO_URL,
+                        product_id: 'WCH-003', buy_link: 'https://jayenware.shop/product/3' },
+                    { id: 4, title: 'Portable Power Bank 20000mAh', price: 899, original_price: 1299, img: LOGO_URL,
+                        product_id: 'PWR-004', buy_link: 'https://jayenware.shop/product/4' },
+                    { id: 5, title: 'USB-C Fast Charging Cable', price: 299, original_price: 499, img: LOGO_URL,
+                        product_id: 'CBL-005', buy_link: 'https://jayenware.shop/product/5' },
                 ];
-                const select = document.getElementById('product-select');
-                select.innerHTML = '<option value="">-- Select product --</option>' +
-                    allProducts.map(p => `<option value="${p.id}">${p.title} - ৳ ${p.price}</option>`).join('');
             }
+            const select = document.getElementById('product-select');
+            select.innerHTML = '<option value="">-- Choose a product --</option>' +
+                allProducts.map(p => `<option value="${p.id}">${p.title || p.name || 'Product'} - ৳ ${p.price||0}</option>`
+                    ).join('');
         }
 
         async function checkSession() {
@@ -838,19 +929,13 @@
             await loadProducts();
             renderRecentCampaigns();
             renderSelectedProducts();
+            updateProductCount();
         }
 
         document.addEventListener('keydown', e => { if (e.key === 'Escape') closeEmailPreview(); });
         window.onload = checkSession;
         window.addEventListener('resize', () => {
             document.querySelector('.bottom-nav').classList.toggle('hidden', window.innerWidth >= 769);
-        });
-
-        // Quick Preview double-click to open full preview
-        document.getElementById('quick-preview-container').addEventListener('dblclick', function(e) {
-            if (document.getElementById('quick-preview-content').innerHTML.includes('email-full')) return;
-            const html = buildCampaignEmailHTML();
-            if (html.includes('<table')) openFullPreview();
         });
     </script>
 </body>

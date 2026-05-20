@@ -44,19 +44,14 @@
             background: #2c2c2e;
         }
         body.dark .text-slate-800,
-        body.dark .text-slate-900,
-        body.dark .text-slate-700 {
+        body.dark .text-slate-900 {
             color: #f5f5f7;
         }
         body.dark .text-gray-400 {
             color: #8e8e93;
         }
-        body.dark .text-gray-500 {
-            color: #636366;
-        }
         body.dark .border,
-        body.dark .border-b,
-        body.dark .border-t {
+        body.dark .border-b {
             border-color: #2c2c2e;
         }
         body.dark .kanban-col {
@@ -67,7 +62,7 @@
             border-color: #3a3a3c;
         }
 
-        /* Email Full Preview Overlay */
+        /* Email Preview */
         .email-full-overlay {
             position: fixed;
             inset: 0;
@@ -88,7 +83,7 @@
             max-height: 90vh;
             overflow-y: auto;
             box-shadow: 0 40px 100px rgba(0, 0, 0, 0.4);
-            animation: scaleIn 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+            animation: scaleIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
             position: relative;
         }
         @keyframes scaleIn {
@@ -110,7 +105,6 @@
             }
         }
 
-        /* Close Button */
         .eml-close-btn {
             position: absolute;
             top: 10px;
@@ -127,17 +121,12 @@
             align-items: center;
             justify-content: center;
             z-index: 10;
-            transition: background 0.2s;
-        }
-        .eml-close-btn:hover {
-            background: rgba(0, 0, 0, 0.85);
         }
 
-        /* Action Bar */
         .eml-action-bar {
             position: sticky;
             bottom: 0;
-            background: #ffffff;
+            background: #fff;
             border-top: 1px solid #e5e7eb;
             padding: 14px 20px;
             display: flex;
@@ -153,32 +142,78 @@
             font-weight: 700;
             cursor: pointer;
             border: none;
-            transition: all 0.2s;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 5px;
-            letter-spacing: 0.3px;
             font-family: 'Inter', system-ui, sans-serif;
         }
         .eml-action-btn.primary {
-            background: #0a0a0a;
-            color: #ffffff;
+            background: #1a1a1a;
+            color: #fff;
         }
         .eml-action-btn.primary:hover {
-            background: #1a1a1a;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+            background: #333;
         }
         .eml-action-btn.secondary {
             background: #f3f4f6;
             color: #374151;
         }
-        .eml-action-btn.secondary:hover {
-            background: #e5e7eb;
+
+        /* Modal for sender info */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+            z-index: 900;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease;
+        }
+        .modal-card {
+            background: #fff;
+            border-radius: 20px;
+            padding: 28px;
+            width: 90%;
+            max-width: 420px;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.3);
+            animation: scaleIn 0.4s ease;
+        }
+        body.dark .modal-card {
+            background: #1c1c1e;
+            color: #f5f5f7;
         }
 
-        /* Toast & others */
+        /* Edit modal */
+        .edit-modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+            z-index: 900;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease;
+        }
+        .edit-modal-card {
+            background: #fff;
+            border-radius: 20px;
+            padding: 24px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.3);
+            animation: scaleIn 0.4s ease;
+        }
+        body.dark .edit-modal-card {
+            background: #1c1c1e;
+            color: #f5f5f7;
+        }
+
         .btn-action {
             transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
             cursor: pointer;
@@ -190,10 +225,10 @@
             transform: scale(0.96);
         }
         .toast-enter {
-            animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            animation: slideUp 0.4s ease forwards;
         }
         .toast-exit {
-            animation: slideDown 0.3s ease-in forwards;
+            animation: slideDown 0.3s ease forwards;
         }
         @keyframes slideUp {
             from {
@@ -243,7 +278,7 @@
             transform: scale(0.95);
         }
         .order-drawer {
-            transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: transform 0.35s ease;
             transform: translateX(100%);
         }
         .order-drawer.open {
@@ -268,10 +303,9 @@
         }
         .custom-scroll::-webkit-scrollbar {
             width: 4px;
-            height: 4px;
         }
         .custom-scroll::-webkit-scrollbar-thumb {
-            background: linear-gradient(180deg, #0071e3, #5856d6);
+            background: #0071e3;
             border-radius: 10px;
         }
 
@@ -293,19 +327,9 @@
             }
             body.dark .bottom-nav {
                 background: rgba(28, 28, 30, 0.95);
-                border-color: rgba(255, 255, 255, 0.08);
             }
             main {
                 padding-bottom: 100px !important;
-            }
-            .email-full-preview {
-                max-width: 100%;
-                border-radius: 14px;
-                max-height: 92vh;
-            }
-            .eml-action-bar {
-                flex-direction: column;
-                gap: 6px;
             }
         }
         @media (min-width: 769px) {
@@ -320,7 +344,7 @@
     <div id="global-loader" style="position:fixed;inset:0;background:white;z-index:9999;display:flex;justify-content:center;align-items:center;">
         <div class="flex flex-col items-center">
             <div class="w-14 h-14 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-            <p class="mt-5 font-bold text-gray-400 text-sm">Loading Orders...</p>
+            <p class="mt-5 font-bold text-gray-400 text-sm">Loading...</p>
         </div>
     </div>
 
@@ -329,11 +353,11 @@
             <header class="mb-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
                     <div class="flex items-center gap-2 text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">
-                        <a href="/home" class="hover:text-blue-600 transition"><i class="fa-solid fa-house"></i> Home</a>
+                        <a href="/home" class="hover:text-blue-600"><i class="fa-solid fa-house"></i> Home</a>
                         <i class="fa-solid fa-chevron-right text-[8px]"></i>
                         <span class="text-blue-600">Orders</span>
                     </div>
-                    <h2 class="text-2xl md:text-3xl font-black uppercase tracking-tight">Order Management</h2>
+                    <h2 class="text-2xl md:text-3xl font-black uppercase">Order Management</h2>
                 </div>
                 <div class="flex items-center gap-3">
                     <button onclick="toggleOrderView('kanban')" id="btn-view-kanban" class="px-5 py-2.5 bg-blue-600 text-white rounded-xl font-black text-xs uppercase btn-action shadow-md">
@@ -350,26 +374,26 @@
             <div id="kanban-view" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div class="kanban-col bg-gray-50 border border-gray-100" data-status="pending" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event, 'pending')">
                     <div class="flex justify-between items-center mb-4 px-2"><h3 class="font-black text-xs uppercase flex items-center gap-2"><span class="w-2 h-2 bg-yellow-500 rounded-full"></span> Pending</h3><span id="count-pending" class="text-[10px] font-black bg-yellow-100 text-yellow-600 px-2.5 py-1 rounded-full">0</span></div>
-                    <div id="kanban-pending" class="space-y-3 min-h-[300px]"><p class="text-xs text-gray-300 text-center py-8">No pending orders</p></div>
+                    <div id="kanban-pending" class="space-y-3 min-h-[300px]"></div>
                 </div>
                 <div class="kanban-col bg-gray-50 border border-gray-100" data-status="confirmed" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event, 'confirmed')">
                     <div class="flex justify-between items-center mb-4 px-2"><h3 class="font-black text-xs uppercase flex items-center gap-2"><span class="w-2 h-2 bg-blue-500 rounded-full"></span> Confirmed</h3><span id="count-confirmed" class="text-[10px] font-black bg-blue-100 text-blue-600 px-2.5 py-1 rounded-full">0</span></div>
-                    <div id="kanban-confirmed" class="space-y-3 min-h-[300px]"><p class="text-xs text-gray-300 text-center py-8">No confirmed orders</p></div>
+                    <div id="kanban-confirmed" class="space-y-3 min-h-[300px]"></div>
                 </div>
                 <div class="kanban-col bg-gray-50 border border-gray-100" data-status="shipped" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event, 'shipped')">
                     <div class="flex justify-between items-center mb-4 px-2"><h3 class="font-black text-xs uppercase flex items-center gap-2"><span class="w-2 h-2 bg-purple-500 rounded-full"></span> Shipped</h3><span id="count-shipped" class="text-[10px] font-black bg-purple-100 text-purple-600 px-2.5 py-1 rounded-full">0</span></div>
-                    <div id="kanban-shipped" class="space-y-3 min-h-[300px]"><p class="text-xs text-gray-300 text-center py-8">No shipped orders</p></div>
+                    <div id="kanban-shipped" class="space-y-3 min-h-[300px]"></div>
                 </div>
                 <div class="kanban-col bg-gray-50 border border-gray-100" data-status="completed" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event, 'completed')">
                     <div class="flex justify-between items-center mb-4 px-2"><h3 class="font-black text-xs uppercase flex items-center gap-2"><span class="w-2 h-2 bg-green-500 rounded-full"></span> Completed</h3><span id="count-completed" class="text-[10px] font-black bg-green-100 text-green-600 px-2.5 py-1 rounded-full">0</span></div>
-                    <div id="kanban-completed" class="space-y-3 min-h-[300px]"><p class="text-xs text-gray-300 text-center py-8">No completed orders</p></div>
+                    <div id="kanban-completed" class="space-y-3 min-h-[300px]"></div>
                 </div>
             </div>
 
             <div id="cards-view" class="hidden">
                 <div class="flex gap-3 mb-4">
-                    <input type="text" id="order-search" placeholder="Search orders..." class="px-4 py-2.5 bg-white border rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-blue-500 w-full max-w-xs" onkeyup="filterOrders()">
-                    <select id="status-filter" onchange="filterOrders()" class="px-4 py-2.5 bg-white border rounded-xl text-xs font-bold outline-none">
+                    <input type="text" id="order-search" placeholder="Search..." class="px-4 py-2.5 bg-white border rounded-xl text-xs font-bold w-full max-w-xs" onkeyup="filterOrders()">
+                    <select id="status-filter" onchange="filterOrders()" class="px-4 py-2.5 bg-white border rounded-xl text-xs font-bold">
                         <option value="all">All</option><option value="pending">Pending</option><option value="confirmed">Confirmed</option><option value="shipped">Shipped</option><option value="completed">Completed</option>
                     </select>
                 </div>
@@ -378,21 +402,52 @@
         </main>
     </div>
 
+    <!-- Order Drawer -->
     <div id="order-drawer-overlay" class="hidden fixed inset-0 bg-black/40 backdrop-blur-sm z-[500]" onclick="closeOrderDrawer()"></div>
-    <div id="order-drawer" class="fixed top-0 right-0 h-full w-full md:w-[480px] bg-white shadow-2xl z-[600] order-drawer overflow-y-auto custom-scroll">
+    <div id="order-drawer" class="fixed top-0 right-0 h-full w-full md:w-[500px] bg-white shadow-2xl z-[600] order-drawer overflow-y-auto custom-scroll">
         <div class="sticky top-0 bg-white z-10 p-6 border-b flex justify-between items-center">
             <h3 class="text-lg font-black uppercase"><i class="fa-solid fa-file-invoice text-blue-600"></i> Order Details</h3>
             <button onclick="closeOrderDrawer()" class="text-gray-400 hover:text-black text-xl btn-action"><i class="fa-solid fa-xmark"></i></button>
         </div>
-        <div id="order-drawer-content" class="p-6 space-y-5"><p class="text-xs text-gray-400 text-center py-8">Select an order</p></div>
+        <div id="order-drawer-content" class="p-6 space-y-5"></div>
     </div>
 
-    <!-- EMAIL FULL PREVIEW OVERLAY -->
+    <!-- Email Preview -->
     <div id="email-full-overlay" class="email-full-overlay hidden" onclick="closeEmailPreview(event)">
-        <div class="email-full-preview custom-scroll" id="email-full-preview-card" onclick="event.stopPropagation()">
+        <div class="email-full-preview custom-scroll" onclick="event.stopPropagation()">
             <button class="eml-close-btn" onclick="closeEmailPreview()">&times;</button>
             <div id="email-full-content"></div>
             <div class="eml-action-bar" id="email-action-bar"></div>
+        </div>
+    </div>
+
+    <!-- Sender Info Modal -->
+    <div id="sender-modal-overlay" class="modal-overlay hidden" onclick="closeSenderModal(event)">
+        <div class="modal-card" onclick="event.stopPropagation()">
+            <h3 class="text-lg font-black uppercase mb-4">Sender Information</h3>
+            <div class="space-y-3">
+                <div>
+                    <label class="text-[10px] font-black text-gray-400 uppercase">Your Name</label>
+                    <input type="text" id="sender-name" value="JAYENWARE Manager" class="w-full p-3 bg-white border rounded-xl text-sm font-bold mt-1">
+                </div>
+                <div>
+                    <label class="text-[10px] font-black text-gray-400 uppercase">Your Title</label>
+                    <input type="text" id="sender-title" value="Manager" class="w-full p-3 bg-white border rounded-xl text-sm font-bold mt-1">
+                </div>
+                <div>
+                    <label class="text-[10px] font-black text-gray-400 uppercase">Your Email</label>
+                    <input type="email" id="sender-email" value="jayenware@proton.me" class="w-full p-3 bg-white border rounded-xl text-sm font-bold mt-1">
+                </div>
+                <button onclick="confirmSenderInfo()" class="w-full py-3 bg-blue-600 text-white rounded-xl font-black text-sm btn-action">Continue to Email</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Order Modal -->
+    <div id="edit-modal-overlay" class="edit-modal-overlay hidden" onclick="closeEditModal(event)">
+        <div class="edit-modal-card custom-scroll" onclick="event.stopPropagation()">
+            <h3 class="text-lg font-black uppercase mb-4 flex items-center gap-2"><i class="fa-solid fa-pen-to-square text-blue-600"></i> Edit Order</h3>
+            <div id="edit-modal-content" class="space-y-4"></div>
         </div>
     </div>
 
@@ -412,7 +467,6 @@
         const ADMIN_EMAIL = "binzeo369@gmail.com";
         const LOGO_URL = "https://ozuwazkqyrxiwwfjceth.supabase.co/storage/v1/object/public/images/Beige%20Black%20Minimal%20Simple%20Modern%20Handwritten%20Graffiti%20Typographic%20Arts%20and_20251212_154142_0000.png";
         const LOGIN_URL = "/login";
-        const MANAGER_EMAIL = "jayenware@proton.me";
 
         const SUPPORT_INFO = {
             website: "https://jayenware.com",
@@ -426,7 +480,13 @@
         let allOrders = [],
             currentOrderView = 'kanban',
             draggedOrderId = null,
-            currentPreviewOrderId = null;
+            pendingEmailOrderId = null,
+            editOrderId = null;
+
+        // Sender defaults
+        let senderName = "JAYENWARE Manager";
+        let senderTitle = "Manager";
+        let senderEmail = "jayenware@proton.me";
 
         function showToast(msg, type = 'success') {
             const t = document.createElement('div');
@@ -435,10 +495,6 @@
             document.body.appendChild(t);
             setTimeout(() => { t.classList.add('toast-exit');
                 setTimeout(() => t.remove(), 300); }, 3000);
-        }
-
-        function copyToClipboard(text) {
-            navigator.clipboard.writeText(text).then(() => showToast('Copied!'));
         }
 
         function getStageLabel(s) {
@@ -451,11 +507,7 @@
                 '#6b7280';
         }
 
-        function getStageTextColor(s) {
-            return '#ffffff';
-        }
-
-        // ==================== BUILD EMAIL (TABLE-BASED, 100% INLINE, EMAIL-SAFE) ====================
+        // ==================== BUILD EMAIL (TABLE-BASED, ALL INLINE) ====================
         function buildEmailHTML(order, stage) {
             const items = order.member_info?.items || [];
             const shipping = order.member_info?.shipping || {};
@@ -469,310 +521,195 @@
             const sc = getStageBgColor(stage);
             const sl = getStageLabel(stage);
 
-            // Build product rows - TABLE BASED
             let productRowsHTML = '';
-            items.forEach((it, idx) => {
+            items.forEach((it) => {
                 productRowsHTML += `
             <tr>
-              <td style="padding:12px 0;border-bottom:1px solid #f0f0f0;font-family:Arial,Helvetica,sans-serif;">
+              <td style="padding:10px 0;border-bottom:1px solid #f0f0f0;">
                 <span style="font-size:13px;font-weight:600;color:#1a1a1a;">${it.title}</span>
-                ${it.variant ? `<span style="font-size:11px;color:#777;display:block;">Variant: ${it.variant}</span>` : ''}
+                ${it.variant ? `<span style="font-size:10px;color:#777;display:block;">Variant: ${it.variant}</span>` : ''}
                 <span style="font-size:9px;color:#aaa;display:block;">Product ID: ${it.product_id || 'N/A'}</span>
               </td>
-              <td style="padding:12px 0;border-bottom:1px solid #f0f0f0;text-align:right;font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:700;color:#1a1a1a;white-space:nowrap;">৳ ${it.price || 0}</td>
+              <td style="padding:10px 0;border-bottom:1px solid #f0f0f0;text-align:right;font-size:13px;font-weight:700;color:#1a1a1a;white-space:nowrap;">৳ ${it.price || 0}</td>
             </tr>`;
             });
 
-            // Social icons - simple SVG circles
+            // Simple icon links - NO background, just colored text links
             const socialIconsHTML = `
-            <td align="center" style="padding:6px 8px;">
-              <a href="${SUPPORT_INFO.website}" target="_blank" style="text-decoration:none;">
-                <table cellpadding="0" cellspacing="0" border="0" style="display:inline-block;">
-                  <tr><td style="width:34px;height:34px;border-radius:17px;background-color:#3b82f6;text-align:center;vertical-align:middle;">
-                    <span style="color:#ffffff;font-size:14px;font-weight:700;font-family:Arial,Helvetica,sans-serif;">&#127760;</span>
-                  </td></tr>
-                </table>
-              </a>
+            <td align="center" style="padding:4px 10px;">
+              <a href="${SUPPORT_INFO.website}" target="_blank" style="text-decoration:none;color:#3b82f6;font-size:18px;">&#127760;</a>
             </td>
-            <td align="center" style="padding:6px 8px;">
-              <a href="mailto:${SUPPORT_INFO.supportEmail}" style="text-decoration:none;">
-                <table cellpadding="0" cellspacing="0" border="0" style="display:inline-block;">
-                  <tr><td style="width:34px;height:34px;border-radius:17px;background-color:#3b82f6;text-align:center;vertical-align:middle;">
-                    <span style="color:#ffffff;font-size:14px;font-weight:700;font-family:Arial,Helvetica,sans-serif;">&#9993;</span>
-                  </td></tr>
-                </table>
-              </a>
+            <td align="center" style="padding:4px 10px;">
+              <a href="mailto:${SUPPORT_INFO.supportEmail}" style="text-decoration:none;color:#3b82f6;font-size:18px;">&#9993;</a>
             </td>
-            <td align="center" style="padding:6px 8px;">
-              <a href="${SUPPORT_INFO.youtube}" target="_blank" style="text-decoration:none;">
-                <table cellpadding="0" cellspacing="0" border="0" style="display:inline-block;">
-                  <tr><td style="width:34px;height:34px;border-radius:17px;background-color:#dc2626;text-align:center;vertical-align:middle;">
-                    <span style="color:#ffffff;font-size:14px;font-weight:700;font-family:Arial,Helvetica,sans-serif;">&#9654;</span>
-                  </td></tr>
-                </table>
-              </a>
+            <td align="center" style="padding:4px 10px;">
+              <a href="${SUPPORT_INFO.youtube}" target="_blank" style="text-decoration:none;color:#dc2626;font-size:18px;">&#9654;</a>
             </td>
-            <td align="center" style="padding:6px 8px;">
-              <a href="${SUPPORT_INFO.facebook}" target="_blank" style="text-decoration:none;">
-                <table cellpadding="0" cellspacing="0" border="0" style="display:inline-block;">
-                  <tr><td style="width:34px;height:34px;border-radius:17px;background-color:#1877f2;text-align:center;vertical-align:middle;">
-                    <span style="color:#ffffff;font-size:14px;font-weight:700;font-family:Arial,Helvetica,sans-serif;">f</span>
-                  </td></tr>
-                </table>
-              </a>
+            <td align="center" style="padding:4px 10px;">
+              <a href="${SUPPORT_INFO.facebook}" target="_blank" style="text-decoration:none;color:#1877f2;font-size:18px;font-weight:700;">f</a>
             </td>
-            <td align="center" style="padding:6px 8px;">
-              <a href="${SUPPORT_INFO.instagram}" target="_blank" style="text-decoration:none;">
-                <table cellpadding="0" cellspacing="0" border="0" style="display:inline-block;">
-                  <tr><td style="width:34px;height:34px;border-radius:17px;background-color:#db2777;text-align:center;vertical-align:middle;">
-                    <span style="color:#ffffff;font-size:14px;font-weight:700;font-family:Arial,Helvetica,sans-serif;">&#9675;</span>
-                  </td></tr>
-                </table>
-              </a>
+            <td align="center" style="padding:4px 10px;">
+              <a href="${SUPPORT_INFO.instagram}" target="_blank" style="text-decoration:none;color:#db2777;font-size:18px;">&#9675;</a>
             </td>`;
 
-            // === COMPLETE EMAIL (TABLE-BASED, NO EXTERNAL CSS, ALL INLINE) ===
             return `
         <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#ffffff;font-family:Arial,Helvetica,sans-serif;">
-          <!-- HEADER -->
           <tr>
             <td style="background-color:#1a1a1a;padding:28px 24px 24px;text-align:center;">
-              <table width="100%" cellpadding="0" cellspacing="0" border="0">
-                <tr>
-                  <td align="center" style="padding-bottom:8px;">
-                    <span style="display:inline-block;padding:5px 16px;border-radius:20px;background-color:${sc};color:#ffffff;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:2px;font-family:Arial,Helvetica,sans-serif;">${stage}</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td align="center">
-                    <h1 style="color:#ffffff;font-size:17px;font-weight:800;margin:0;text-transform:uppercase;letter-spacing:0.5px;font-family:Arial,Helvetica,sans-serif;">${sl}</h1>
-                  </td>
-                </tr>
-              </table>
+              <span style="display:inline-block;padding:5px 16px;border-radius:20px;background-color:${sc};color:#fff;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:2px;">${stage}</span>
+              <h1 style="color:#fff;font-size:17px;font-weight:800;margin:10px 0 0;text-transform:uppercase;letter-spacing:0.5px;">${sl}</h1>
             </td>
           </tr>
-
-          <!-- BRAND BAR -->
           <tr>
-            <td style="padding:14px 24px;border-bottom:1px solid #eeeeee;background-color:#fafafa;">
+            <td style="padding:14px 24px;border-bottom:1px solid #eee;background:#fafafa;">
               <table width="100%" cellpadding="0" cellspacing="0" border="0">
                 <tr>
                   <td style="vertical-align:middle;">
                     <table cellpadding="0" cellspacing="0" border="0">
                       <tr>
-                        <td style="width:36px;height:36px;border-radius:8px;background-color:#1a1a1a;text-align:center;vertical-align:middle;">
-                          <span style="color:#ffffff;font-weight:900;font-size:15px;font-family:Arial,Helvetica,sans-serif;">J</span>
+                        <td style="width:36px;height:36px;border-radius:8px;background:#1a1a1a;text-align:center;">
+                          <span style="color:#fff;font-weight:900;font-size:15px;">J</span>
                         </td>
-                        <td style="padding-left:10px;vertical-align:middle;">
-                          <p style="font-size:13px;font-weight:700;color:#1a1a1a;margin:0;font-family:Arial,Helvetica,sans-serif;">JAYENWARE</p>
-                          <p style="font-size:10px;color:#888;margin:0;font-family:Arial,Helvetica,sans-serif;">${MANAGER_EMAIL}</p>
+                        <td style="padding-left:10px;">
+                          <p style="font-size:13px;font-weight:700;color:#1a1a1a;margin:0;">${senderName}</p>
+                          <p style="font-size:10px;color:#888;margin:0;">${senderEmail}</p>
                         </td>
                       </tr>
                     </table>
                   </td>
                   <td style="text-align:right;vertical-align:middle;">
-                    <span style="display:inline-block;padding:4px 10px;border-radius:10px;background-color:#e8f0fe;color:#3b82f6;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;font-family:Arial,Helvetica,sans-serif;">Manager</span>
+                    <span style="display:inline-block;padding:4px 10px;border-radius:10px;background:#e8f0fe;color:#3b82f6;font-size:9px;font-weight:700;text-transform:uppercase;">${senderTitle}</span>
                   </td>
                 </tr>
               </table>
             </td>
           </tr>
-
-          <!-- GREETING -->
           <tr>
             <td style="padding:20px 24px 8px;">
-              <p style="font-size:13px;color:#666;margin:0 0 4px;font-family:Arial,Helvetica,sans-serif;">Dear <strong style="color:#1a1a1a;">${order.member_name || 'Valued Customer'}</strong>,</p>
-              <p style="font-size:12px;color:#999;margin:0;font-family:Arial,Helvetica,sans-serif;">Thank you for your order. Here is your updated summary.</p>
+              <p style="font-size:13px;color:#666;margin:0 0 4px;">Dear <strong style="color:#1a1a1a;">${order.member_name || 'Customer'}</strong>,</p>
+              <p style="font-size:12px;color:#999;margin:0;">Thank you for your order. Here is your updated summary.</p>
             </td>
           </tr>
-
-          <!-- CUSTOMER ACCOUNT CARD -->
           <tr>
             <td style="padding:16px 24px;">
-              <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#f9f9f9;border:1px solid #eeeeee;border-radius:12px;">
-                <tr>
-                  <td style="padding:16px 18px;">
-                    <table width="100%" cellpadding="0" cellspacing="0" border="0">
-                      <tr>
-                        <td colspan="2" style="padding-bottom:12px;">
-                          <span style="font-size:10px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:1px;font-family:Arial,Helvetica,sans-serif;">Customer Account</span>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td style="width:44px;vertical-align:top;">
-                          <table cellpadding="0" cellspacing="0" border="0">
-                            <tr>
-                              <td style="width:44px;height:44px;border-radius:22px;background-color:#e5e7eb;text-align:center;vertical-align:middle;">
-                                <span style="color:#666;font-size:18px;font-weight:700;font-family:Arial,Helvetica,sans-serif;">${(order.member_name || 'U').charAt(0).toUpperCase()}</span>
-                              </td>
-                            </tr>
-                          </table>
-                        </td>
-                        <td style="padding-left:12px;vertical-align:top;">
-                          <p style="font-size:14px;font-weight:700;color:#1a1a1a;margin:0;font-family:Arial,Helvetica,sans-serif;">${order.member_name || 'N/A'}</p>
-                          <p style="font-size:11px;color:#777;margin:2px 0;font-family:Arial,Helvetica,sans-serif;">${custEmail || ''}${custEmail && shipping.address ? ' &middot; ' : ''}${shipping.address || ''}, ${shipping.district || ''}</p>
-                          ${shipping.phone ? `<p style="font-size:12px;font-weight:600;color:#3b82f6;margin:3px 0 0;font-family:Arial,Helvetica,sans-serif;">${shipping.phone}</p>` : ''}
-                        </td>
-                      </tr>
-                    </table>
-                  </td>
-                </tr>
+              <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f9f9f9;border:1px solid #eee;border-radius:12px;">
+                <tr><td style="padding:16px 18px;">
+                  <span style="font-size:10px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:1px;">Customer Account</span>
+                  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:10px;">
+                    <tr>
+                      <td style="width:44px;vertical-align:top;">
+                        <table cellpadding="0" cellspacing="0" border="0"><tr><td style="width:44px;height:44px;border-radius:22px;background:#e5e7eb;text-align:center;"><span style="color:#666;font-size:18px;font-weight:700;">${(order.member_name||'U').charAt(0).toUpperCase()}</span></td></tr></table>
+                      </td>
+                      <td style="padding-left:12px;">
+                        <p style="font-size:14px;font-weight:700;color:#1a1a1a;margin:0;">${order.member_name||'N/A'}</p>
+                        <p style="font-size:11px;color:#777;margin:2px 0;">${custEmail||''}${custEmail&&shipping.address?' · ':''}${shipping.address||''}, ${shipping.district||''}</p>
+                        ${shipping.phone?`<p style="font-size:12px;font-weight:600;color:#3b82f6;margin:3px 0 0;">${shipping.phone}</p>`:''}
+                      </td>
+                    </tr>
+                  </table>
+                </td></tr>
               </table>
             </td>
           </tr>
-
-          <!-- ORDER INFO -->
           <tr>
-            <td style="padding:16px 24px;">
-              <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#f9f9f9;border:1px solid #eeeeee;border-radius:12px;">
-                <tr>
-                  <td style="padding:14px 18px;">
-                    <p style="font-size:10px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:1px;margin:0 0 10px;font-family:Arial,Helvetica,sans-serif;">Order Information</p>
-                    <table width="100%" cellpadding="0" cellspacing="0" border="0">
-                      <tr>
-                        <td style="padding:5px 0;font-size:11px;color:#888;text-transform:uppercase;letter-spacing:0.4px;font-family:Arial,Helvetica,sans-serif;">Order ID</td>
-                        <td style="padding:5px 0;text-align:right;font-size:12px;font-weight:600;color:#1a1a1a;font-family:Arial,Helvetica,sans-serif;">#${order.id}</td>
-                      </tr>
-                      <tr>
-                        <td style="padding:5px 0;font-size:11px;color:#888;text-transform:uppercase;letter-spacing:0.4px;font-family:Arial,Helvetica,sans-serif;">Date</td>
-                        <td style="padding:5px 0;text-align:right;font-size:12px;font-weight:600;color:#1a1a1a;font-family:Arial,Helvetica,sans-serif;">${date}</td>
-                      </tr>
-                      <tr>
-                        <td style="padding:5px 0;font-size:11px;color:#888;text-transform:uppercase;letter-spacing:0.4px;font-family:Arial,Helvetica,sans-serif;">Status</td>
-                        <td style="padding:5px 0;text-align:right;">
-                          <span style="display:inline-block;padding:2px 12px;border-radius:12px;background-color:${sc};color:#ffffff;font-size:10px;font-weight:700;text-transform:uppercase;font-family:Arial,Helvetica,sans-serif;">${stage}</span>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td colspan="2" style="padding:6px 0;"><hr style="border:none;border-top:1px dashed #ddd;margin:0;"></td>
-                      </tr>
-                      <tr>
-                        <td style="padding:5px 0;font-size:13px;font-weight:800;color:#1a1a1a;text-transform:uppercase;font-family:Arial,Helvetica,sans-serif;">Total</td>
-                        <td style="padding:5px 0;text-align:right;font-size:20px;font-weight:900;color:#3b82f6;font-family:Arial,Helvetica,sans-serif;">৳ ${total}</td>
-                      </tr>
-                    </table>
-                  </td>
-                </tr>
+            <td style="padding:12px 24px;">
+              <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f9f9f9;border:1px solid #eee;border-radius:12px;">
+                <tr><td style="padding:14px 18px;">
+                  <span style="font-size:10px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:1px;">Order Info</span>
+                  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:8px;">
+                    <tr><td style="padding:4px 0;font-size:11px;color:#888;">Order ID</td><td style="text-align:right;font-size:12px;font-weight:600;color:#1a1a1a;">#${order.id}</td></tr>
+                    <tr><td style="padding:4px 0;font-size:11px;color:#888;">Date</td><td style="text-align:right;font-size:12px;font-weight:600;color:#1a1a1a;">${date}</td></tr>
+                    <tr><td style="padding:4px 0;font-size:11px;color:#888;">Status</td><td style="text-align:right;"><span style="display:inline-block;padding:2px 12px;border-radius:12px;background:${sc};color:#fff;font-size:10px;font-weight:700;">${stage}</span></td></tr>
+                    <tr><td colspan="2" style="padding:5px 0;"><hr style="border:none;border-top:1px dashed #ddd;"></td></tr>
+                    <tr><td style="font-size:13px;font-weight:800;color:#1a1a1a;">Total</td><td style="text-align:right;font-size:20px;font-weight:900;color:#3b82f6;">৳ ${total}</td></tr>
+                  </table>
+                </td></tr>
               </table>
             </td>
           </tr>
-
-          <!-- PRODUCTS -->
           <tr>
-            <td style="padding:16px 24px;">
-              <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#f9f9f9;border:1px solid #eeeeee;border-radius:12px;">
-                <tr>
-                  <td style="padding:14px 18px;">
-                    <p style="font-size:10px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:1px;margin:0 0 8px;font-family:Arial,Helvetica,sans-serif;">Products (${items.length})</p>
-                    <table width="100%" cellpadding="0" cellspacing="0" border="0">
-                      ${productRowsHTML}
-                    </table>
-                  </td>
-                </tr>
+            <td style="padding:12px 24px;">
+              <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f9f9f9;border:1px solid #eee;border-radius:12px;">
+                <tr><td style="padding:14px 18px;">
+                  <span style="font-size:10px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:1px;">Products</span>
+                  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:8px;">${productRowsHTML}</table>
+                </td></tr>
               </table>
             </td>
           </tr>
-
-          <!-- PAYMENT SUMMARY -->
           <tr>
-            <td style="padding:16px 24px;">
-              <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#f9f9f9;border:1px solid #eeeeee;border-radius:12px;">
-                <tr>
-                  <td style="padding:14px 18px;">
-                    <p style="font-size:10px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:1px;margin:0 0 10px;font-family:Arial,Helvetica,sans-serif;">Payment Summary</p>
-                    <table width="100%" cellpadding="0" cellspacing="0" border="0">
-                      <tr>
-                        <td style="padding:4px 0;font-size:12px;color:#888;font-family:Arial,Helvetica,sans-serif;">Subtotal</td>
-                        <td style="padding:4px 0;text-align:right;font-size:12px;font-weight:600;color:#1a1a1a;font-family:Arial,Helvetica,sans-serif;">৳ ${subtotal}</td>
-                      </tr>
-                      <tr>
-                        <td style="padding:4px 0;font-size:12px;color:#b45309;font-family:Arial,Helvetica,sans-serif;">Delivery</td>
-                        <td style="padding:4px 0;text-align:right;font-size:12px;font-weight:600;color:#b45309;font-family:Arial,Helvetica,sans-serif;">+৳ ${del}</td>
-                      </tr>
-                      ${disc > 0 ? `
-                      <tr>
-                        <td style="padding:4px 0;font-size:12px;color:#10b981;font-family:Arial,Helvetica,sans-serif;">Discount</td>
-                        <td style="padding:4px 0;text-align:right;font-size:12px;font-weight:600;color:#10b981;font-family:Arial,Helvetica,sans-serif;">&minus;৳ ${disc}</td>
-                      </tr>` : ''}
-                      <tr>
-                        <td colspan="2" style="padding:6px 0;"><hr style="border:none;border-top:1px dashed #ddd;margin:0;"></td>
-                      </tr>
-                      <tr>
-                        <td style="padding:4px 0;font-size:13px;font-weight:800;color:#1a1a1a;text-transform:uppercase;font-family:Arial,Helvetica,sans-serif;">Total</td>
-                        <td style="padding:4px 0;text-align:right;font-size:20px;font-weight:900;color:#3b82f6;font-family:Arial,Helvetica,sans-serif;">৳ ${total}</td>
-                      </tr>
-                    </table>
-                  </td>
-                </tr>
+            <td style="padding:12px 24px;">
+              <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f9f9f9;border:1px solid #eee;border-radius:12px;">
+                <tr><td style="padding:14px 18px;">
+                  <span style="font-size:10px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:1px;">Payment</span>
+                  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:8px;">
+                    <tr><td style="padding:3px 0;font-size:12px;color:#888;">Subtotal</td><td style="text-align:right;font-weight:600;">৳ ${subtotal}</td></tr>
+                    <tr><td style="padding:3px 0;font-size:12px;color:#b45309;">Delivery</td><td style="text-align:right;font-weight:600;color:#b45309;">+৳ ${del}</td></tr>
+                    ${disc>0?`<tr><td style="padding:3px 0;font-size:12px;color:#10b981;">Discount</td><td style="text-align:right;font-weight:600;color:#10b981;">−৳ ${disc}</td></tr>`:''}
+                    <tr><td colspan="2" style="padding:5px 0;"><hr style="border:none;border-top:1px dashed #ddd;"></td></tr>
+                    <tr><td style="font-weight:800;">Total</td><td style="text-align:right;font-size:18px;font-weight:900;color:#3b82f6;">৳ ${total}</td></tr>
+                  </table>
+                </td></tr>
               </table>
             </td>
           </tr>
-
-          ${shipping.note ? `
+          ${shipping.note?`
+          <tr><td style="padding:12px 24px;">
+            <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#fefce8;border:1px solid #fde68a;border-radius:12px;">
+              <tr><td style="padding:14px 18px;">
+                <span style="font-size:10px;font-weight:700;color:#b45309;text-transform:uppercase;">Note</span>
+                <p style="font-size:12px;color:#78350f;margin:4px 0 0;">${shipping.note}</p>
+              </td></tr>
+            </table>
+          </td></tr>`:''}
           <tr>
-            <td style="padding:16px 24px;">
-              <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#fefce8;border:1px solid #fde68a;border-radius:12px;">
-                <tr>
-                  <td style="padding:14px 18px;">
-                    <p style="font-size:10px;font-weight:700;color:#b45309;text-transform:uppercase;letter-spacing:1px;margin:0 0 4px;font-family:Arial,Helvetica,sans-serif;">Customer Note</p>
-                    <p style="font-size:12px;color:#78350f;margin:0;font-family:Arial,Helvetica,sans-serif;">${shipping.note}</p>
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>` : ''}
-
-          <!-- FOOTER -->
-          <tr>
-            <td style="background-color:#1a1a1a;padding:24px;text-align:center;">
-              <table width="100%" cellpadding="0" cellspacing="0" border="0">
-                <tr>
-                  <td align="center" style="padding-bottom:4px;">
-                    <p style="font-size:14px;font-weight:800;color:#ffffff;margin:0;letter-spacing:0.5px;font-family:Arial,Helvetica,sans-serif;">JAYENWARE</p>
-                  </td>
-                </tr>
-                <tr>
-                  <td align="center" style="padding-bottom:16px;">
-                    <p style="font-size:9px;color:#999;margin:0;text-transform:uppercase;letter-spacing:1.5px;font-family:Arial,Helvetica,sans-serif;">Systems by Binzeo</p>
-                  </td>
-                </tr>
-                <tr>
-                  <td align="center" style="padding-bottom:14px;">
-                    <table cellpadding="0" cellspacing="0" border="0">
-                      <tr>
-                        ${socialIconsHTML}
-                      </tr>
-                    </table>
-                  </td>
-                </tr>
-                <tr>
-                  <td align="center" style="padding-top:12px;border-top:1px solid #333;">
-                    <p style="font-size:9px;color:#777;margin:0;font-family:Arial,Helvetica,sans-serif;">&copy; ${new Date().getFullYear()} JAYENWARE. All rights reserved.</p>
-                  </td>
-                </tr>
-              </table>
+            <td style="background:#1a1a1a;padding:24px;text-align:center;">
+              <p style="font-size:14px;font-weight:800;color:#fff;margin:0;">JAYENWARE</p>
+              <p style="font-size:9px;color:#999;margin:4px 0 16px;text-transform:uppercase;letter-spacing:1.5px;">Systems by Binzeo</p>
+              <table cellpadding="0" cellspacing="0" border="0" style="margin:0 auto 14px;"><tr>${socialIconsHTML}</tr></table>
+              <hr style="border:none;border-top:1px solid #333;margin:10px 0;">
+              <p style="font-size:9px;color:#777;margin:0;">&copy; ${new Date().getFullYear()} JAYENWARE. All rights reserved.</p>
             </td>
           </tr>
         </table>`;
         }
 
-        // ==================== OPEN EMAIL FULL PREVIEW ====================
+        // ==================== SENDER MODAL ====================
+        function openSenderModal(orderId) {
+            pendingEmailOrderId = orderId;
+            document.getElementById('sender-name').value = senderName;
+            document.getElementById('sender-title').value = senderTitle;
+            document.getElementById('sender-email').value = senderEmail;
+            document.getElementById('sender-modal-overlay').classList.remove('hidden');
+        }
+
+        function closeSenderModal(event) {
+            if (event && event.target !== document.getElementById('sender-modal-overlay')) return;
+            document.getElementById('sender-modal-overlay').classList.add('hidden');
+            pendingEmailOrderId = null;
+        }
+
+        function confirmSenderInfo() {
+            senderName = document.getElementById('sender-name').value.trim() || 'JAYENWARE Manager';
+            senderTitle = document.getElementById('sender-title').value.trim() || 'Manager';
+            senderEmail = document.getElementById('sender-email').value.trim() || 'jayenware@proton.me';
+            document.getElementById('sender-modal-overlay').classList.add('hidden');
+            if (pendingEmailOrderId) {
+                openEmailPreview(pendingEmailOrderId);
+                pendingEmailOrderId = null;
+            }
+        }
+
+        // ==================== EMAIL PREVIEW ====================
         function openEmailPreview(orderId) {
             const order = allOrders.find(o => o.id === orderId);
             if (!order) return;
-            currentPreviewOrderId = orderId;
             const emailHTML = buildEmailHTML(order, order.status);
             document.getElementById('email-full-content').innerHTML = emailHTML;
             document.getElementById('email-action-bar').innerHTML = `
-            <button class="eml-action-btn secondary" onclick="copyEmailHTML(${order.id})">
-              <i class="fa-solid fa-copy"></i> Copy
-            </button>
-            <button class="eml-action-btn primary" onclick="sendViaProtonMail(${order.id})">
-              <i class="fa-solid fa-paper-plane"></i> Send via Proton
-            </button>
-            <button class="eml-action-btn secondary" onclick="openGmailCompose(${order.id})">
-              <i class="fa-solid fa-envelope"></i> Gmail
-            </button>`;
+            <button class="eml-action-btn secondary" onclick="copyEmailHTML(${order.id})"><i class="fa-solid fa-copy"></i> Copy</button>
+            <button class="eml-action-btn primary" onclick="sendViaProtonMail(${order.id})"><i class="fa-solid fa-paper-plane"></i> Send Proton</button>
+            <button class="eml-action-btn secondary" onclick="openGmailCompose(${order.id})"><i class="fa-solid fa-envelope"></i> Gmail</button>`;
             document.getElementById('email-full-overlay').classList.remove('hidden');
             document.body.style.overflow = 'hidden';
         }
@@ -781,7 +718,6 @@
             if (event && event.target !== document.getElementById('email-full-overlay')) return;
             document.getElementById('email-full-overlay').classList.add('hidden');
             document.body.style.overflow = '';
-            currentPreviewOrderId = null;
         }
 
         function sendViaProtonMail(orderId) {
@@ -791,18 +727,11 @@
             const to = shipping.email || order.member_email || '';
             const subject = `${getStageLabel(order.status)} - Order #${order.id}`;
             if (!to) { showToast('No customer email found', 'error'); return; }
-            const emailHTML = buildEmailHTML(order, order.status);
-            navigator.clipboard.writeText(emailHTML).then(() => showToast('Design copied! Opening Proton Mail...',
-                'success')).catch(() => {});
+            const html = buildEmailHTML(order, order.status);
+            navigator.clipboard.writeText(html).then(() => showToast('Design copied! Opening Proton...',
+            'success')).catch(() => {});
             const protonUrl = `https://mail.proton.me/u/0/compose?to=${encodeURIComponent(to)}&subject=${encodeURIComponent(subject)}`;
             window.open(protonUrl, '_blank');
-            setTimeout(() => {
-                const popup = document.createElement('div');
-                popup.style.cssText = `position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fff;padding:18px 24px;border-radius:14px;z-index:9999;box-shadow:0 20px 60px rgba(0,0,0,0.5);font-family:'Inter',system-ui,sans-serif;text-align:center;max-width:460px;width:90%;animation:slideUp 0.5s ease;`;
-                popup.innerHTML = `<p style="font-weight:800;font-size:13px;margin:0 0 6px;">Proton Mail Opened</p><p style="font-size:11px;opacity:0.8;margin:0;">Switch to <strong>HTML mode</strong> and press <strong>Ctrl+V</strong> to paste.</p><button onclick="this.parentElement.remove()" style="background:#fff;color:#1a1a1a;border:none;padding:8px 20px;border-radius:8px;font-weight:700;font-size:11px;cursor:pointer;margin-top:10px;">Got it</button>`;
-                document.body.appendChild(popup);
-                setTimeout(() => { if (popup.parentElement) popup.remove(); }, 15000);
-            }, 1000);
         }
 
         function copyEmailHTML(orderId) {
@@ -820,12 +749,132 @@
             const subject = `${getStageLabel(order.status)} - Order #${order.id}`;
             const html = buildEmailHTML(order, order.status);
             navigator.clipboard.writeText(html).then(() => {
-                const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(to)}&su=${encodeURIComponent(subject)}`;
-                window.open(gmailUrl, '_blank');
+                window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(to)}&su=${encodeURIComponent(subject)}`, '_blank');
                 showToast('Gmail opened! Design copied.', 'success');
             });
         }
 
+        // ==================== EDIT ORDER ====================
+        function openEditModal(orderId) {
+            const order = allOrders.find(o => o.id === orderId);
+            if (!order) return;
+            editOrderId = orderId;
+            const items = order.member_info?.items || [];
+            const shipping = order.member_info?.shipping || {};
+            const del = parseFloat(order.member_info?.delivery_charge) || 0;
+            const disc = parseFloat(order.member_info?.discount) || 0;
+
+            let itemsHTML = items.map((it, idx) => `
+            <div class="flex items-center gap-2 bg-white border rounded-xl p-3 mb-2" id="edit-item-${idx}">
+              <div class="flex-1 space-y-1">
+                <input type="text" value="${it.title||''}" placeholder="Product name" class="w-full p-2 bg-gray-50 border rounded-lg text-xs font-bold" onchange="updateEditItem(${idx},'title',this.value)">
+                <div class="flex gap-2">
+                  <input type="text" value="${it.variant||''}" placeholder="Variant" class="flex-1 p-2 bg-gray-50 border rounded-lg text-xs" onchange="updateEditItem(${idx},'variant',this.value)">
+                  <input type="text" value="${it.product_id||''}" placeholder="ID" class="w-20 p-2 bg-gray-50 border rounded-lg text-xs" onchange="updateEditItem(${idx},'product_id',this.value)">
+                </div>
+              </div>
+              <div class="flex items-center gap-2">
+                <input type="number" value="${it.price||0}" placeholder="Price" class="w-20 p-2 bg-gray-50 border rounded-lg text-xs font-bold" onchange="updateEditItem(${idx},'price',this.value)">
+                <button onclick="removeEditItem(${idx})" class="p-2 bg-red-100 text-red-500 rounded-lg text-xs btn-action"><i class="fa-solid fa-trash"></i></button>
+              </div>
+            </div>`).join('');
+
+            document.getElementById('edit-modal-content').innerHTML = `
+            <div>
+              <label class="text-[10px] font-black text-gray-400 uppercase">Products</label>
+              <div id="edit-items-container" class="max-h-[300px] overflow-y-auto space-y-1 mt-2">${itemsHTML}</div>
+              <button onclick="addEditItem()" class="w-full py-2.5 bg-blue-50 text-blue-600 rounded-xl font-black text-xs btn-action mt-2"><i class="fa-solid fa-plus mr-1"></i> Add Product</button>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+              <div><label class="text-[10px] font-black text-gray-400 uppercase">Delivery Charge</label><input type="number" id="edit-delivery" value="${del}" class="w-full p-3 bg-white border rounded-xl text-sm font-bold mt-1"></div>
+              <div><label class="text-[10px] font-black text-gray-400 uppercase">Discount</label><input type="number" id="edit-discount" value="${disc}" class="w-full p-3 bg-white border rounded-xl text-sm font-bold mt-1"></div>
+            </div>
+            <div class="flex gap-2">
+              <button onclick="saveEditOrder()" class="flex-1 py-3 bg-blue-600 text-white rounded-xl font-black text-sm btn-action"><i class="fa-solid fa-check mr-1"></i> Save Changes</button>
+              <button onclick="closeEditModal()" class="py-3 px-6 bg-gray-200 text-gray-600 rounded-xl font-black text-sm btn-action">Cancel</button>
+            </div>`;
+
+            // Store items in a temp array
+            window._editItems = JSON.parse(JSON.stringify(items));
+            document.getElementById('edit-modal-overlay').classList.remove('hidden');
+        }
+
+        function closeEditModal(event) {
+            if (event && event.target !== document.getElementById('edit-modal-overlay')) return;
+            document.getElementById('edit-modal-overlay').classList.add('hidden');
+            editOrderId = null;
+            window._editItems = null;
+        }
+
+        function addEditItem() {
+            if (!window._editItems) window._editItems = [];
+            window._editItems.push({ title: '', variant: '', product_id: '', price: 0 });
+            refreshEditItemsUI();
+        }
+
+        function removeEditItem(idx) {
+            if (!window._editItems) return;
+            window._editItems.splice(idx, 1);
+            refreshEditItemsUI();
+        }
+
+        function updateEditItem(idx, field, value) {
+            if (!window._editItems) return;
+            if (field === 'price') window._editItems[idx][field] = parseFloat(value) || 0;
+            else window._editItems[idx][field] = value;
+        }
+
+        function refreshEditItemsUI() {
+            const container = document.getElementById('edit-items-container');
+            if (!container || !window._editItems) return;
+            container.innerHTML = window._editItems.map((it, idx) => `
+            <div class="flex items-center gap-2 bg-white border rounded-xl p-3 mb-2">
+              <div class="flex-1 space-y-1">
+                <input type="text" value="${it.title||''}" placeholder="Product name" class="w-full p-2 bg-gray-50 border rounded-lg text-xs font-bold" onchange="updateEditItem(${idx},'title',this.value)">
+                <div class="flex gap-2">
+                  <input type="text" value="${it.variant||''}" placeholder="Variant" class="flex-1 p-2 bg-gray-50 border rounded-lg text-xs" onchange="updateEditItem(${idx},'variant',this.value)">
+                  <input type="text" value="${it.product_id||''}" placeholder="ID" class="w-20 p-2 bg-gray-50 border rounded-lg text-xs" onchange="updateEditItem(${idx},'product_id',this.value)">
+                </div>
+              </div>
+              <div class="flex items-center gap-2">
+                <input type="number" value="${it.price||0}" placeholder="Price" class="w-20 p-2 bg-gray-50 border rounded-lg text-xs font-bold" onchange="updateEditItem(${idx},'price',this.value)">
+                <button onclick="removeEditItem(${idx})" class="p-2 bg-red-100 text-red-500 rounded-lg text-xs btn-action"><i class="fa-solid fa-trash"></i></button>
+              </div>
+            </div>`).join('');
+        }
+
+        async function saveEditOrder() {
+            if (!editOrderId || !window._editItems) return;
+            const order = allOrders.find(o => o.id === editOrderId);
+            if (!order) return;
+            const del = parseFloat(document.getElementById('edit-delivery')?.value) || 0;
+            const disc = parseFloat(document.getElementById('edit-discount')?.value) || 0;
+            const subtotal = window._editItems.reduce((a, i) => a + (parseFloat(i.price) || 0), 0);
+            const total = subtotal + del - disc;
+
+            const updatedMemberInfo = {
+                ...order.member_info,
+                items: window._editItems,
+                delivery_charge: del,
+                discount: disc,
+                total: '৳ ' + total
+            };
+
+            try {
+                const { error } = await _supabase.from('orders').update({ member_info: updatedMemberInfo }).eq('id',
+                    editOrderId);
+                if (error) throw error;
+                showToast('Order updated!', 'success');
+                closeEditModal();
+                await loadOrders();
+                if (currentDrawerOrderId === editOrderId) openOrderDrawer(editOrderId);
+            } catch (e) {
+                console.error(e);
+                showToast('Failed to update order', 'error');
+            }
+        }
+
+        // ==================== LOAD ORDERS ====================
         async function loadOrders() {
             try {
                 const { data, error } = await _supabase.from('orders').select('*').order('created_at',
@@ -908,7 +957,7 @@
                     .status
                 ] || 'bg-gray-100 text-gray-600';
                 return `<div onclick="openOrderDrawer(${o.id})" class="bg-white p-5 rounded-[2rem] border shadow-sm hover:shadow-lg transition cursor-pointer btn-action">
-              <div class="flex justify-between items-start mb-3"><div><h4 class="font-black uppercase truncate max-w-[130px]">${o.member_name||'Unknown'}</h4><p class="text-[10px] text-gray-400">#${o.id} &bull; ${new Date(o.created_at).toLocaleDateString()}</p></div><span class="status-badge ${sc}">${o.status}</span></div>
+              <div class="flex justify-between items-start mb-3"><div><h4 class="font-black uppercase truncate max-w-[130px]">${o.member_name||'Unknown'}</h4><p class="text-[10px] text-gray-400">#${o.id} · ${new Date(o.created_at).toLocaleDateString()}</p></div><span class="status-badge ${sc}">${o.status}</span></div>
               <div class="bg-gray-50 p-3 rounded-2xl mb-3"><div class="flex flex-wrap gap-1">${items.slice(0,3).map(i=>`<span class="bg-white px-2 py-0.5 rounded border text-[8px] font-bold">${i.title}</span>`).join('')}${items.length>3?`<span class="text-[8px] text-gray-400">+${items.length-3}</span>`:''}</div></div>
               <div class="flex justify-between items-center pt-3 border-t"><span class="text-lg font-black">৳ ${o.member_info?.total||'0'}</span><div class="flex gap-2" onclick="event.stopPropagation()"><button onclick="quickStatusUpdate(${o.id})" class="p-2 bg-green-500 text-white rounded-lg text-xs btn-action"><i class="fa-solid fa-check"></i></button><button onclick="deleteOrder(${o.id})" class="p-2 bg-red-500 text-white rounded-lg text-xs btn-action"><i class="fa-solid fa-trash"></i></button></div></div></div>`;
             }).join('') : '<p class="col-span-full text-center py-12 text-gray-400">No orders found</p>';
@@ -924,11 +973,10 @@
             try {
                 const { error } = await _supabase.from('orders').update({ status }).eq('id', id);
                 if (error) throw error;
-                showToast(`Order #${id} &rarr; ${status}`, 'success');
+                showToast(`Order #${id} → ${status}`, 'success');
                 const o = allOrders.find(o => o.id === id);
                 if (o) { o.status = status;
-                    setTimeout(() => { if (confirm(`Status updated. Open email preview?`)) openEmailPreview(
-                        id); }, 400); }
+                    setTimeout(() => { if (confirm(`Open email preview?`)) openSenderModal(id); }, 400); }
                 await loadOrders();
             } catch (e) { console.error(e);
                 showToast('Failed to update', 'error'); }
@@ -945,6 +993,7 @@
         function openOrderDrawer(orderId) {
             const order = allOrders.find(o => o.id === orderId);
             if (!order) return;
+            currentDrawerOrderId = orderId;
             const items = order.member_info?.items || [];
             const shipping = order.member_info?.shipping || {};
             const subtotal = items.reduce((a, i) => a + (parseFloat(i.price) || 0), 0);
@@ -964,17 +1013,19 @@
               <div><label class="text-[10px] font-black text-gray-400 uppercase">Phone</label><p class="text-sm font-bold mt-1">${shipping.phone||'N/A'}</p></div>
               <div><label class="text-[10px] font-black text-gray-400 uppercase">Address</label><p class="text-xs font-bold mt-1">${shipping.address||'N/A'}, ${shipping.district||''}</p></div>
               ${shipping.note?`<div><label class="text-[10px] font-black text-gray-400 uppercase">Note</label><p class="text-xs mt-1 text-orange-600 font-bold">${shipping.note}</p></div>`:''}</div>
-            <div class="bg-gray-50 p-5 rounded-2xl"><h4 class="text-[10px] font-black uppercase text-gray-400 mb-3">Products (${items.length})</h4>${items.map(i=>`<div class="flex justify-between py-2 border-b last:border-0"><div><span class="text-xs font-bold">${i.title} ${i.variant?`(${i.variant})`:''}</span><span class="text-[8px] text-gray-400 block">ID: ${i.product_id||'N/A'}</span></div><span class="text-xs font-black">৳ ${i.price||0}</span></div>`).join('')}
+            <div class="bg-gray-50 p-5 rounded-2xl">
+              <div class="flex justify-between items-center mb-3"><h4 class="text-[10px] font-black uppercase text-gray-400">Products (${items.length})</h4><button onclick="openEditModal(${order.id})" class="text-[10px] font-black text-blue-600 btn-action"><i class="fa-solid fa-pen-to-square"></i> Edit</button></div>
+              ${items.map(i=>`<div class="flex justify-between py-2 border-b last:border-0"><div><span class="text-xs font-bold">${i.title} ${i.variant?`(${i.variant})`:''}</span><span class="text-[8px] text-gray-400 block">ID: ${i.product_id||'N/A'}</span></div><span class="text-xs font-black">৳ ${i.price||0}</span></div>`).join('')}
               <div class="pt-3 mt-3 border-t space-y-1.5"><div class="flex justify-between text-[11px]"><span>Subtotal</span><span class="font-bold">৳ ${subtotal}</span></div><div class="flex justify-between text-[11px] text-orange-600"><span>Delivery</span><span class="font-bold">+৳ ${del}</span></div>${disc>0?`<div class="flex justify-between text-[11px] text-green-600"><span>Discount</span><span class="font-bold">-৳ ${disc}</span></div>`:''}<div class="flex justify-between text-lg font-black border-t pt-2 mt-2"><span>TOTAL</span><span class="text-blue-600">৳ ${total}</span></div></div></div>
             <div class="bg-black p-5 rounded-2xl text-white">
               <h4 class="text-[10px] font-black uppercase mb-3 text-gray-400"><i class="fa-solid fa-envelope"></i> Email</h4>
-              <button onclick="openEmailPreview(${order.id})" class="w-full py-3 bg-white text-black rounded-xl font-black text-xs btn-action"><i class="fa-solid fa-eye mr-2"></i> Preview & Send</button>
+              <button onclick="openSenderModal(${order.id})" class="w-full py-3 bg-white text-black rounded-xl font-black text-xs btn-action"><i class="fa-solid fa-eye mr-2"></i> Preview & Send</button>
             </div>
             <div class="text-center text-[10px] text-gray-400 font-bold">${date}</div>
             <div class="space-y-2">
-              <div class="grid grid-cols-2 gap-2"><button onclick="downloadInvoice(${order.id})" class="py-3 bg-slate-900 text-white rounded-xl font-black text-xs btn-action"><i class="fa-solid fa-file-pdf mr-1"></i> Invoice</button><button onclick="downloadShippingSticker(${order.id})" class="py-3 bg-blue-600 text-white rounded-xl font-black text-xs btn-action"><i class="fa-solid fa-tag mr-1"></i> Sticker</button></div>
-              <div class="grid grid-cols-3 gap-2">${order.status!=='pending'?`<button onclick="updateOrderStatus(${order.id},'pending')" class="py-2.5 bg-yellow-100 text-yellow-700 rounded-xl font-black text-[10px] btn-action">&larr; Pending</button>`:'<div></div>'}${order.status!=='confirmed'?`<button onclick="updateOrderStatus(${order.id},'confirmed')" class="py-2.5 bg-blue-100 text-blue-700 rounded-xl font-black text-[10px] btn-action">Confirm</button>`:'<div></div>'}${order.status!=='shipped'?`<button onclick="updateOrderStatus(${order.id},'shipped')" class="py-2.5 bg-purple-100 text-purple-700 rounded-xl font-black text-[10px] btn-action">Ship</button>`:'<div></div>'}${order.status!=='completed'?`<button onclick="updateOrderStatus(${order.id},'completed')" class="py-2.5 bg-green-100 text-green-700 rounded-xl font-black text-[10px] btn-action">Complete</button>`:'<div></div>'}</div>
-              <button onclick="deleteOrder(${order.id})" class="w-full py-3 bg-red-50 text-red-600 rounded-xl font-black text-xs btn-action mt-2"><i class="fa-solid fa-trash mr-1"></i> Delete</button></div>`;
+              <div class="grid grid-cols-2 gap-2"><button onclick="downloadInvoice(${order.id})" class="py-3 bg-slate-900 text-white rounded-xl font-black text-xs btn-action"><i class="fa-solid fa-file-pdf"></i> Invoice</button><button onclick="downloadShippingSticker(${order.id})" class="py-3 bg-blue-600 text-white rounded-xl font-black text-xs btn-action"><i class="fa-solid fa-tag"></i> Sticker</button></div>
+              <div class="grid grid-cols-3 gap-2">${order.status!=='pending'?`<button onclick="updateOrderStatus(${order.id},'pending')" class="py-2.5 bg-yellow-100 text-yellow-700 rounded-xl font-black text-[10px] btn-action">← Pending</button>`:'<div></div>'}${order.status!=='confirmed'?`<button onclick="updateOrderStatus(${order.id},'confirmed')" class="py-2.5 bg-blue-100 text-blue-700 rounded-xl font-black text-[10px] btn-action">Confirm</button>`:'<div></div>'}${order.status!=='shipped'?`<button onclick="updateOrderStatus(${order.id},'shipped')" class="py-2.5 bg-purple-100 text-purple-700 rounded-xl font-black text-[10px] btn-action">Ship</button>`:'<div></div>'}${order.status!=='completed'?`<button onclick="updateOrderStatus(${order.id},'completed')" class="py-2.5 bg-green-100 text-green-700 rounded-xl font-black text-[10px] btn-action">Complete</button>`:'<div></div>'}</div>
+              <button onclick="deleteOrder(${order.id})" class="w-full py-3 bg-red-50 text-red-600 rounded-xl font-black text-xs btn-action mt-2"><i class="fa-solid fa-trash"></i> Delete</button></div>`;
             document.getElementById('order-drawer-overlay').classList.remove('hidden');
             document.getElementById('order-drawer').classList.add('open');
         }
@@ -996,9 +1047,8 @@
             const div = document.createElement('div');
             div.style.cssText =
                 'padding:40px 50px;font-family:Inter,sans-serif;color:#1a1a1a;max-width:800px;margin:0 auto;background:#fff;';
-            div.innerHTML = `<div style="display:flex;justify-content:space-between;border-bottom:3px solid #1a1a1a;padding-bottom:20px;margin-bottom:30px"><div><h1 style="font-size:28px;font-weight:900;">INVOICE</h1><p>ORDER #${order.id}</p></div><div><h2>JAYENWARE</h2></div></div><p style="font-weight:700;">${order.member_name||'N/A'}</p><p>${shipping.phone||''}<br>${shipping.address||''}</p><table style="width:100%;border-collapse:collapse;margin:20px 0"><thead><tr style="background:#f5f5f5;"><th style="text-align:left;padding:8px;">Item</th><th style="text-align:right;padding:8px;">Price</th></tr></thead><tbody>${items.map(i=>`<tr><td style="padding:8px;">${i.title}</td><td style="text-align:right;padding:8px;">৳ ${i.price||0}</td></tr>`).join('')}</tbody></table><div style="text-align:right"><p>Subtotal: ৳ ${subtotal}</p><p>Delivery: ৳ ${del}</p>${disc>0?`<p>Discount: -৳ ${disc}</p>`:''}<h2 style="color:#3b82f6;">TOTAL: ৳ ${total}</h2></div>`;
-            html2pdf().set({ margin: 0, filename: `Invoice_#${order.id}.pdf`, jsPDF: { format: 'a4' } }).from(div)
-            .save();
+            div.innerHTML = `<div style="display:flex;justify-content:space-between;border-bottom:3px solid #1a1a1a;padding-bottom:20px;margin-bottom:30px"><div><h1 style="font-size:28px;font-weight:900;">INVOICE</h1><p>#${order.id}</p></div><div><h2>JAYENWARE</h2></div></div><p style="font-weight:700;">${order.member_name||'N/A'}</p><p>${shipping.phone||''}<br>${shipping.address||''}</p><table style="width:100%;border-collapse:collapse;margin:20px 0"><thead><tr style="background:#f5f5f5;"><th style="text-align:left;padding:8px;">Item</th><th style="text-align:right;padding:8px;">Price</th></tr></thead><tbody>${items.map(i=>`<tr><td style="padding:8px;">${i.title}</td><td style="text-align:right;padding:8px;">৳ ${i.price||0}</td></tr>`).join('')}</tbody></table><div style="text-align:right"><p>Subtotal: ৳ ${subtotal}</p><p>Delivery: ৳ ${del}</p>${disc>0?`<p>Discount: -৳ ${disc}</p>`:''}<h2 style="color:#3b82f6;">TOTAL: ৳ ${total}</h2></div>`;
+            html2pdf().set({ margin: 0, filename: `Invoice_#${order.id}.pdf`, jsPDF: { format: 'a4' } }).from(div).save();
         }
 
         function downloadShippingSticker(orderId) {
@@ -1009,8 +1059,7 @@
             const div = document.createElement('div');
             div.style.cssText = 'padding:35px;font-family:Inter,sans-serif;';
             div.innerHTML = `<div style="border:6px solid #1a1a1a;padding:35px;border-radius:20px;"><div style="display:flex;justify-content:space-between;"><span style="font-weight:900;font-size:28px;">JAYENWARE</span><span>#${order.id}</span></div><p style="font-size:34px;font-weight:900;">${order.member_name||'N/A'}</p><p style="font-size:24px;color:#3b82f6;">${shipping.phone||'N/A'}</p><p>${shipping.address||''}</p><div style="background:#1a1a1a;color:#fff;padding:22px;text-align:center;border-radius:14px;margin-top:25px;"><p style="font-size:38px;font-weight:900;">৳ ${total}</p></div></div>`;
-            html2pdf().set({ margin: 0, filename: `Sticker_#${order.id}.pdf`, jsPDF: { format: 'a4' } }).from(div)
-            .save();
+            html2pdf().set({ margin: 0, filename: `Sticker_#${order.id}.pdf`, jsPDF: { format: 'a4' } }).from(div).save();
         }
 
         async function checkSession() {
@@ -1024,7 +1073,9 @@
         }
 
         document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeOrderDrawer();
-                closeEmailPreview(); } });
+                closeEmailPreview();
+                closeSenderModal();
+                closeEditModal(); } });
         window.onload = checkSession;
         window.addEventListener('resize', () => {
             document.querySelector('.bottom-nav').classList.toggle('hidden', window.innerWidth >= 769);

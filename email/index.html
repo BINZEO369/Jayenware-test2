@@ -593,9 +593,9 @@
 
             // Banner HTML
             const bannerHTML = bannerUrl ? `
-          <tr><td style="padding:0 24px 16px;">
-            <img src="${bannerUrl}" alt="Campaign Banner" style="width:100%;height:auto;max-height:220px;object-fit:contain;display:block;border-radius:14px;background:#f5f5f5;" onerror="this.style.display='none'">
-          </td></tr>` : '';
+<tr><td style="padding:0 0 16px 0;">
+  <img src="${bannerUrl}" alt="Campaign Banner" style="width:100%;height:auto;max-height:250px;object-fit:cover;display:block;" onerror="this.style.display='none'">
+</td></tr>` : '';
 
             // Product cards with images
             let productsHTML = '';

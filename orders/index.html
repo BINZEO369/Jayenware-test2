@@ -39,7 +39,6 @@
             background: #0a0a0a;
             color: #f5f5f7;
         }
-
         body.dark .bg-white {
             background: #1c1c1e;
         }
@@ -70,100 +69,195 @@
             background: #2c2c2e;
             border-color: #3a3a3c;
         }
+        body.dark .email-full-preview {
+            background: #1c1c1e;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+        }
+        body.dark .eml-box {
+            background: #2c2c2e;
+            border-color: #3a3a3c;
+        }
+        body.dark .eml-section-title {
+            color: #e5e7eb;
+        }
+        body.dark .eml-text {
+            color: #d1d5db;
+        }
+        body.dark .eml-label {
+            color: #9ca3af;
+        }
+        body.dark .eml-value {
+            color: #f3f4f6;
+        }
+        body.dark .eml-table th {
+            background: #374151;
+            color: #9ca3af;
+        }
+        body.dark .eml-table td {
+            border-color: #374151;
+            color: #e5e7eb;
+        }
+        body.dark .eml-divider {
+            border-color: #374151;
+        }
 
-        /* ========== EMAIL MODAL ========== */
-        .email-modal-overlay {
+        /* Email Full Preview Overlay */
+        .email-full-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(10px);
-            z-index: 700;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(12px);
+            z-index: 800;
             display: flex;
             justify-content: center;
             align-items: center;
             animation: fadeIn 0.3s ease;
+            padding: 20px;
         }
-        .email-modal {
-            background: white;
-            border-radius: 2rem;
-            width: 95%;
-            max-width: 700px;
+        .email-full-preview {
+            background: #ffffff;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 620px;
             max-height: 90vh;
             overflow-y: auto;
-            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.3);
-            animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        body.dark .email-modal {
-            background: #1c1c1e;
-            color: #f5f5f7;
-        }
-        body.dark .email-modal .bg-gray-50 {
-            background: #2c2c2e;
-        }
-        body.dark .email-modal .border,
-        body.dark .email-modal .border-b {
-            border-color: #3a3a3c;
-        }
-
-        /* ========== EMAIL PREVIEW (Gmail/Proton Style) ========== */
-        .email-preview-wrapper {
-            background: #f0f2f5;
-            border-radius: 1.5rem;
-            padding: 2rem;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.3);
+            animation: scaleIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
             position: relative;
         }
-        body.dark .email-preview-wrapper {
-            background: #1a1a1c;
-        }
-        .email-preview-card {
-            background: #ffffff;
-            border-radius: 1rem;
-            overflow: hidden;
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-            font-family: 'Inter', Arial, sans-serif;
-        }
-        body.dark .email-preview-card {
-            background: #2c2c2e;
-        }
-        .email-preview-header {
-            padding: 16px 20px;
-            border-bottom: 1px solid #e5e7eb;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            background: #fafafa;
-        }
-        body.dark .email-preview-header {
-            background: #3a3a3c;
-            border-color: #4a4a4c;
-        }
-        .email-preview-body {
-            padding: 0;
+        @keyframes scaleIn {
+            from {
+                transform: scale(0.9);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
         }
 
-        /* ========== INLINE EMAIL STYLES (for preview & proton) ========== */
-        .eml-wrapper {
-            width: 100%;
-            max-width: 600px;
-            margin: 0 auto;
-            background: #ffffff;
-            border-radius: 0;
-            overflow: hidden;
-            font-family: Arial, Helvetica, sans-serif;
+        /* Email Inner Styles */
+        .eml-inner {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            color: #1f2937;
+            line-height: 1.6;
         }
-        .eml-header-banner {
-            padding: 30px 24px;
+        .eml-banner {
+            padding: 32px 24px;
             text-align: center;
+            color: #ffffff;
+        }
+        .eml-banner-title {
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            margin: 8px 0 0;
+            text-transform: uppercase;
+        }
+        .eml-banner-subtitle {
+            font-size: 48px;
+            display: block;
+            margin-bottom: 4px;
+        }
+        .eml-logo-section {
+            text-align: center;
+            padding: 24px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .eml-logo-img {
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            object-fit: cover;
+            display: block;
+            margin: 0 auto 8px;
+        }
+        .eml-brand-name {
+            font-size: 18px;
+            font-weight: 900;
+            color: #0071e3;
+            margin: 0;
+        }
+        .eml-brand-tagline {
+            font-size: 9px;
+            color: #94a3b8;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+        .eml-greeting {
+            padding: 20px 24px 12px;
+            font-size: 14px;
+            color: #374151;
+        }
+        .eml-greeting strong {
+            color: #1f2937;
         }
         .eml-section {
-            padding: 20px 24px;
+            padding: 0 24px 16px;
+        }
+        .eml-section-title {
+            font-size: 13px;
+            font-weight: 800;
+            color: #1f2937;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin: 0 0 10px;
         }
         .eml-box {
             background: #f8fafc;
-            border-radius: 14px;
             border: 1px solid #e5e7eb;
-            padding: 18px;
-            margin-bottom: 16px;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+        .eml-info-row {
+            display: flex;
+            padding: 4px 0;
+            font-size: 13px;
+        }
+        .eml-label {
+            color: #6b7280;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            min-width: 80px;
+        }
+        .eml-value {
+            color: #1f2937;
+            font-weight: 600;
+        }
+        .eml-value.highlight {
+            color: #0071e3;
+            font-weight: 700;
+            font-size: 14px;
+        }
+        .eml-status-badge {
+            display: inline-block;
+            padding: 3px 14px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+            color: #ffffff;
+            letter-spacing: 0.5px;
+        }
+        .eml-total-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+        }
+        .eml-total-label {
+            font-size: 15px;
+            font-weight: 900;
+            color: #1f2937;
+        }
+        .eml-total-value {
+            font-size: 22px;
+            font-weight: 900;
+            color: #0071e3;
         }
         .eml-table {
             width: 100%;
@@ -171,63 +265,199 @@
         }
         .eml-table th {
             background: #f1f5f9;
-            padding: 10px;
-            font-size: 10px;
+            padding: 8px 10px;
+            font-size: 9px;
             color: #6b7280;
             text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 700;
             text-align: left;
-            font-family: Arial, Helvetica, sans-serif;
+        }
+        .eml-table th:first-child {
+            border-radius: 8px 0 0 0;
+        }
+        .eml-table th:last-child {
+            border-radius: 0 8px 0 0;
+            text-align: right;
         }
         .eml-table td {
-            padding: 12px 10px;
+            padding: 10px;
             border-bottom: 1px solid #e5e7eb;
-            font-family: Arial, Helvetica, sans-serif;
+            font-size: 13px;
+            vertical-align: middle;
         }
-        .eml-btn {
-            display: inline-block;
-            margin: 4px;
-            padding: 10px 18px;
-            border-radius: 25px;
-            text-decoration: none;
-            font-size: 12px;
+        .eml-table td:last-child {
+            text-align: right;
             font-weight: 700;
-            font-family: Arial, Helvetica, sans-serif;
-            color: #ffffff;
-        }
-        .eml-footer {
-            background: #1f2937;
-            padding: 25px 24px;
-            text-align: center;
-            color: #ffffff;
         }
         .eml-product-img {
-            width: 50px;
-            height: 50px;
-            border-radius: 10px;
+            width: 44px;
+            height: 44px;
+            border-radius: 8px;
             object-fit: cover;
             border: 1px solid #e5e7eb;
             display: inline-block;
             vertical-align: middle;
             margin-right: 10px;
         }
-        .eml-status-badge {
-            display: inline-block;
-            padding: 4px 16px;
-            border-radius: 20px;
-            font-size: 11px;
+        .eml-product-id {
+            font-size: 9px;
+            color: #9ca3af;
+            display: block;
+        }
+        .eml-divider {
+            border: none;
+            border-top: 1px dashed #d1d5db;
+            margin: 8px 0;
+        }
+        .eml-footer {
+            background: #1f2937;
+            padding: 24px;
+            text-align: center;
+            color: #ffffff;
+            border-radius: 0 0 16px 16px;
+        }
+        .eml-footer-title {
+            font-size: 13px;
             font-weight: 800;
             text-transform: uppercase;
-            font-family: Arial, Helvetica, sans-serif;
+            letter-spacing: 1px;
+            margin: 0 0 14px;
+        }
+        .eml-footer-links {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 6px;
+        }
+        .eml-footer-link {
+            display: inline-block;
+            padding: 8px 14px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 10px;
+            font-weight: 700;
             color: #ffffff;
+            transition: opacity 0.2s;
+        }
+        .eml-footer-link:hover {
+            opacity: 0.85;
+        }
+        .eml-footer-link.blue {
+            background: #0071e3;
+        }
+        .eml-footer-link.red {
+            background: #dc2626;
+        }
+        .eml-footer-link.indigo {
+            background: #4f46e5;
+        }
+        .eml-footer-link.pink {
+            background: #db2777;
+        }
+        .eml-footer-copy {
+            font-size: 10px;
+            color: #9ca3af;
+            margin: 12px 0 0;
+        }
+        .eml-footer-copy2 {
+            font-size: 9px;
+            color: #6b7280;
+            margin: 4px 0 0;
         }
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
+        /* Close Button on Preview */
+        .eml-close-btn {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.6);
+            color: #ffffff;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            transition: background 0.2s;
+        }
+        .eml-close-btn:hover {
+            background: rgba(0, 0, 0, 0.8);
+        }
+
+        /* Proton Action Bar */
+        .eml-action-bar {
+            position: sticky;
+            bottom: 0;
+            background: #ffffff;
+            border-top: 1px solid #e5e7eb;
+            padding: 14px 24px;
+            display: flex;
+            gap: 10px;
+            border-radius: 0 0 16px 16px;
+            z-index: 5;
+        }
+        body.dark .eml-action-bar {
+            background: #1c1c1e;
+            border-color: #3a3a3c;
+        }
+        .eml-action-btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        .eml-action-btn.primary {
+            background: linear-gradient(135deg, #6d28d9, #4f46e5);
+            color: #ffffff;
+        }
+        .eml-action-btn.primary:hover {
+            box-shadow: 0 4px 20px rgba(109, 40, 217, 0.4);
+            transform: translateY(-1px);
+        }
+        .eml-action-btn.secondary {
+            background: #f3f4f6;
+            color: #374151;
+        }
+        body.dark .eml-action-btn.secondary {
+            background: #374151;
+            color: #e5e7eb;
+        }
+        .eml-action-btn.secondary:hover {
+            background: #e5e7eb;
+        }
+        body.dark .eml-action-btn.secondary:hover {
+            background: #4b5563;
+        }
+
+        /* Toast & others */
+        .btn-action {
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            cursor: pointer;
+        }
+        .btn-action:hover {
+            transform: translateY(-2px);
+        }
+        .btn-action:active {
+            transform: scale(0.96);
+        }
+        .toast-enter {
+            animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        .toast-exit {
+            animation: slideDown 0.3s ease-in forwards;
         }
         @keyframes slideUp {
             from {
@@ -249,31 +479,13 @@
                 opacity: 0;
             }
         }
-        @keyframes pulse-dot {
-            0%,
-            100% {
-                box-shadow: 0 0 0 0 rgba(0, 113, 227, 0.4);
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
             }
-            50% {
-                box-shadow: 0 0 0 8px rgba(0, 113, 227, 0);
+            to {
+                opacity: 1;
             }
-        }
-
-        .btn-action {
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-            cursor: pointer;
-        }
-        .btn-action:hover {
-            transform: translateY(-2px);
-        }
-        .btn-action:active {
-            transform: scale(0.96);
-        }
-        .toast-enter {
-            animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-        .toast-exit {
-            animation: slideDown 0.3s ease-in forwards;
         }
         .status-badge {
             padding: 4px 12px;
@@ -317,6 +529,15 @@
             background: #0071e3;
             animation: pulse-dot 1.5s infinite;
         }
+        @keyframes pulse-dot {
+            0%,
+            100% {
+                box-shadow: 0 0 0 0 rgba(0, 113, 227, 0.4);
+            }
+            50% {
+                box-shadow: 0 0 0 8px rgba(0, 113, 227, 0);
+            }
+        }
         .custom-scroll::-webkit-scrollbar {
             width: 4px;
             height: 4px;
@@ -349,9 +570,14 @@
             main {
                 padding-bottom: 100px !important;
             }
-            .email-modal {
-                width: 98%;
-                border-radius: 1.5rem;
+            .email-full-preview {
+                max-width: 100%;
+                border-radius: 12px;
+                max-height: 95vh;
+            }
+            .eml-action-bar {
+                flex-direction: column;
+                gap: 8px;
             }
         }
         @media (min-width: 769px) {
@@ -363,7 +589,6 @@
 </head>
 <body class="text-slate-800 antialiased">
 
-    <!-- GLOBAL LOADER -->
     <div id="global-loader" style="position:fixed;inset:0;background:white;z-index:9999;display:flex;justify-content:center;align-items:center;">
         <div class="flex flex-col items-center">
             <div class="w-14 h-14 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
@@ -371,7 +596,6 @@
         </div>
     </div>
 
-    <!-- MAIN LAYOUT -->
     <div id="main-layout" class="hidden min-h-screen">
         <main class="p-4 md:p-8 lg:p-10 max-w-7xl mx-auto">
             <header class="mb-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
@@ -395,7 +619,6 @@
 
             <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6" id="order-stats"></div>
 
-            <!-- KANBAN VIEW -->
             <div id="kanban-view" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div class="kanban-col bg-gray-50 border border-gray-100" data-status="pending" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event, 'pending')">
                     <div class="flex justify-between items-center mb-4 px-2"><h3 class="font-black text-xs uppercase flex items-center gap-2"><span class="w-2 h-2 bg-yellow-500 rounded-full"></span> Pending</h3><span id="count-pending" class="text-[10px] font-black bg-yellow-100 text-yellow-600 px-2.5 py-1 rounded-full">0</span></div>
@@ -415,7 +638,6 @@
                 </div>
             </div>
 
-            <!-- CARDS VIEW -->
             <div id="cards-view" class="hidden">
                 <div class="flex gap-3 mb-4">
                     <input type="text" id="order-search" placeholder="Search orders..." class="px-4 py-2.5 bg-white border rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-blue-500 w-full max-w-xs" onkeyup="filterOrders()">
@@ -428,7 +650,6 @@
         </main>
     </div>
 
-    <!-- ORDER DRAWER -->
     <div id="order-drawer-overlay" class="hidden fixed inset-0 bg-black/40 backdrop-blur-sm z-[500]" onclick="closeOrderDrawer()"></div>
     <div id="order-drawer" class="fixed top-0 right-0 h-full w-full md:w-[480px] bg-white shadow-2xl z-[600] order-drawer overflow-y-auto custom-scroll">
         <div class="sticky top-0 bg-white z-10 p-6 border-b flex justify-between items-center">
@@ -438,18 +659,15 @@
         <div id="order-drawer-content" class="p-6 space-y-5"><p class="text-xs text-gray-400 text-center py-8">Select an order</p></div>
     </div>
 
-    <!-- EMAIL MODAL -->
-    <div id="email-modal-overlay" class="email-modal-overlay hidden" onclick="closeEmailModal(event)">
-        <div class="email-modal custom-scroll" onclick="event.stopPropagation()">
-            <div class="sticky top-0 bg-white z-10 p-6 border-b flex justify-between items-center rounded-t-[2rem]">
-                <h3 class="text-lg font-black uppercase flex items-center gap-2"><i class="fa-solid fa-envelope text-blue-600"></i> Send Email via Proton Mail</h3>
-                <button onclick="closeEmailModal()" class="text-gray-400 hover:text-black text-xl btn-action"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <div class="p-6 space-y-5" id="email-modal-content"></div>
+    <!-- EMAIL FULL PREVIEW OVERLAY -->
+    <div id="email-full-overlay" class="email-full-overlay hidden" onclick="closeEmailPreview(event)">
+        <div class="email-full-preview custom-scroll" id="email-full-preview-card" onclick="event.stopPropagation()">
+            <button class="eml-close-btn" onclick="closeEmailPreview()">&times;</button>
+            <div id="email-full-content" class="eml-inner"></div>
+            <div class="eml-action-bar" id="email-action-bar"></div>
         </div>
     </div>
 
-    <!-- BOTTOM NAV -->
     <nav class="bottom-nav hidden">
         <div class="flex justify-around items-center px-2">
             <a href="/home" class="flex flex-col items-center gap-1 p-2 text-[10px] font-black text-gray-400 no-underline"><i class="fa-solid fa-house text-lg"></i> Home</a>
@@ -461,7 +679,6 @@
     </nav>
 
     <script>
-        // ==================== CONFIG ====================
         const SUPABASE_URL = "https://vdqbjwzixppbtkbgvhlq.supabase.co";
         const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZkcWJqd3ppeHBwYnRrYmd2aGxxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgwMDc3MzQsImV4cCI6MjA5MzU4MzczNH0.E6C0_7SWIrTMJlFe5t8EbNAW5fzlpg-fKV3ZV0XYd3k";
         const ADMIN_EMAIL = "binzeo369@gmail.com";
@@ -480,7 +697,7 @@
         let allOrders = [],
             currentOrderView = 'kanban',
             draggedOrderId = null,
-            currentDrawerOrderId = null;
+            currentPreviewOrderId = null;
 
         function showToast(msg, type = 'success') {
             const t = document.createElement('div');
@@ -496,8 +713,8 @@
         }
 
         function getStageLabel(s) {
-            return { 'pending': 'Order Pending - Awaiting Confirmation', 'confirmed': 'Order Confirmed - Preparing Your Items',
-                'shipped': 'Order Shipped - On The Way!', 'completed': 'Order Delivered Successfully' } [s] || 'Order Update';
+            return { 'pending': 'Order Received', 'confirmed': 'Order Confirmed', 'shipped': 'Order Shipped',
+                'completed': 'Order Delivered' } [s] || 'Order Update';
         }
 
         function getStageColor(s) {
@@ -505,12 +722,18 @@
                 '#0071e3';
         }
 
-        function getStageEmoji(s) {
-            return { 'pending': '⏳', 'confirmed': '✅', 'shipped': '🚚', 'completed': '🎉' } [s] || '📦';
+        function getStageIcon(s) {
+            const icons = {
+                'pending': '<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
+                'confirmed': '<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>',
+                'shipped': '<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>',
+                'completed': '<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>'
+            };
+            return icons[s] || icons['pending'];
         }
 
-        // ==================== GENERATE EMAIL HTML (Proton/Gmail Compatible) ====================
-        function generateEmailHTML(order, stage) {
+        // ==================== BUILD EMAIL HTML (Pure, Clean, Professional) ====================
+        function buildEmailHTML(order, stage) {
             const items = order.member_info?.items || [];
             const shipping = order.member_info?.shipping || {};
             const subtotal = items.reduce((a, i) => a + (parseFloat(i.price) || 0), 0);
@@ -521,190 +744,173 @@
                 year: 'numeric' });
             const custEmail = shipping.email || order.member_email || '';
             const sc = getStageColor(stage);
-            const se = getStageEmoji(stage);
             const sl = getStageLabel(stage);
+            const icon = getStageIcon(stage);
 
-            const rows = items.map((it, idx) => `
+            const productRows = items.map((it, idx) => `
             <tr>
-              <td style="padding:12px 10px;border-bottom:1px solid #e5e7eb;text-align:center;font-size:12px;color:#6b7280;">${idx+1}</td>
-              <td style="padding:12px 10px;border-bottom:1px solid #e5e7eb;">
-                <img src="${it.img || LOGO_URL}" alt="${it.title}" style="width:48px;height:48px;border-radius:10px;object-fit:cover;display:inline-block;vertical-align:middle;margin-right:10px;border:1px solid #e5e7eb;">
-                <span style="font-weight:700;font-size:14px;color:#1f2937;">${it.title}</span>${it.variant?`<br><span style="font-size:11px;color:#0071e3;">Variant: ${it.variant}</span>`:''}<br><span style="font-size:10px;color:#9ca3af;">ID: ${it.product_id||'N/A'}</span>
+              <td style="text-align:center;font-size:12px;color:#6b7280;">${idx+1}</td>
+              <td>
+                <img src="${it.img || LOGO_URL}" alt="${it.title}" class="eml-product-img" onerror="this.src='${LOGO_URL}'">
+                <span style="font-weight:600;font-size:13px;color:#1f2937;">${it.title}</span>
+                ${it.variant ? `<span style="font-size:10px;color:#0071e3;display:block;">Variant: ${it.variant}</span>` : ''}
+                <span class="eml-product-id">Product ID: ${it.product_id || 'N/A'}</span>
               </td>
-              <td style="padding:12px 10px;border-bottom:1px solid #e5e7eb;text-align:right;font-weight:700;font-size:14px;color:#1f2937;">৳ ${it.price||0}</td>
+              <td>৳ ${it.price || 0}</td>
             </tr>`).join('');
 
-            return `<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body style="margin:0;padding:0;background:#f5f5f7;font-family:Arial,Helvetica,sans-serif;">
-        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f5f5f7;padding:20px 0;"><tr><td align="center">
-        <table width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.08);">
-        <tr><td style="background:${sc};padding:35px 30px;text-align:center;"><span style="font-size:52px;">${se}</span><h1 style="color:#fff;font-size:22px;font-weight:900;margin:10px 0 0;text-transform:uppercase;">${sl}</h1></td></tr>
-        <tr><td style="padding:30px 30px 20px;text-align:center;"><img src="${LOGO_URL}" style="width:60px;height:60px;border-radius:14px;object-fit:cover;"><h2 style="font-size:18px;font-weight:900;color:#0071e3;margin:10px 0 0;">JAYENWARE</h2><p style="font-size:10px;color:#94a3b8;font-weight:700;">SYSTEMS BY BINZEO</p>
-        <p style="color:#374151;font-size:15px;line-height:1.7;margin-top:15px;">Dear <strong>${order.member_name||'Customer'}</strong>,<br>Thank you for choosing <strong>JAYENWARE</strong>! Here's your order update.</p></td></tr>
-        <tr><td style="padding:0 30px 20px;"><div style="background:#f8fafc;border-radius:16px;border:1px solid #e5e7eb;padding:20px;">
-        <table width="100%" cellpadding="6"><tr><td style="font-size:12px;color:#6b7280;">Order ID:</td><td style="font-weight:700;color:#1f2937;">#${order.id}</td></tr>
-        <tr><td style="font-size:12px;color:#6b7280;">Date:</td><td style="font-weight:700;color:#1f2937;">${date}</td></tr>
-        <tr><td style="font-size:12px;color:#6b7280;">Status:</td><td><span style="background:${sc};color:#fff;padding:4px 16px;border-radius:20px;font-size:11px;font-weight:800;text-transform:uppercase;">${stage}</span></td></tr>
-        <tr><td style="font-size:12px;color:#6b7280;">Total:</td><td style="font-weight:900;color:#0071e3;font-size:20px;">৳ ${total}</td></tr></table></div></td></tr>
-        <tr><td style="padding:0 30px 20px;"><h3 style="font-size:15px;font-weight:900;color:#1f2937;margin:0 0 12px;">🛍️ Products Ordered</h3>
-        <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;"><thead><tr style="background:#f1f5f9;"><th style="padding:10px;font-size:10px;color:#6b7280;">#</th><th style="padding:10px;font-size:10px;color:#6b7280;text-align:left;">Product</th><th style="padding:10px;font-size:10px;color:#6b7280;text-align:right;">Price</th></tr></thead><tbody>${rows}</tbody></table></td></tr>
-        <tr><td style="padding:0 30px 20px;"><div style="background:#f8fafc;border-radius:16px;border:1px solid #e5e7eb;padding:20px;">
-        <table width="100%" cellpadding="5"><tr><td style="font-size:13px;color:#6b7280;">Subtotal</td><td style="text-align:right;font-weight:600;">৳ ${subtotal}</td></tr>
-        <tr><td style="font-size:13px;color:#f59e0b;">Delivery</td><td style="text-align:right;font-weight:600;color:#f59e0b;">+৳ ${del}</td></tr>${disc>0?`<tr><td style="font-size:13px;color:#22c55e;">Discount</td><td style="text-align:right;font-weight:600;color:#22c55e;">-৳ ${disc}</td></tr>`:''}
-        <tr><td colspan="2"><hr style="border:none;border-top:1px dashed #d1d5db;"></td></tr>
-        <tr><td style="font-size:16px;font-weight:900;">TOTAL</td><td style="text-align:right;font-size:22px;font-weight:900;color:#0071e3;">৳ ${total}</td></tr></table></div></td></tr>
-        <tr><td style="padding:0 30px 20px;"><div style="background:#f8fafc;border-radius:16px;border:1px solid #e5e7eb;padding:20px;">
-        <h3 style="font-size:15px;font-weight:900;color:#1f2937;margin:0 0 15px;">📍 Shipping Details</h3>
-        <table width="100%" cellpadding="6"><tr><td style="font-size:12px;color:#6b7280;">Name:</td><td style="font-weight:700;">${order.member_name||'N/A'}</td></tr>${custEmail?`<tr><td style="font-size:12px;color:#6b7280;">Email:</td><td style="font-weight:600;color:#0071e3;">${custEmail}</td></tr>`:''}
-        <tr><td style="font-size:12px;color:#6b7280;">Phone:</td><td style="font-weight:700;color:#0071e3;font-size:15px;">${shipping.phone||'N/A'}</td></tr>
-        <tr><td style="font-size:12px;color:#6b7280;">Address:</td><td style="font-weight:600;">${shipping.address||'N/A'}, ${shipping.district||''}</td></tr>${shipping.note?`<tr><td style="font-size:12px;color:#6b7280;">Note:</td><td style="font-weight:600;color:#f59e0b;">📝 ${shipping.note}</td></tr>`:''}</table></div></td></tr>
-        <tr><td style="background:#1f2937;padding:30px;text-align:center;"><h3 style="color:#fff;font-size:14px;font-weight:900;margin:0 0 15px;">🔗 Connect With JAYENWARE</h3>
-        <a href="${SUPPORT_INFO.website}" target="_blank" style="display:inline-block;margin:4px;padding:10px 18px;background:#0071e3;color:#fff;border-radius:25px;text-decoration:none;font-size:12px;font-weight:700;">🌐 Website</a>
-        <a href="mailto:${SUPPORT_INFO.supportEmail}" style="display:inline-block;margin:4px;padding:10px 18px;background:#0071e3;color:#fff;border-radius:25px;text-decoration:none;font-size:12px;font-weight:700;">✉️ Support</a><br>
-        <a href="${SUPPORT_INFO.youtube}" target="_blank" style="display:inline-block;margin:4px;padding:10px 18px;background:#ff0000;color:#fff;border-radius:25px;text-decoration:none;font-size:12px;font-weight:700;">▶️ YouTube</a>
-        <a href="${SUPPORT_INFO.facebook}" target="_blank" style="display:inline-block;margin:4px;padding:10px 18px;background:#1877f2;color:#fff;border-radius:25px;text-decoration:none;font-size:12px;font-weight:700;">📘 Facebook</a>
-        <a href="${SUPPORT_INFO.instagram}" target="_blank" style="display:inline-block;margin:4px;padding:10px 18px;background:#e4405f;color:#fff;border-radius:25px;text-decoration:none;font-size:12px;font-weight:700;">📷 Instagram</a>
-        <hr style="border:none;border-top:1px solid #374151;margin:15px 0;"><p style="color:#9ca3af;font-size:11px;">JAYENWARE • SYSTEMS BY BINZEO</p><p style="color:#6b7280;font-size:10px;">© ${new Date().getFullYear()}</p></td></tr>
-        </table></td></tr></table></body></html>`;
+            return `
+            <div class="eml-banner" style="background:${sc};">
+              <span class="eml-banner-subtitle">${icon}</span>
+              <h1 class="eml-banner-title">${sl}</h1>
+            </div>
+            <div class="eml-logo-section">
+              <img src="${LOGO_URL}" alt="JAYENWARE" class="eml-logo-img">
+              <h2 class="eml-brand-name">JAYENWARE</h2>
+              <p class="eml-brand-tagline">Systems by Binzeo</p>
+            </div>
+            <div class="eml-greeting">
+              <p>Dear <strong>${order.member_name || 'Valued Customer'}</strong>,</p>
+              <p style="color:#6b7280;font-size:13px;">Thank you for your order. Here is your updated order summary.</p>
+            </div>
+            <div class="eml-section">
+              <h3 class="eml-section-title">Order Information</h3>
+              <div class="eml-box">
+                <div class="eml-info-row"><span class="eml-label">Order ID</span><span class="eml-value">#${order.id}</span></div>
+                <div class="eml-info-row"><span class="eml-label">Date</span><span class="eml-value">${date}</span></div>
+                <div class="eml-info-row"><span class="eml-label">Status</span><span class="eml-status-badge" style="background:${sc};">${stage}</span></div>
+                <hr class="eml-divider">
+                <div class="eml-total-row"><span class="eml-total-label">Total Amount</span><span class="eml-total-value">৳ ${total}</span></div>
+              </div>
+            </div>
+            <div class="eml-section">
+              <h3 class="eml-section-title">Products Ordered</h3>
+              <table class="eml-table">
+                <thead><tr><th style="width:40px;text-align:center;">#</th><th>Product</th><th style="text-align:right;">Price</th></tr></thead>
+                <tbody>${productRows}</tbody>
+              </table>
+            </div>
+            <div class="eml-section">
+              <h3 class="eml-section-title">Price Breakdown</h3>
+              <div class="eml-box">
+                <div class="eml-info-row"><span class="eml-label">Subtotal</span><span class="eml-value">৳ ${subtotal}</span></div>
+                <div class="eml-info-row"><span class="eml-label">Delivery</span><span class="eml-value" style="color:#f59e0b;">+৳ ${del}</span></div>
+                ${disc > 0 ? `<div class="eml-info-row"><span class="eml-label">Discount</span><span class="eml-value" style="color:#22c55e;">-৳ ${disc}</span></div>` : ''}
+                <hr class="eml-divider">
+                <div class="eml-total-row"><span class="eml-total-label">Total</span><span class="eml-total-value">৳ ${total}</span></div>
+              </div>
+            </div>
+            <div class="eml-section">
+              <h3 class="eml-section-title">Shipping Details</h3>
+              <div class="eml-box">
+                <div class="eml-info-row"><span class="eml-label">Name</span><span class="eml-value">${order.member_name || 'N/A'}</span></div>
+                ${custEmail ? `<div class="eml-info-row"><span class="eml-label">Email</span><span class="eml-value highlight">${custEmail}</span></div>` : ''}
+                <div class="eml-info-row"><span class="eml-label">Phone</span><span class="eml-value highlight">${shipping.phone || 'N/A'}</span></div>
+                <div class="eml-info-row"><span class="eml-label">Address</span><span class="eml-value">${shipping.address || 'N/A'}, ${shipping.district || ''}</span></div>
+                ${shipping.note ? `<div class="eml-info-row"><span class="eml-label">Note</span><span class="eml-value" style="color:#f59e0b;">${shipping.note}</span></div>` : ''}
+              </div>
+            </div>
+            <div class="eml-footer">
+              <h3 class="eml-footer-title">Connect With JAYENWARE</h3>
+              <div class="eml-footer-links">
+                <a href="${SUPPORT_INFO.website}" target="_blank" class="eml-footer-link blue">Website</a>
+                <a href="mailto:${SUPPORT_INFO.supportEmail}" class="eml-footer-link blue">Support Email</a>
+                <a href="${SUPPORT_INFO.youtube}" target="_blank" class="eml-footer-link red">YouTube</a>
+                <a href="${SUPPORT_INFO.facebook}" target="_blank" class="eml-footer-link indigo">Facebook</a>
+                <a href="${SUPPORT_INFO.instagram}" target="_blank" class="eml-footer-link pink">Instagram</a>
+              </div>
+              <p class="eml-footer-copy">JAYENWARE &bull; SYSTEMS BY BINZEO</p>
+              <p class="eml-footer-copy2">&copy; ${new Date().getFullYear()} All Rights Reserved</p>
+            </div>`;
         }
 
-        // ==================== OPEN EMAIL MODAL ====================
-        function openEmailModal(orderId) {
+        // ==================== OPEN EMAIL FULL PREVIEW ====================
+        function openEmailPreview(orderId) {
             const order = allOrders.find(o => o.id === orderId);
             if (!order) return;
+            currentPreviewOrderId = orderId;
             const shipping = order.member_info?.shipping || {};
             const customerEmail = shipping.email || order.member_email || '';
-            const emailHTML = generateEmailHTML(order, order.status);
-            const stageLabel = getStageLabel(order.status);
-            const stageEmoji = getStageEmoji(order.status);
+            const subject = `${getStageLabel(order.status)} - Order #${order.id}`;
 
-            document.getElementById('email-modal-content').innerHTML = `
-            <div>
-              <label class="text-[10px] font-black text-gray-400 uppercase">Recipient Email</label>
-              <input type="email" id="email-to" value="${customerEmail}" placeholder="customer@email.com" class="w-full p-3 bg-white border rounded-xl text-sm font-bold mt-1 outline-none focus:ring-2 focus:ring-blue-500">
-            </div>
-            <div>
-              <label class="text-[10px] font-black text-gray-400 uppercase">Subject</label>
-              <input type="text" id="email-subject" value="${stageEmoji} ${stageLabel} - Order #${order.id}" class="w-full p-3 bg-white border rounded-xl text-sm font-bold mt-1 outline-none focus:ring-2 focus:ring-blue-500">
-            </div>
-            <div>
-              <label class="text-[10px] font-black text-gray-400 uppercase flex justify-between"><span>📧 Email Preview</span><span class="text-blue-600 text-[9px]">Scroll to see full design</span></label>
-              <div class="email-preview-wrapper mt-1">
-                <div class="email-preview-card">
-                  <div class="email-preview-header">
-                    <div class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white font-black text-xs">J</div>
-                    <div>
-                      <p class="text-xs font-bold">JAYENWARE <span class="text-gray-400 font-normal text-[10px]">via proton.me</span></p>
-                      <p class="text-[10px] text-gray-400">to ${customerEmail || 'customer'}</p>
-                    </div>
-                  </div>
-                  <div class="email-preview-body" style="max-height:400px;overflow-y:auto;">
-                    ${emailHTML}
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="bg-gray-50 p-4 rounded-2xl space-y-1 text-xs">
-              <p><span class="font-black text-gray-400">Name:</span> <span class="font-bold">${order.member_name||'N/A'}</span></p>
-              <p><span class="font-black text-gray-400">Email:</span> <span class="font-bold text-blue-600">${customerEmail||'Not provided'}</span></p>
-              <p><span class="font-black text-gray-400">Phone:</span> <span class="font-bold">${shipping.phone||'N/A'}</span></p>
-              <p><span class="font-black text-gray-400">Location:</span> <span class="font-bold">${shipping.address||'N/A'}, ${shipping.district||''}</span></p>
-            </div>
-            <div class="space-y-3">
-              <button onclick="sendViaProtonMail(${order.id})" class="w-full py-4 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-xl font-black text-sm btn-action shadow-lg hover:shadow-xl flex items-center justify-center gap-2">
-                <i class="fa-solid fa-shield-halved text-lg"></i> Send via Proton Mail
-              </button>
-              <p class="text-[9px] text-center text-gray-400 font-bold">Opens Proton Mail with all fields pre-filled. Just review & click Send!</p>
-              <div class="grid grid-cols-2 gap-2">
-                <button onclick="copyEmailHTML(${order.id})" class="py-3 bg-gray-100 text-gray-700 rounded-xl font-black text-xs btn-action"><i class="fa-solid fa-copy mr-1"></i> Copy HTML</button>
-                <button onclick="openGmailCompose(${order.id})" class="py-3 bg-red-50 text-red-600 rounded-xl font-black text-xs btn-action"><i class="fa-solid fa-envelope mr-1"></i> Gmail</button>
-              </div>
-            </div>`;
-            document.getElementById('email-modal-overlay').classList.remove('hidden');
+            const emailHTML = buildEmailHTML(order, order.status);
+            document.getElementById('email-full-content').innerHTML = emailHTML;
+
+            document.getElementById('email-action-bar').innerHTML = `
+            <button class="eml-action-btn secondary" onclick="copyEmailHTML(${order.id})">
+              <i class="fa-solid fa-copy"></i> Copy HTML
+            </button>
+            <button class="eml-action-btn primary" onclick="sendViaProtonMail(${order.id})">
+              <i class="fa-solid fa-paper-plane"></i> Send via Proton Mail
+            </button>
+            <button class="eml-action-btn secondary" onclick="openGmailCompose(${order.id})">
+              <i class="fa-solid fa-envelope"></i> Gmail
+            </button>`;
+
+            document.getElementById('email-full-overlay').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
         }
 
-        function closeEmailModal(event) {
-            if (event && event.target !== document.getElementById('email-modal-overlay')) return;
-            document.getElementById('email-modal-overlay').classList.add('hidden');
+        function closeEmailPreview(event) {
+            if (event && event.target !== document.getElementById('email-full-overlay')) return;
+            document.getElementById('email-full-overlay').classList.add('hidden');
+            document.body.style.overflow = '';
+            currentPreviewOrderId = null;
         }
 
         // ==================== SEND VIA PROTON MAIL ====================
         function sendViaProtonMail(orderId) {
-            const to = document.getElementById('email-to')?.value?.trim();
-            const subject = document.getElementById('email-subject')?.value?.trim();
-            if (!to) { showToast('Please enter recipient email', 'error'); return; }
             const order = allOrders.find(o => o.id === orderId);
             if (!order) return;
-            const emailHTML = generateEmailHTML(order, order.status);
+            const shipping = order.member_info?.shipping || {};
+            const to = shipping.email || order.member_email || '';
+            const subject = `${getStageLabel(order.status)} - Order #${order.id}`;
 
-            // Copy HTML to clipboard
+            if (!to) { showToast('No customer email found', 'error'); return; }
+
+            const emailHTML = buildEmailHTML(order, order.status);
             navigator.clipboard.writeText(emailHTML).then(() => {
-                showToast('✅ Email design copied! Opening Proton Mail...', 'success');
+                showToast('Email design copied! Opening Proton Mail...', 'success');
             }).catch(() => {});
 
-            // Open Proton Mail compose with encoded parameters
-            // Proton Mail compose URL format
             const protonUrl = `https://mail.proton.me/u/0/compose?to=${encodeURIComponent(to)}&subject=${encodeURIComponent(subject)}`;
-
-            // Also try direct proton mailto handler
-            const mailtoUrl = `mailto:${encodeURIComponent(to)}?subject=${encodeURIComponent(subject)}`;
-
-            // Show instruction popup
-            const existing = document.querySelector('.proton-instruction-popup');
-            if (existing) existing.remove();
-
-            const popup = document.createElement('div');
-            popup.className =
-                'proton-instruction-popup';
-            popup.style.cssText = `
-            position:fixed;bottom:30px;left:50%;transform:translateX(-50%);
-            background:linear-gradient(135deg,#6d28d9,#4f46e5);color:#fff;padding:24px 28px;
-            border-radius:20px;z-index:9999;box-shadow:0 20px 60px rgba(0,0,0,0.4);
-            font-family:'Inter',system-ui,sans-serif;text-align:center;
-            animation:slideUp 0.5s cubic-bezier(0.16,1,0.3,1);max-width:520px;width:90%;
-          `;
-            popup.innerHTML = `
-            <div style="font-size:40px;margin-bottom:8px;">🔐</div>
-            <h3 style="margin:0 0 8px;font-size:16px;font-weight:900;">Proton Mail Ready!</h3>
-            <p style="margin:0 0 6px;font-size:12px;opacity:0.9;">To: <strong>${to}</strong></p>
-            <p style="margin:0 0 6px;font-size:12px;opacity:0.9;">Subject: <strong>${subject}</strong></p>
-            <div style="background:rgba(255,255,255,0.15);border-radius:12px;padding:12px;margin:12px 0;">
-              <p style="margin:0;font-size:12px;font-weight:700;">📋 Email design copied to clipboard!</p>
-              <p style="margin:5px 0 0;font-size:11px;">In Proton Mail compose window, click the <strong>✏️</strong> (Editor) button, switch to <strong>HTML mode</strong>, then press <kbd style="background:#fff;color:#6d28d9;padding:2px 8px;border-radius:4px;font-weight:900;">Ctrl+V</kbd> to paste the full design.</p>
-            </div>
-            <button onclick="this.parentElement.remove()" style="background:#fff;color:#6d28d9;border:none;padding:10px 28px;border-radius:12px;font-weight:700;font-size:13px;cursor:pointer;margin-top:4px;">Got it ✓</button>
-          `;
-            document.body.appendChild(popup);
-
-            // Open Proton Mail
             window.open(protonUrl, '_blank');
 
-            // Fallback: also try mailto after short delay
+            // Show paste instruction
             setTimeout(() => {
-                window.location.href = mailtoUrl;
-            }, 800);
-
-            setTimeout(() => { if (popup.parentElement) popup.remove(); }, 20000);
+                const popup = document.createElement('div');
+                popup.style.cssText = `
+              position:fixed;bottom:30px;left:50%;transform:translateX(-50%);
+              background:linear-gradient(135deg,#6d28d9,#4f46e5);color:#fff;padding:20px 24px;
+              border-radius:16px;z-index:9999;box-shadow:0 20px 60px rgba(0,0,0,0.4);
+              font-family:'Inter',system-ui,sans-serif;text-align:center;max-width:480px;width:90%;
+              animation:slideUp 0.5s ease;
+            `;
+                popup.innerHTML = `
+              <p style="font-weight:900;font-size:14px;margin:0 0 8px;">Proton Mail Opened</p>
+              <p style="font-size:11px;opacity:0.9;margin:0;">Design copied to clipboard. In Proton Mail, click <strong>Editor &gt; HTML</strong> mode, then press <strong>Ctrl+V</strong> to paste.</p>
+              <button onclick="this.parentElement.remove()" style="background:#fff;color:#6d28d9;border:none;padding:8px 20px;border-radius:10px;font-weight:700;font-size:11px;cursor:pointer;margin-top:10px;">Got it</button>`;
+                document.body.appendChild(popup);
+                setTimeout(() => { if (popup.parentElement) popup.remove(); }, 15000);
+            }, 1000);
         }
 
-        // ==================== COPY HTML ====================
         function copyEmailHTML(orderId) {
             const order = allOrders.find(o => o.id === orderId);
             if (!order) return;
-            const html = generateEmailHTML(order, order.status);
-            navigator.clipboard.writeText(html).then(() => showToast('✅ Email design copied! Paste in Proton Mail HTML editor.',
-                'success'));
+            const html = buildEmailHTML(order, order.status);
+            navigator.clipboard.writeText(html).then(() => showToast('Email design copied to clipboard!', 'success'));
         }
 
-        // ==================== GMAIL FALLBACK ====================
         function openGmailCompose(orderId) {
             const order = allOrders.find(o => o.id === orderId);
             if (!order) return;
-            const to = document.getElementById('email-to')?.value?.trim();
-            const subject = document.getElementById('email-subject')?.value?.trim();
-            const html = generateEmailHTML(order, order.status);
+            const shipping = order.member_info?.shipping || {};
+            const to = shipping.email || order.member_email || '';
+            const subject = `${getStageLabel(order.status)} - Order #${order.id}`;
+            const html = buildEmailHTML(order, order.status);
             navigator.clipboard.writeText(html).then(() => {
-                const gmailUrl =
-                    `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(to)}&su=${encodeURIComponent(subject)}`;
+                const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(to)}&su=${encodeURIComponent(subject)}`;
                 window.open(gmailUrl, '_blank');
                 showToast('Gmail opened! Design copied. Press Ctrl+V to paste.', 'success');
             });
@@ -726,10 +932,8 @@
             else renderCardsView(); }
 
         function renderOrderStats() {
-            const p = allOrders.filter(o => o.status === 'pending').length,
-                c = allOrders.filter(o => o.status === 'confirmed').length,
-                s = allOrders.filter(o => o.status === 'shipped').length,
-                comp = allOrders.filter(o => o.status === 'completed').length;
+            const p = allOrders.filter(o => o.status === 'pending').length;
+            const comp = allOrders.filter(o => o.status === 'completed').length;
             const today = new Date();
             today.setHours(0, 0, 0, 0);
             const todayOrders = allOrders.filter(o => new Date(o.created_at) >= today).length;
@@ -795,7 +999,7 @@
                     .status
                 ] || 'bg-gray-100 text-gray-600';
                 return `<div onclick="openOrderDrawer(${o.id})" class="bg-white p-5 rounded-[2rem] border shadow-sm hover:shadow-lg transition cursor-pointer btn-action">
-              <div class="flex justify-between items-start mb-3"><div><h4 class="font-black uppercase truncate max-w-[130px]">${o.member_name||'Unknown'}</h4><p class="text-[10px] text-gray-400">#${o.id} • ${new Date(o.created_at).toLocaleDateString()}</p></div><span class="status-badge ${sc}">${o.status}</span></div>
+              <div class="flex justify-between items-start mb-3"><div><h4 class="font-black uppercase truncate max-w-[130px]">${o.member_name||'Unknown'}</h4><p class="text-[10px] text-gray-400">#${o.id} &bull; ${new Date(o.created_at).toLocaleDateString()}</p></div><span class="status-badge ${sc}">${o.status}</span></div>
               <div class="bg-gray-50 p-3 rounded-2xl mb-3"><div class="flex flex-wrap gap-1">${items.slice(0,3).map(i=>`<span class="bg-white px-2 py-0.5 rounded border text-[8px] font-bold">${i.title}</span>`).join('')}${items.length>3?`<span class="text-[8px] text-gray-400">+${items.length-3}</span>`:''}</div></div>
               <div class="flex justify-between items-center pt-3 border-t"><span class="text-lg font-black">৳ ${o.member_info?.total||'0'}</span><div class="flex gap-2" onclick="event.stopPropagation()"><button onclick="quickStatusUpdate(${o.id})" class="p-2 bg-green-500 text-white rounded-lg text-xs btn-action"><i class="fa-solid fa-check"></i></button><button onclick="deleteOrder(${o.id})" class="p-2 bg-red-500 text-white rounded-lg text-xs btn-action"><i class="fa-solid fa-trash"></i></button></div></div></div>`;
             }).join('') : '<p class="col-span-full text-center py-12 text-gray-400">No orders found</p>';
@@ -811,12 +1015,12 @@
             try {
                 const { error } = await _supabase.from('orders').update({ status }).eq('id', id);
                 if (error) throw error;
-                showToast(`Order #${id} → ${status}`, 'success');
+                showToast(`Order #${id} &rarr; ${status}`, 'success');
                 const o = allOrders.find(o => o.id === id);
                 if (o) { o.status = status;
                     setTimeout(() => { if (confirm(
-                            `Status updated to "${status}". Open email to notify customer?`)) openEmailModal(
-                        id); }, 500); }
+                            `Status updated. Open email preview to notify customer?`)) openEmailPreview(
+                        id); }, 400); }
                 await loadOrders();
             } catch (e) { console.error(e);
                 showToast('Failed to update', 'error'); }
@@ -834,7 +1038,6 @@
         function openOrderDrawer(orderId) {
             const order = allOrders.find(o => o.id === orderId);
             if (!order) return;
-            currentDrawerOrderId = orderId;
             const items = order.member_info?.items || [];
             const shipping = order.member_info?.shipping || {};
             const subtotal = items.reduce((a, i) => a + (parseFloat(i.price) || 0), 0);
@@ -857,14 +1060,13 @@
             <div class="bg-gray-50 p-5 rounded-2xl"><h4 class="text-[10px] font-black uppercase text-gray-400 mb-3">Products (${items.length})</h4>${items.map(i=>`<div class="flex justify-between items-center py-2 border-b last:border-0"><div class="flex items-center gap-2"><img src="${i.img||LOGO_URL}" class="w-8 h-8 rounded-lg object-cover" onerror="this.src='${LOGO_URL}'"><div><span class="text-xs font-bold">${i.title} ${i.variant?`(${i.variant})`:''}</span><span class="text-[8px] text-gray-400 block">ID: ${i.product_id||'N/A'}</span></div></div><span class="text-xs font-black">৳ ${i.price||0}</span></div>`).join('')}
               <div class="pt-3 mt-3 border-t space-y-1.5"><div class="flex justify-between text-[11px]"><span>Subtotal</span><span class="font-bold">৳ ${subtotal}</span></div><div class="flex justify-between text-[11px] text-orange-600"><span>Delivery</span><span class="font-bold">+৳ ${del}</span></div>${disc>0?`<div class="flex justify-between text-[11px] text-green-600"><span>Discount</span><span class="font-bold">-৳ ${disc}</span></div>`:''}<div class="flex justify-between text-lg font-black border-t pt-2 mt-2"><span>TOTAL</span><span class="text-blue-600">৳ ${total}</span></div></div></div>
             <div class="bg-gradient-to-r from-purple-50 to-indigo-50 p-5 rounded-2xl border border-purple-200">
-              <h4 class="text-[10px] font-black text-purple-600 uppercase mb-3 flex items-center gap-2"><i class="fa-solid fa-shield-halved"></i> Email via Proton Mail</h4>
-              <p class="text-[10px] text-gray-500 mb-3">Send professionally designed email to customer</p>
-              <button onclick="openEmailModal(${order.id})" class="w-full py-3 bg-purple-600 text-white rounded-xl font-black text-xs btn-action shadow-md hover:bg-purple-700"><i class="fa-solid fa-paper-plane mr-2"></i> Compose Email</button>
-              <div class="grid grid-cols-2 gap-2 mt-2"><button onclick="copyEmailHTML(${order.id})" class="py-2.5 bg-white text-gray-700 rounded-xl font-black text-[10px] btn-action border"><i class="fa-solid fa-copy mr-1"></i> Copy Design</button><button onclick="openGmailCompose(${order.id})" class="py-2.5 bg-white text-red-500 rounded-xl font-black text-[10px] btn-action border"><i class="fa-solid fa-envelope mr-1"></i> Gmail</button></div></div>
+              <h4 class="text-[10px] font-black text-purple-600 uppercase mb-3"><i class="fa-solid fa-envelope"></i> Email Customer</h4>
+              <button onclick="openEmailPreview(${order.id})" class="w-full py-3 bg-purple-600 text-white rounded-xl font-black text-xs btn-action shadow-md hover:bg-purple-700"><i class="fa-solid fa-eye mr-2"></i> Preview & Send Email</button>
+            </div>
             <div class="text-center text-[10px] text-gray-400 font-bold">Order placed on ${date}</div>
             <div class="space-y-2">
               <div class="grid grid-cols-2 gap-2"><button onclick="downloadInvoice(${order.id})" class="py-3 bg-slate-900 text-white rounded-xl font-black text-xs btn-action"><i class="fa-solid fa-file-pdf mr-1"></i> Invoice</button><button onclick="downloadShippingSticker(${order.id})" class="py-3 bg-blue-600 text-white rounded-xl font-black text-xs btn-action"><i class="fa-solid fa-tag mr-1"></i> Sticker</button></div>
-              <div class="grid grid-cols-3 gap-2">${order.status!=='pending'?`<button onclick="updateOrderStatus(${order.id},'pending')" class="py-2.5 bg-yellow-100 text-yellow-700 rounded-xl font-black text-[10px] btn-action">← Pending</button>`:'<div></div>'}${order.status!=='confirmed'?`<button onclick="updateOrderStatus(${order.id},'confirmed')" class="py-2.5 bg-blue-100 text-blue-700 rounded-xl font-black text-[10px] btn-action">Confirm</button>`:'<div></div>'}${order.status!=='shipped'?`<button onclick="updateOrderStatus(${order.id},'shipped')" class="py-2.5 bg-purple-100 text-purple-700 rounded-xl font-black text-[10px] btn-action">Ship</button>`:'<div></div>'}${order.status!=='completed'?`<button onclick="updateOrderStatus(${order.id},'completed')" class="py-2.5 bg-green-100 text-green-700 rounded-xl font-black text-[10px] btn-action">Complete</button>`:'<div></div>'}</div>
+              <div class="grid grid-cols-3 gap-2">${order.status!=='pending'?`<button onclick="updateOrderStatus(${order.id},'pending')" class="py-2.5 bg-yellow-100 text-yellow-700 rounded-xl font-black text-[10px] btn-action">&larr; Pending</button>`:'<div></div>'}${order.status!=='confirmed'?`<button onclick="updateOrderStatus(${order.id},'confirmed')" class="py-2.5 bg-blue-100 text-blue-700 rounded-xl font-black text-[10px] btn-action">Confirm</button>`:'<div></div>'}${order.status!=='shipped'?`<button onclick="updateOrderStatus(${order.id},'shipped')" class="py-2.5 bg-purple-100 text-purple-700 rounded-xl font-black text-[10px] btn-action">Ship</button>`:'<div></div>'}${order.status!=='completed'?`<button onclick="updateOrderStatus(${order.id},'completed')" class="py-2.5 bg-green-100 text-green-700 rounded-xl font-black text-[10px] btn-action">Complete</button>`:'<div></div>'}</div>
               <button onclick="deleteOrder(${order.id})" class="w-full py-3 bg-red-50 text-red-600 rounded-xl font-black text-xs btn-action mt-2"><i class="fa-solid fa-trash mr-1"></i> Delete Order</button></div>`;
             document.getElementById('order-drawer-overlay').classList.remove('hidden');
             document.getElementById('order-drawer').classList.add('open');
@@ -875,7 +1077,6 @@
             document.getElementById('order-drawer').classList.remove('open');
         }
 
-        // ==================== DOWNLOADS ====================
         function downloadInvoice(orderId) {
             const order = allOrders.find(o => o.id === orderId);
             if (!order) return;
@@ -888,7 +1089,7 @@
             const div = document.createElement('div');
             div.style.cssText =
                 'padding:40px 50px;font-family:Inter,system-ui,sans-serif;color:#1e293b;max-width:800px;margin:0 auto;background:#fff;';
-            div.innerHTML = `<div style="display:flex;justify-content:space-between;border-bottom:4px solid #0f172a;padding-bottom:25px;margin-bottom:35px"><div><h1 style="font-size:32px;font-weight:900;">INVOICE</h1><p style="color:#64748b;">ORDER #${order.id}</p></div><div style="text-align:right"><img src="${LOGO_URL}" style="width:55px;height:55px;border-radius:12px;"><h2 style="color:#0071e3;">JAYENWARE</h2></div></div><div style="margin-bottom:35px"><p style="font-weight:800;">${order.member_name||'N/A'}</p><p>${shipping.phone||''}<br>${shipping.address||''}</p></div><table style="width:100%;border-collapse:collapse;margin-bottom:30px"><thead><tr><th>Item</th><th style="text-align:right">Price</th></tr></thead><tbody>${items.map(i=>`<tr><td>${i.title}</td><td style="text-align:right">৳ ${i.price||0}</td></tr>`).join('')}</tbody></table><div style="text-align:right"><p>Subtotal: ৳ ${subtotal}</p><p>Delivery: ৳ ${del}</p>${disc>0?`<p>Discount: -৳ ${disc}</p>`:''}<h2 style="color:#0071e3;">TOTAL: ৳ ${total}</h2></div>`;
+            div.innerHTML = `<div style="display:flex;justify-content:space-between;border-bottom:4px solid #0f172a;padding-bottom:25px;margin-bottom:35px"><div><h1 style="font-size:32px;font-weight:900;">INVOICE</h1><p>ORDER #${order.id}</p></div><div style="text-align:right"><img src="${LOGO_URL}" style="width:55px;height:55px;border-radius:12px;"><h2 style="color:#0071e3;">JAYENWARE</h2></div></div><p style="font-weight:800;">${order.member_name||'N/A'}</p><p>${shipping.phone||''}<br>${shipping.address||''}</p><table style="width:100%;border-collapse:collapse;margin:20px 0"><thead><tr><th>Item</th><th style="text-align:right">Price</th></tr></thead><tbody>${items.map(i=>`<tr><td>${i.title}</td><td style="text-align:right">৳ ${i.price||0}</td></tr>`).join('')}</tbody></table><div style="text-align:right"><p>Subtotal: ৳ ${subtotal}</p><p>Delivery: ৳ ${del}</p>${disc>0?`<p>Discount: -৳ ${disc}</p>`:''}<h2 style="color:#0071e3;">TOTAL: ৳ ${total}</h2></div>`;
             html2pdf().set({ margin: 0, filename: `Invoice_#${order.id}.pdf`, jsPDF: { format: 'a4' } }).from(div)
             .save();
         }
@@ -900,13 +1101,11 @@
             const total = order.member_info?.total?.toString().replace('৳', '') || '0';
             const div = document.createElement('div');
             div.style.cssText = 'padding:35px;font-family:Inter,system-ui,sans-serif;';
-            div.innerHTML =
-                `<div style="border:8px solid #000;padding:40px;border-radius:25px;"><div style="display:flex;justify-content:space-between;"><span style="font-weight:900;font-size:32px;">JAYENWARE</span><span>#${order.id}</span></div><p style="font-size:38px;font-weight:900;">${order.member_name||'N/A'}</p><p style="font-size:28px;color:#0071e3;">${shipping.phone||'N/A'}</p><p>${shipping.address||''}</p><div style="background:#000;color:#fff;padding:25px;text-align:center;border-radius:16px;margin-top:30px;"><p style="font-size:42px;">৳ ${total}</p></div></div>`;
+            div.innerHTML = `<div style="border:8px solid #000;padding:40px;border-radius:25px;"><div style="display:flex;justify-content:space-between;"><span style="font-weight:900;font-size:32px;">JAYENWARE</span><span>#${order.id}</span></div><p style="font-size:38px;font-weight:900;">${order.member_name||'N/A'}</p><p style="font-size:28px;color:#0071e3;">${shipping.phone||'N/A'}</p><p>${shipping.address||''}</p><div style="background:#000;color:#fff;padding:25px;text-align:center;border-radius:16px;margin-top:30px;"><p style="font-size:42px;">৳ ${total}</p></div></div>`;
             html2pdf().set({ margin: 0, filename: `Sticker_#${order.id}.pdf`, jsPDF: { format: 'a4' } }).from(div)
             .save();
         }
 
-        // ==================== SESSION ====================
         async function checkSession() {
             const { data: { session } } = await _supabase.auth.getSession();
             if (!session || session.user.email !== ADMIN_EMAIL) { window.location.href = LOGIN_URL; return; }
@@ -916,8 +1115,9 @@
             if (window.innerWidth < 769) document.querySelector('.bottom-nav').classList.remove('hidden');
             await loadOrders();
         }
+
         document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeOrderDrawer();
-                closeEmailModal(); } });
+                closeEmailPreview(); } });
         window.onload = checkSession;
         window.addEventListener('resize', () => {
             document.querySelector('.bottom-nav').classList.toggle('hidden', window.innerWidth >= 769);

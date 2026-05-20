@@ -38,7 +38,6 @@
             padding: 0;
             min-height: 100vh;
         }
-
         body.dark {
             background: #0a0a0a;
             color: #f5f5f7;
@@ -83,9 +82,6 @@
             background: #1c1c1e !important;
             color: #f5f5f7 !important;
         }
-        body.dark .hover\:bg-slate-50:hover {
-            background: #2c2c2e;
-        }
 
         .glass-card {
             background: var(--glass-bg);
@@ -94,7 +90,6 @@
             border: 1px solid var(--glass-border);
             box-shadow: var(--shadow-md);
         }
-
         .custom-scroll::-webkit-scrollbar {
             width: 4px;
             height: 4px;
@@ -166,7 +161,6 @@
                 opacity: 1;
             }
         }
-
         .stat-card {
             animation: fadeSlideIn 0.5s ease-out forwards;
             opacity: 0;
@@ -196,7 +190,6 @@
         .live-dot {
             animation: livePulse 1.5s infinite;
         }
-
         .toast-enter {
             animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
@@ -227,7 +220,6 @@
         .progress-bar {
             transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
-
         .visitor-row {
             transition: all 0.2s ease;
         }
@@ -236,7 +228,6 @@
             transform: scale(1.002);
             box-shadow: 0 4px 20px rgba(0, 113, 227, 0.08);
         }
-
         .page-badge {
             display: inline-block;
             padding: 2px 10px;
@@ -246,7 +237,6 @@
             text-transform: uppercase;
             letter-spacing: 0.03em;
         }
-
         #map-modal {
             transition: opacity 0.3s ease;
         }
@@ -257,7 +247,6 @@
         #map-modal:not(.hidden) {
             animation: modalPopIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
-
         #openstreet-map-container,
         #google-map-container {
             transition: all 0.3s ease;
@@ -269,7 +258,6 @@
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
-
         .glass-card canvas,
         .glass-card .apexcharts-canvas {
             transition: transform 0.3s ease;
@@ -278,13 +266,10 @@
         .glass-card:hover .apexcharts-canvas {
             transform: scale(1.02);
         }
-
         .diff-live {
             color: #34c759;
             animation: livePulse 1.5s infinite;
         }
-
-        /* Device stat cards */
         .device-stat-icon {
             width: 48px;
             height: 48px;
@@ -294,8 +279,6 @@
             justify-content: center;
             font-size: 22px;
         }
-
-        /* Visitor table enhancement */
         .visitor-table th {
             position: sticky;
             top: 0;
@@ -354,7 +337,6 @@
                 height: 100% !important;
             }
         }
-
         @media (min-width: 769px) {
             .bottom-nav {
                 display: none;
@@ -363,7 +345,6 @@
     </style>
 </head>
 <body class="text-slate-800 antialiased">
-    <!-- GLOBAL LOADER -->
     <div id="global-loader" style="position:fixed;inset:0;background:white;z-index:9999;display:flex;justify-content:center;align-items:center;transition:opacity 0.5s;">
         <div class="flex flex-col items-center">
             <div class="w-14 h-14 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
@@ -371,10 +352,8 @@
         </div>
     </div>
 
-    <!-- MAIN LAYOUT -->
     <div id="main-layout" class="hidden min-h-screen">
         <main class="p-4 md:p-8 lg:p-10 max-w-7xl mx-auto">
-            <!-- HEADER -->
             <header class="mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
                     <div class="flex items-center gap-2 text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">
@@ -390,22 +369,13 @@
                     </h2>
                 </div>
                 <div class="flex flex-wrap gap-2">
-                    <button onclick="refreshVisitors()" class="px-4 py-2.5 bg-blue-100 text-blue-600 rounded-xl font-black text-[10px] uppercase btn-action flex items-center gap-2">
-                        <i class="fa-solid fa-rotate"></i> Refresh
-                    </button>
-                    <button onclick="cleanupDuplicateVisitors()" class="px-4 py-2.5 bg-purple-100 text-purple-600 rounded-xl font-black text-[10px] uppercase btn-action flex items-center gap-2">
-                        <i class="fa-solid fa-clone"></i> Deduplicate
-                    </button>
-                    <button onclick="cleanupOldVisitors()" class="px-4 py-2.5 bg-orange-100 text-orange-600 rounded-xl font-black text-[10px] uppercase btn-action flex items-center gap-2">
-                        <i class="fa-solid fa-broom"></i> Clean 30d
-                    </button>
-                    <button onclick="deleteAllVisitors()" class="px-4 py-2.5 bg-red-100 text-red-600 rounded-xl font-black text-[10px] uppercase btn-danger flex items-center gap-2">
-                        <i class="fa-solid fa-trash-can"></i> Clear All
-                    </button>
+                    <button onclick="refreshVisitors()" class="px-4 py-2.5 bg-blue-100 text-blue-600 rounded-xl font-black text-[10px] uppercase btn-action flex items-center gap-2"><i class="fa-solid fa-rotate"></i> Refresh</button>
+                    <button onclick="cleanupDuplicateVisitors()" class="px-4 py-2.5 bg-purple-100 text-purple-600 rounded-xl font-black text-[10px] uppercase btn-action flex items-center gap-2"><i class="fa-solid fa-clone"></i> Deduplicate</button>
+                    <button onclick="cleanupOldVisitors()" class="px-4 py-2.5 bg-orange-100 text-orange-600 rounded-xl font-black text-[10px] uppercase btn-action flex items-center gap-2"><i class="fa-solid fa-broom"></i> Clean 30d</button>
+                    <button onclick="deleteAllVisitors()" class="px-4 py-2.5 bg-red-100 text-red-600 rounded-xl font-black text-[10px] uppercase btn-danger flex items-center gap-2"><i class="fa-solid fa-trash-can"></i> Clear All</button>
                 </div>
             </header>
 
-            <!-- LIVE COUNTER CARD -->
             <div class="live-counter glass-card p-6 md:p-10 rounded-[2.5rem] mb-6 text-center bg-gradient-to-r from-blue-600 via-blue-700 to-purple-700 text-white border-0 shadow-xl">
                 <div class="flex items-center justify-center gap-3 mb-2">
                     <span class="live-dot w-3 h-3 bg-green-400 rounded-full"></span>
@@ -416,137 +386,40 @@
                 <p class="text-[8px] opacity-50 mt-1 uppercase tracking-widest">Last updated: <span id="last-updated">just now</span></p>
             </div>
 
-            <!-- DEVICE STATS OVERVIEW (Enhanced 6 cards) -->
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-6">
-                <div class="glass-card p-4 rounded-[2rem] shadow-sm stat-card text-center">
-                    <div class="device-stat-icon bg-blue-100 text-blue-600 mx-auto mb-2">
-                        <i class="fa-solid fa-eye"></i>
-                    </div>
-                    <p class="text-[9px] font-black text-gray-400 uppercase mb-1">Total Visits</p>
-                    <h3 class="text-xl font-black" id="stat-total-visits">0</h3>
-                </div>
-                <div class="glass-card p-4 rounded-[2rem] shadow-sm stat-card text-center">
-                    <div class="device-stat-icon bg-green-100 text-green-600 mx-auto mb-2">
-                        <i class="fa-solid fa-users"></i>
-                    </div>
-                    <p class="text-[9px] font-black text-gray-400 uppercase mb-1">Unique IPs</p>
-                    <h3 class="text-xl font-black" id="stat-unique-ips">0</h3>
-                </div>
-                <div class="glass-card p-4 rounded-[2rem] shadow-sm stat-card text-center">
-                    <div class="device-stat-icon bg-purple-100 text-purple-600 mx-auto mb-2">
-                        <i class="fa-solid fa-clock"></i>
-                    </div>
-                    <p class="text-[9px] font-black text-gray-400 uppercase mb-1">Sessions</p>
-                    <h3 class="text-xl font-black" id="stat-sessions">0</h3>
-                </div>
-                <div class="glass-card p-4 rounded-[2rem] shadow-sm stat-card text-center">
-                    <div class="device-stat-icon bg-orange-100 text-orange-600 mx-auto mb-2">
-                        <i class="fa-solid fa-mobile-screen"></i>
-                    </div>
-                    <p class="text-[9px] font-black text-gray-400 uppercase mb-1">Mobile</p>
-                    <h3 class="text-xl font-black" id="stat-mobile">0</h3>
-                </div>
-                <div class="glass-card p-4 rounded-[2rem] shadow-sm stat-card text-center">
-                    <div class="device-stat-icon bg-teal-100 text-teal-600 mx-auto mb-2">
-                        <i class="fa-solid fa-desktop"></i>
-                    </div>
-                    <p class="text-[9px] font-black text-gray-400 uppercase mb-1">Desktop</p>
-                    <h3 class="text-xl font-black" id="stat-desktop">0</h3>
-                </div>
-                <div class="glass-card p-4 rounded-[2rem] shadow-sm stat-card text-center">
-                    <div class="device-stat-icon bg-pink-100 text-pink-600 mx-auto mb-2">
-                        <i class="fa-solid fa-tablet-screen-button"></i>
-                    </div>
-                    <p class="text-[9px] font-black text-gray-400 uppercase mb-1">Tablet</p>
-                    <h3 class="text-xl font-black" id="stat-tablet">0</h3>
-                </div>
+                <div class="glass-card p-4 rounded-[2rem] shadow-sm stat-card text-center"><div class="device-stat-icon bg-blue-100 text-blue-600 mx-auto mb-2"><i class="fa-solid fa-eye"></i></div><p class="text-[9px] font-black text-gray-400 uppercase mb-1">Total Visits</p><h3 class="text-xl font-black" id="stat-total-visits">0</h3></div>
+                <div class="glass-card p-4 rounded-[2rem] shadow-sm stat-card text-center"><div class="device-stat-icon bg-green-100 text-green-600 mx-auto mb-2"><i class="fa-solid fa-users"></i></div><p class="text-[9px] font-black text-gray-400 uppercase mb-1">Unique IPs</p><h3 class="text-xl font-black" id="stat-unique-ips">0</h3></div>
+                <div class="glass-card p-4 rounded-[2rem] shadow-sm stat-card text-center"><div class="device-stat-icon bg-purple-100 text-purple-600 mx-auto mb-2"><i class="fa-solid fa-clock"></i></div><p class="text-[9px] font-black text-gray-400 uppercase mb-1">Sessions</p><h3 class="text-xl font-black" id="stat-sessions">0</h3></div>
+                <div class="glass-card p-4 rounded-[2rem] shadow-sm stat-card text-center"><div class="device-stat-icon bg-orange-100 text-orange-600 mx-auto mb-2"><i class="fa-solid fa-mobile-screen"></i></div><p class="text-[9px] font-black text-gray-400 uppercase mb-1">Mobile</p><h3 class="text-xl font-black" id="stat-mobile">0</h3></div>
+                <div class="glass-card p-4 rounded-[2rem] shadow-sm stat-card text-center"><div class="device-stat-icon bg-teal-100 text-teal-600 mx-auto mb-2"><i class="fa-solid fa-desktop"></i></div><p class="text-[9px] font-black text-gray-400 uppercase mb-1">Desktop</p><h3 class="text-xl font-black" id="stat-desktop">0</h3></div>
+                <div class="glass-card p-4 rounded-[2rem] shadow-sm stat-card text-center"><div class="device-stat-icon bg-pink-100 text-pink-600 mx-auto mb-2"><i class="fa-solid fa-tablet-screen-button"></i></div><p class="text-[9px] font-black text-gray-400 uppercase mb-1">Tablet</p><h3 class="text-xl font-black" id="stat-tablet">0</h3></div>
             </div>
 
-            <!-- DEVICE & PAGES BREAKDOWN -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-                <div class="glass-card p-6 md:p-8 rounded-[2.5rem] shadow-sm">
-                    <h4 class="text-sm font-black uppercase mb-6 text-gray-400 flex items-center gap-2">
-                        <i class="fa-solid fa-mobile-screen text-blue-600"></i> Device Breakdown
-                    </h4>
-                    <div id="device-breakdown" class="space-y-4">
-                        <div class="text-center py-8 text-xs text-gray-400">Loading device data...</div>
-                    </div>
-                    <canvas id="deviceChart" class="mt-4" height="200"></canvas>
-                </div>
-                <div class="glass-card p-6 md:p-8 rounded-[2.5rem] shadow-sm">
-                    <h4 class="text-sm font-black uppercase mb-6 text-gray-400 flex items-center gap-2">
-                        <i class="fa-solid fa-file-lines text-purple-600"></i> Top Pages
-                    </h4>
-                    <div id="top-pages" class="space-y-1">
-                        <div class="text-center py-8 text-xs text-gray-400">Loading page data...</div>
-                    </div>
-                </div>
+                <div class="glass-card p-6 md:p-8 rounded-[2.5rem] shadow-sm"><h4 class="text-sm font-black uppercase mb-6 text-gray-400 flex items-center gap-2"><i class="fa-solid fa-mobile-screen text-blue-600"></i> Device Breakdown</h4><div id="device-breakdown" class="space-y-4"><div class="text-center py-8 text-xs text-gray-400">Loading device data...</div></div><canvas id="deviceChart" class="mt-4" height="200"></canvas></div>
+                <div class="glass-card p-6 md:p-8 rounded-[2.5rem] shadow-sm"><h4 class="text-sm font-black uppercase mb-6 text-gray-400 flex items-center gap-2"><i class="fa-solid fa-file-lines text-purple-600"></i> Top Pages</h4><div id="top-pages" class="space-y-1"><div class="text-center py-8 text-xs text-gray-400">Loading page data...</div></div></div>
             </div>
 
-            <!-- COUNTRY & CITY ANALYTICS -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-                <div class="glass-card p-6 md:p-8 rounded-[2.5rem] shadow-sm">
-                    <h4 class="text-sm font-black uppercase mb-4 text-gray-400 flex items-center gap-2">
-                        <i class="fa-solid fa-globe-americas text-green-600"></i> Top Countries
-                    </h4>
-                    <div id="country-chart" style="height: 320px;"></div>
-                </div>
-                <div class="glass-card p-6 md:p-8 rounded-[2.5rem] shadow-sm">
-                    <h4 class="text-sm font-black uppercase mb-4 text-gray-400 flex items-center gap-2">
-                        <i class="fa-solid fa-city text-orange-600"></i> Top Cities
-                    </h4>
-                    <div id="city-chart" style="height: 320px;"></div>
-                </div>
+                <div class="glass-card p-6 md:p-8 rounded-[2.5rem] shadow-sm"><h4 class="text-sm font-black uppercase mb-4 text-gray-400 flex items-center gap-2"><i class="fa-solid fa-globe-americas text-green-600"></i> Top Countries</h4><div id="country-chart" style="height: 320px;"></div></div>
+                <div class="glass-card p-6 md:p-8 rounded-[2.5rem] shadow-sm"><h4 class="text-sm font-black uppercase mb-4 text-gray-400 flex items-center gap-2"><i class="fa-solid fa-city text-orange-600"></i> Top Cities</h4><div id="city-chart" style="height: 320px;"></div></div>
             </div>
 
-            <!-- BOT DETECTION & CONSENT & CONNECTION -->
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-                <div class="glass-card p-6 md:p-8 rounded-[2.5rem] shadow-sm">
-                    <h4 class="text-sm font-black uppercase mb-4 text-gray-400 flex items-center gap-2">
-                        <i class="fa-solid fa-robot text-red-600"></i> Bot Detection
-                    </h4>
-                    <div id="bot-chart" style="height: 240px;"></div>
-                </div>
-                <div class="glass-card p-6 md:p-8 rounded-[2.5rem] shadow-sm">
-                    <h4 class="text-sm font-black uppercase mb-4 text-gray-400 flex items-center gap-2">
-                        <i class="fa-solid fa-cookie-bite text-yellow-600"></i> Cookie Consent
-                    </h4>
-                    <div id="consent-chart" style="height: 240px;"></div>
-                </div>
-                <div class="glass-card p-6 md:p-8 rounded-[2.5rem] shadow-sm">
-                    <h4 class="text-sm font-black uppercase mb-4 text-gray-400 flex items-center gap-2">
-                        <i class="fa-solid fa-wifi text-purple-600"></i> Connection Type
-                    </h4>
-                    <div id="connection-chart" style="height: 240px;"></div>
-                </div>
+                <div class="glass-card p-6 md:p-8 rounded-[2.5rem] shadow-sm"><h4 class="text-sm font-black uppercase mb-4 text-gray-400 flex items-center gap-2"><i class="fa-solid fa-robot text-red-600"></i> Bot Detection</h4><div id="bot-chart" style="height: 240px;"></div></div>
+                <div class="glass-card p-6 md:p-8 rounded-[2.5rem] shadow-sm"><h4 class="text-sm font-black uppercase mb-4 text-gray-400 flex items-center gap-2"><i class="fa-solid fa-cookie-bite text-yellow-600"></i> Cookie Consent</h4><div id="consent-chart" style="height: 240px;"></div></div>
+                <div class="glass-card p-6 md:p-8 rounded-[2.5rem] shadow-sm"><h4 class="text-sm font-black uppercase mb-4 text-gray-400 flex items-center gap-2"><i class="fa-solid fa-wifi text-purple-600"></i> Connection Type</h4><div id="connection-chart" style="height: 240px;"></div></div>
             </div>
 
-            <!-- HOURLY & WEEKLY TIMELINE -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-                <div class="glass-card p-6 md:p-8 rounded-[2.5rem] shadow-sm">
-                    <h4 class="text-sm font-black uppercase mb-4 text-gray-400 flex items-center gap-2">
-                        <i class="fa-solid fa-clock text-blue-600"></i> Hourly Traffic
-                    </h4>
-                    <div id="hourly-chart" style="height: 280px;"></div>
-                </div>
-                <div class="glass-card p-6 md:p-8 rounded-[2.5rem] shadow-sm">
-                    <h4 class="text-sm font-black uppercase mb-4 text-gray-400 flex items-center gap-2">
-                        <i class="fa-solid fa-calendar-week text-purple-600"></i> Weekly Traffic
-                    </h4>
-                    <div id="weekly-chart" style="height: 280px;"></div>
-                </div>
+                <div class="glass-card p-6 md:p-8 rounded-[2.5rem] shadow-sm"><h4 class="text-sm font-black uppercase mb-4 text-gray-400 flex items-center gap-2"><i class="fa-solid fa-clock text-blue-600"></i> Hourly Traffic</h4><div id="hourly-chart" style="height: 280px;"></div></div>
+                <div class="glass-card p-6 md:p-8 rounded-[2.5rem] shadow-sm"><h4 class="text-sm font-black uppercase mb-4 text-gray-400 flex items-center gap-2"><i class="fa-solid fa-calendar-week text-purple-600"></i> Weekly Traffic</h4><div id="weekly-chart" style="height: 280px;"></div></div>
             </div>
 
-            <!-- VISITOR TABLE (Enhanced) -->
             <div class="glass-card p-4 md:p-6 rounded-[2.5rem] shadow-sm visitor-table">
                 <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-4">
-                    <h4 class="text-sm font-black uppercase text-gray-400 flex items-center gap-2">
-                        <i class="fa-solid fa-list text-green-600"></i> Visitor Log
-                        <span id="visitor-count-badge" class="text-[10px] bg-gray-100 dark:bg-gray-800 px-2 py-0.5 rounded-full">0 records</span>
-                    </h4>
-                    <div class="flex gap-2 w-full md:w-auto">
-                        <input type="text" id="visitor-search" placeholder="Search IP, country, city, device..." class="flex-1 md:flex-none px-4 py-2 bg-gray-50 dark:bg-gray-800 border dark:border-gray-700 rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-blue-500 w-full md:w-64" onkeyup="filterVisitorTable()">
-                    </div>
+                    <h4 class="text-sm font-black uppercase text-gray-400 flex items-center gap-2"><i class="fa-solid fa-list text-green-600"></i> Visitor Log <span id="visitor-count-badge" class="text-[10px] bg-gray-100 dark:bg-gray-800 px-2 py-0.5 rounded-full">0 records</span></h4>
+                    <div class="flex gap-2 w-full md:w-auto"><input type="text" id="visitor-search" placeholder="Search IP, country, city, device..." class="flex-1 md:flex-none px-4 py-2 bg-gray-50 dark:bg-gray-800 border dark:border-gray-700 rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-blue-500 w-full md:w-64" onkeyup="filterVisitorTable()"></div>
                 </div>
                 <div class="overflow-x-auto custom-scroll table-responsive">
                     <table class="w-full text-left">
@@ -579,7 +452,6 @@
         </main>
     </div>
 
-    <!-- BOTTOM NAVIGATION (MOBILE) -->
     <nav class="bottom-nav hidden">
         <div class="flex justify-around items-center px-2">
             <a href="/home" class="flex flex-col items-center gap-1 p-2 text-[10px] font-black text-gray-400 no-underline"><i class="fa-solid fa-house text-lg"></i> Home</a>
@@ -590,7 +462,6 @@
         </div>
     </nav>
 
-    <!-- DELETE CONFIRMATION MODAL -->
     <div id="delete-modal" class="hidden fixed inset-0 z-[500] bg-black/40 backdrop-blur-sm flex items-center justify-center p-4">
         <div class="bg-white dark:bg-gray-900 rounded-[2rem] p-6 md:p-8 max-w-md w-full shadow-2xl">
             <h3 class="text-lg font-black uppercase mb-4 flex items-center gap-2 text-red-600"><i class="fa-solid fa-triangle-exclamation"></i> Confirm Delete</h3>
@@ -602,43 +473,22 @@
         </div>
     </div>
 
-    <!-- LOCATION MAP MODAL (DUAL MAP - Fixed) -->
     <div id="map-modal" class="hidden fixed inset-0 z-[600] bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
         <div class="bg-white dark:bg-gray-900 rounded-[2.5rem] p-6 w-full max-w-4xl shadow-2xl max-h-[90vh] overflow-y-auto">
             <div class="flex flex-wrap justify-between items-center gap-3 mb-4">
-                <h3 class="text-lg font-black uppercase flex items-center gap-2">
-                    <i class="fa-solid fa-map-pin text-red-500"></i>
-                    <span id="map-ip-display">IP Location</span>
-                </h3>
+                <h3 class="text-lg font-black uppercase flex items-center gap-2"><i class="fa-solid fa-map-pin text-red-500"></i> <span id="map-ip-display">IP Location</span></h3>
                 <div class="flex gap-2">
-                    <button onclick="switchMapView('openstreet')" id="btn-osm" class="px-3 py-1.5 bg-blue-100 text-blue-600 rounded-xl text-[10px] font-black btn-action">
-                        <i class="fa-solid fa-map"></i> OpenStreet
-                    </button>
-                    <button onclick="switchMapView('google')" id="btn-google" class="px-3 py-1.5 bg-gray-100 text-gray-600 rounded-xl text-[10px] font-black btn-action">
-                        <i class="fa-brands fa-google"></i> Google
-                    </button>
-                    <button onclick="closeMapModal()" class="p-2 bg-gray-100 dark:bg-gray-800 rounded-full btn-action">
-                        <i class="fa-solid fa-xmark"></i>
-                    </button>
+                    <button onclick="switchMapView('openstreet')" id="btn-osm" class="px-3 py-1.5 bg-blue-100 text-blue-600 rounded-xl text-[10px] font-black btn-action"><i class="fa-solid fa-map"></i> OpenStreet</button>
+                    <button onclick="switchMapView('google')" id="btn-google" class="px-3 py-1.5 bg-gray-100 text-gray-600 rounded-xl text-[10px] font-black btn-action"><i class="fa-brands fa-google"></i> Google</button>
+                    <button onclick="closeMapModal()" class="p-2 bg-gray-100 dark:bg-gray-800 rounded-full btn-action"><i class="fa-solid fa-xmark"></i></button>
                 </div>
             </div>
-
             <div id="visitor-full-details" class="mb-4 grid grid-cols-2 md:grid-cols-4 gap-3 text-xs"></div>
-
-            <div id="openstreet-map-container" class="rounded-2xl overflow-hidden" style="height: 400px;">
-                <div id="visitor-map" style="height: 100%; width: 100%;"></div>
-            </div>
-            <div id="google-map-container" class="rounded-2xl overflow-hidden hidden" style="height: 400px;">
-                <div id="google-visitor-map" style="height: 100%; width: 100%;"></div>
-            </div>
-
+            <div id="openstreet-map-container" class="rounded-2xl overflow-hidden" style="height: 400px;"><div id="visitor-map" style="height: 100%; width: 100%;"></div></div>
+            <div id="google-map-container" class="rounded-2xl overflow-hidden hidden" style="height: 400px;"><div id="google-visitor-map" style="height: 100%; width: 100%;"></div></div>
             <div class="flex gap-2 mt-4">
-                <button onclick="openInGoogleMaps()" class="flex-1 py-2.5 bg-red-500 text-white rounded-xl font-black text-[10px] uppercase btn-action flex items-center justify-center gap-2">
-                    <i class="fa-brands fa-google"></i> Open in Google Maps App
-                </button>
-                <button onclick="copyLocationData()" class="flex-1 py-2.5 bg-blue-500 text-white rounded-xl font-black text-[10px] uppercase btn-action flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-copy"></i> Copy Location Data
-                </button>
+                <button onclick="openInGoogleMaps()" class="flex-1 py-2.5 bg-red-500 text-white rounded-xl font-black text-[10px] uppercase btn-action flex items-center justify-center gap-2"><i class="fa-brands fa-google"></i> Open in Google Maps App</button>
+                <button onclick="copyLocationData()" class="flex-1 py-2.5 bg-blue-500 text-white rounded-xl font-black text-[10px] uppercase btn-action flex items-center justify-center gap-2"><i class="fa-solid fa-copy"></i> Copy Location Data</button>
             </div>
         </div>
     </div>
@@ -648,18 +498,15 @@
         const SUPABASE_URL = "https://vdqbjwzixppbtkbgvhlq.supabase.co";
         const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZkcWJqd3ppeHBwYnRrYmd2aGxxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgwMDc3MzQsImV4cCI6MjA5MzU4MzczNH0.E6C0_7SWIrTMJlFe5t8EbNAW5fzlpg-fKV3ZV0XYd3k";
         const ADMIN_EMAIL = "binzeo369@gmail.com";
-        const HOME_URL = "/home";
         const LOGIN_URL = "/login";
         const GOOGLE_MAPS_KEY = "AIzaSyAuHB2FlVB7nBh2ilGoimjlGIwZ_6Vz4Gc";
 
         const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        // ==================== STATE ====================
         let allVisitors = [];
         let filteredVisitors = [];
         let currentPage = 1;
         const itemsPerPage = 25;
-        let isDarkMode = false;
         let deleteTargetId = null;
 
         let deviceChartInstance = null;
@@ -677,45 +524,7 @@
         let currentMapView = 'openstreet';
         let currentVisitorData = null;
         let googleMapsLoaded = false;
-
-        // ==================== GOOGLE MAPS DYNAMIC LOAD ====================
-        function loadGoogleMapsScript() {
-            return new Promise((resolve, reject) => {
-                if (typeof google !== 'undefined' && google.maps) {
-                    googleMapsLoaded = true;
-                    resolve();
-                    return;
-                }
-                if (document.getElementById('google-maps-script')) {
-                    const checkInterval = setInterval(() => {
-                        if (typeof google !== 'undefined' && google.maps) {
-                            clearInterval(checkInterval);
-                            googleMapsLoaded = true;
-                            resolve();
-                        }
-                    }, 200);
-                    setTimeout(() => {
-                        clearInterval(checkInterval);
-                        if (!googleMapsLoaded) reject(new Error('Google Maps load timeout'));
-                    }, 10000);
-                    return;
-                }
-                const script = document.createElement('script');
-                script.id = 'google-maps-script';
-                script.src = `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_KEY}&libraries=places,geocoding`;
-                script.async = true;
-                script.defer = true;
-                script.onload = () => {
-                    googleMapsLoaded = true;
-                    resolve();
-                };
-                script.onerror = () => reject(new Error('Failed to load Google Maps'));
-                document.head.appendChild(script);
-            });
-        }
-
-        // Preload Google Maps
-        loadGoogleMapsScript().then(() => console.log('Google Maps ready')).catch(err => console.warn('Google Maps:', err.message));
+        let googleMapsLoading = false;
 
         // ==================== UTILITY FUNCTIONS ====================
         function showToast(message, type = 'success') {
@@ -725,35 +534,17 @@
             toast.className = `fixed bottom-20 md:bottom-6 right-4 md:right-6 px-5 py-3.5 rounded-2xl font-black text-sm text-white shadow-2xl z-[9999] toast-enter ${colors[type] || colors.info}`;
             toast.innerHTML = `<span class="flex items-center gap-2"><i class="fa-solid fa-${icons[type] || icons.info}"></i> ${message}</span>`;
             document.body.appendChild(toast);
-            setTimeout(() => {
-                toast.classList.add('toast-exit');
-                setTimeout(() => toast.remove(), 300);
-            }, 3000);
-        }
-
-        function timeAgo(dateString) {
-            const now = new Date();
-            const date = new Date(dateString);
-            const seconds = Math.floor((now - date) / 1000);
-            if (seconds < 60) return 'Just now';
-            if (seconds < 3600) return Math.floor(seconds / 60) + 'm ago';
-            if (seconds < 86400) return Math.floor(seconds / 3600) + 'h ago';
-            if (seconds < 604800) return Math.floor(seconds / 86400) + 'd ago';
-            return date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+            setTimeout(() => { toast.classList.add('toast-exit'); setTimeout(() => toast.remove(), 300); }, 3000);
         }
 
         function formatDateShort(dateString) {
             return new Date(dateString).toLocaleString('en-US', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
         }
-
         function formatDateFull(dateString) {
             return new Date(dateString).toLocaleString('en-US', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' });
         }
-
         function parseLocationInfo(v) {
-            try {
-                return typeof v.location_info === 'string' ? JSON.parse(v.location_info) : v.location_info || {};
-            } catch (e) { return {}; }
+            try { return typeof v.location_info === 'string' ? JSON.parse(v.location_info) : v.location_info || {}; } catch (e) { return {}; }
         }
 
         // ==================== LOAD VISITORS ====================
@@ -765,8 +556,8 @@
                 filteredVisitors = [...allVisitors];
                 renderAllVisitorData();
                 document.getElementById('last-updated').textContent = 'just now';
-            } catch (error) {
-                console.error('Error loading visitors:', error);
+            } catch (e) {
+                console.error(e);
                 showToast('Failed to load visitor data', 'error');
             }
         }
@@ -774,7 +565,6 @@
         function refreshVisitors() { showToast('Refreshing...', 'info');
             loadVisitors(); }
 
-        // ==================== RENDER ALL DATA ====================
         function renderAllVisitorData() {
             renderStats();
             renderDeviceBreakdown();
@@ -791,28 +581,24 @@
         }
 
         function updateLiveCount() {
-            const fifteenMinutesAgo = new Date(Date.now() - 15 * 60 * 1000);
-            const onlineIPs = new Set(allVisitors.filter(v => new Date(v.created_at) >= fifteenMinutesAgo).map(v => v.ip_address));
-            document.getElementById('live-online-count').textContent = Math.min(onlineIPs.size, 999);
+            const ago = new Date(Date.now() - 15 * 60 * 1000);
+            const ips = new Set(allVisitors.filter(v => new Date(v.created_at) >= ago).map(v => v.ip_address));
+            document.getElementById('live-online-count').textContent = Math.min(ips.size, 999);
         }
 
-        // ==================== ENHANCED STATS ====================
         function renderStats() {
             const total = allVisitors.length;
             const uniqueIps = new Set(allVisitors.map(v => v.ip_address)).size;
             const uniqueSessions = new Set(allVisitors.map(v => v.session_id)).size;
-            const firstTime = allVisitors.filter(v => v.is_unique_visit).length;
-
             let mobile = 0,
                 desktop = 0,
                 tablet = 0;
             allVisitors.forEach(v => {
                 const info = (v.device_info || v.device_type || '').toLowerCase();
-                if (info.includes('mobile') || info.includes('iphone') || info.includes('android')) mobile++;
-                else if (info.includes('tablet') || info.includes('ipad')) tablet++;
+                if (/mobile|iphone|android/i.test(info)) mobile++;
+                else if (/tablet|ipad/i.test(info)) tablet++;
                 else desktop++;
             });
-
             document.getElementById('stat-total-visits').textContent = total.toLocaleString();
             document.getElementById('stat-unique-ips').textContent = uniqueIps.toLocaleString();
             document.getElementById('stat-sessions').textContent = uniqueSessions.toLocaleString();
@@ -822,44 +608,29 @@
             document.getElementById('visitor-count-badge').textContent = `${total} records`;
         }
 
-        // ==================== DEVICE BREAKDOWN ====================
         function renderDeviceBreakdown() {
             const devices = {};
             allVisitors.forEach(v => {
                 const info = (v.device_info || v.device_type || 'Unknown').toLowerCase();
                 let type = 'Desktop';
-                if (info.includes('mobile') || info.includes('iphone') || info.includes('android')) type = 'Mobile';
-                else if (info.includes('tablet') || info.includes('ipad')) type = 'Tablet';
+                if (/mobile|iphone|android/i.test(info)) type = 'Mobile';
+                else if (/tablet|ipad/i.test(info)) type = 'Tablet';
                 devices[type] = (devices[type] || 0) + 1;
             });
             const total = allVisitors.length || 1;
             const colors = { Mobile: '#0071e3', Desktop: '#5856d6', Tablet: '#34c759' };
             const icons = { Mobile: 'fa-mobile-screen', Desktop: 'fa-desktop', Tablet: 'fa-tablet-screen-button' };
-
             document.getElementById('device-breakdown').innerHTML = Object.entries(devices).sort((a, b) => b[1] - a[1]).map(([name, count]) => `
-                <div>
-                    <div class="flex justify-between items-center mb-2">
-                        <span class="text-[11px] font-bold flex items-center gap-2"><i class="fa-solid ${icons[name] || 'fa-circle'}" style="color:${colors[name] || '#94a3b8'}"></i>${name}</span>
-                        <span class="text-[10px] font-black text-gray-500">${count} (${Math.round(count/total*100)}%)</span>
-                    </div>
-                    <div class="w-full bg-gray-100 dark:bg-gray-800 rounded-full h-2.5 overflow-hidden">
-                        <div class="h-2.5 rounded-full progress-bar" style="width:${count/total*100}%; background:${colors[name] || '#94a3b8'}"></div>
-                    </div>
-                </div>`).join('');
-
+                <div><div class="flex justify-between items-center mb-2"><span class="text-[11px] font-bold flex items-center gap-2"><i class="fa-solid ${icons[name] || 'fa-circle'}" style="color:${colors[name] || '#94a3b8'}"></i>${name}</span><span class="text-[10px] font-black text-gray-500">${count} (${Math.round(count/total*100)}%)</span></div><div class="w-full bg-gray-100 dark:bg-gray-800 rounded-full h-2.5 overflow-hidden"><div class="h-2.5 rounded-full progress-bar" style="width:${count/total*100}%;background:${colors[name] || '#94a3b8'}"></div></div></div>`).join('');
             const ctx = document.getElementById('deviceChart').getContext('2d');
             if (deviceChartInstance) deviceChartInstance.destroy();
             deviceChartInstance = new Chart(ctx, {
                 type: 'doughnut',
-                data: {
-                    labels: Object.keys(devices),
-                    datasets: [{ data: Object.values(devices), backgroundColor: Object.keys(devices).map(d => colors[d] || '#94a3b8'), borderWidth: 0 }]
-                },
+                data: { labels: Object.keys(devices), datasets: [{ data: Object.values(devices), backgroundColor: Object.keys(devices).map(d => colors[d] || '#94a3b8'), borderWidth: 0 }] },
                 options: { responsive: true, maintainAspectRatio: true, cutout: '65%', plugins: { legend: { display: false } } }
             });
         }
 
-        // ==================== TOP PAGES ====================
         function renderTopPages() {
             const pages = {};
             allVisitors.forEach(v => { const p = v.page_visited || 'Home';
@@ -867,151 +638,126 @@
             const sorted = Object.entries(pages).sort((a, b) => b[1] - a[1]).slice(0, 10);
             const max = sorted[0]?.[1] || 1;
             document.getElementById('top-pages').innerHTML = sorted.length ? sorted.map(([page, count], i) => `
-                <div class="flex items-center gap-3 py-2.5 border-b dark:border-gray-800 last:border-0">
-                    <span class="text-[10px] font-black text-gray-400 w-5">${i+1}</span>
-                    <div class="flex-grow">
-                        <div class="flex justify-between items-center mb-1"><span class="text-xs font-bold truncate max-w-[200px]">${page}</span><span class="text-[10px] font-black text-gray-500 ml-2">${count}</span></div>
-                        <div class="w-full bg-gray-100 dark:bg-gray-800 rounded-full h-1.5"><div class="h-1.5 rounded-full bg-blue-500 progress-bar" style="width:${(count/max)*100}%"></div></div>
-                    </div>
-                </div>`).join('') : '<p class="text-xs text-gray-400 text-center py-8">No page data</p>';
+                <div class="flex items-center gap-3 py-2.5 border-b dark:border-gray-800 last:border-0"><span class="text-[10px] font-black text-gray-400 w-5">${i+1}</span><div class="flex-grow"><div class="flex justify-between items-center mb-1"><span class="text-xs font-bold truncate max-w-[200px]">${page}</span><span class="text-[10px] font-black text-gray-500 ml-2">${count}</span></div><div class="w-full bg-gray-100 dark:bg-gray-800 rounded-full h-1.5"><div class="h-1.5 rounded-full bg-blue-500 progress-bar" style="width:${(count/max)*100}%"></div></div></div></div>`).join('') : '<p class="text-xs text-gray-400 text-center py-8">No page data</p>';
         }
 
-        // ==================== COUNTRY CHART ====================
         function renderCountryChart() {
             const countries = {};
             allVisitors.forEach(v => { const loc = parseLocationInfo(v);
                 const c = loc.country || loc.country_name || 'Unknown';
                 countries[c] = (countries[c] || 0) + 1; });
             const sorted = Object.entries(countries).sort((a, b) => b[1] - a[1]).slice(0, 10);
-            const options = {
-                chart: { type: 'bar', height: 320, toolbar: { show: false }, animations: { enabled: true, easing: 'easeinout', speed: 800 }, fontFamily: 'Inter, sans-serif' },
-                series: [{ name: 'Visitors', data: sorted.map(s => s[1]) }],
-                xaxis: { categories: sorted.map(s => s[0]), labels: { style: { fontSize: '10px', fontWeight: 'bold' } } },
-                colors: ['#0071e3'],
-                plotOptions: { bar: { borderRadius: 8, columnWidth: '60%' } },
-                grid: { borderColor: '#f1f5f9' },
-                dataLabels: { enabled: false }
-            };
+            const opts = { chart: { type: 'bar', height: 320, toolbar: { show: false }, animations: { enabled: true, easing: 'easeinout', speed: 800 }, fontFamily: 'Inter, sans-serif' }, series: [{ name: 'Visitors', data: sorted.map(s => s[1]) }], xaxis: { categories: sorted.map(s => s[0]), labels: { style: { fontSize: '10px', fontWeight: 'bold' } } }, colors: ['#0071e3'], plotOptions: { bar: { borderRadius: 8, columnWidth: '60%' } }, grid: { borderColor: '#f1f5f9' }, dataLabels: { enabled: false } };
             if (countryChartInstance) countryChartInstance.destroy();
-            countryChartInstance = new ApexCharts(document.getElementById('country-chart'), options);
+            countryChartInstance = new ApexCharts(document.getElementById('country-chart'), opts);
             countryChartInstance.render();
         }
 
-        // ==================== CITY CHART ====================
         function renderCityChart() {
             const cities = {};
             allVisitors.forEach(v => { const loc = parseLocationInfo(v);
                 const c = loc.city;
                 if (c && c !== 'Unknown') cities[c] = (cities[c] || 0) + 1; });
             const sorted = Object.entries(cities).sort((a, b) => b[1] - a[1]).slice(0, 8);
-            const options = {
-                chart: { type: 'treemap', height: 320, toolbar: { show: false }, animations: { enabled: true, easing: 'easeinout', speed: 800 }, fontFamily: 'Inter, sans-serif' },
-                series: [{ data: sorted.map(s => ({ x: s[0], y: s[1] })) }],
-                colors: ['#0071e3', '#5856d6', '#34c759', '#ff9500', '#ff3b30', '#af52de', '#5ac8fa', '#ff2d55'],
-                dataLabels: { style: { fontSize: '11px', fontWeight: 'bold' } }
-            };
+            const opts = { chart: { type: 'treemap', height: 320, toolbar: { show: false }, animations: { enabled: true }, fontFamily: 'Inter, sans-serif' }, series: [{ data: sorted.map(s => ({ x: s[0], y: s[1] })) }], colors: ['#0071e3', '#5856d6', '#34c759', '#ff9500', '#ff3b30', '#af52de', '#5ac8fa', '#ff2d55'], dataLabels: { style: { fontSize: '11px', fontWeight: 'bold' } } };
             if (cityChartInstance) cityChartInstance.destroy();
-            cityChartInstance = new ApexCharts(document.getElementById('city-chart'), options);
+            cityChartInstance = new ApexCharts(document.getElementById('city-chart'), opts);
             cityChartInstance.render();
         }
 
-        // ==================== BOT CHART ====================
         function renderBotChart() {
             const bot = allVisitors.filter(v => v.is_bot).length;
             const human = allVisitors.length - bot;
-            const options = {
-                chart: { type: 'donut', height: 240, animations: { enabled: true, easing: 'easeinout', speed: 800 }, fontFamily: 'Inter, sans-serif' },
-                series: [human, bot],
-                labels: ['Human', 'Bot'],
-                colors: ['#34c759', '#ff3b30'],
-                legend: { position: 'bottom', fontSize: '11px', fontWeight: 'bold' },
-                plotOptions: { pie: { donut: { size: '60%' } } },
-                dataLabels: { enabled: true, style: { fontSize: '12px', fontWeight: 'bold' } }
-            };
+            const opts = { chart: { type: 'donut', height: 240, animations: { enabled: true }, fontFamily: 'Inter, sans-serif' }, series: [human, bot], labels: ['Human', 'Bot'], colors: ['#34c759', '#ff3b30'], legend: { position: 'bottom', fontSize: '11px', fontWeight: 'bold' }, plotOptions: { pie: { donut: { size: '60%' } } }, dataLabels: { enabled: true, style: { fontSize: '12px', fontWeight: 'bold' } } };
             if (botChartInstance) botChartInstance.destroy();
-            botChartInstance = new ApexCharts(document.getElementById('bot-chart'), options);
+            botChartInstance = new ApexCharts(document.getElementById('bot-chart'), opts);
             botChartInstance.render();
         }
 
-        // ==================== CONSENT CHART ====================
         function renderConsentChart() {
             const yes = allVisitors.filter(v => v.consent_given).length;
             const no = allVisitors.length - yes;
-            const options = {
-                chart: { type: 'pie', height: 240, animations: { enabled: true, easing: 'easeinout', speed: 800 }, fontFamily: 'Inter, sans-serif' },
-                series: [yes, no],
-                labels: ['Consented', 'No Consent'],
-                colors: ['#ff9500', '#e5e7eb'],
-                legend: { position: 'bottom', fontSize: '11px', fontWeight: 'bold' },
-                dataLabels: { enabled: true, style: { fontSize: '12px', fontWeight: 'bold' } }
-            };
+            const opts = { chart: { type: 'pie', height: 240, animations: { enabled: true }, fontFamily: 'Inter, sans-serif' }, series: [yes, no], labels: ['Consented', 'No Consent'], colors: ['#ff9500', '#e5e7eb'], legend: { position: 'bottom', fontSize: '11px', fontWeight: 'bold' }, dataLabels: { enabled: true, style: { fontSize: '12px', fontWeight: 'bold' } } };
             if (consentChartInstance) consentChartInstance.destroy();
-            consentChartInstance = new ApexCharts(document.getElementById('consent-chart'), options);
+            consentChartInstance = new ApexCharts(document.getElementById('consent-chart'), opts);
             consentChartInstance.render();
         }
 
-        // ==================== CONNECTION CHART ====================
         function renderConnectionChart() {
             const conns = {};
             allVisitors.forEach(v => { const c = v.connection_type || 'Unknown';
                 conns[c] = (conns[c] || 0) + 1; });
             const sorted = Object.entries(conns).sort((a, b) => b[1] - a[1]);
-            const options = {
-                chart: { type: 'polarArea', height: 240, animations: { enabled: true, easing: 'easeinout', speed: 800 }, fontFamily: 'Inter, sans-serif' },
-                series: sorted.map(s => s[1]),
-                labels: sorted.map(s => s[0]),
-                colors: ['#0071e3', '#5856d6', '#34c759', '#ff9500'],
-                legend: { position: 'bottom', fontSize: '10px', fontWeight: 'bold' }
-            };
+            const opts = { chart: { type: 'polarArea', height: 240, animations: { enabled: true }, fontFamily: 'Inter, sans-serif' }, series: sorted.map(s => s[1]), labels: sorted.map(s => s[0]), colors: ['#0071e3', '#5856d6', '#34c759', '#ff9500'], legend: { position: 'bottom', fontSize: '10px', fontWeight: 'bold' } };
             if (connectionChartInstance) connectionChartInstance.destroy();
-            connectionChartInstance = new ApexCharts(document.getElementById('connection-chart'), options);
+            connectionChartInstance = new ApexCharts(document.getElementById('connection-chart'), opts);
             connectionChartInstance.render();
         }
 
-        // ==================== HOURLY CHART ====================
         function renderHourlyChart() {
             const hours = {};
             for (let i = 0; i < 24; i++) hours[i] = 0;
             allVisitors.forEach(v => { const h = new Date(v.created_at).getHours();
                 hours[h]++; });
-            const options = {
-                chart: { type: 'area', height: 280, toolbar: { show: false }, animations: { enabled: true, easing: 'easeinout', speed: 800 }, fontFamily: 'Inter, sans-serif' },
-                series: [{ name: 'Visitors', data: Object.values(hours) }],
-                xaxis: { categories: Object.keys(hours).map(h => `${h}:00`), labels: { style: { fontSize: '9px' } } },
-                colors: ['#0071e3'],
-                fill: { type: 'gradient', gradient: { shadeIntensity: 1, opacityFrom: 0.4, opacityTo: 0.1 } },
-                stroke: { curve: 'smooth', width: 2 },
-                dataLabels: { enabled: false },
-                grid: { borderColor: '#f1f5f9' }
-            };
+            const opts = { chart: { type: 'area', height: 280, toolbar: { show: false }, animations: { enabled: true }, fontFamily: 'Inter, sans-serif' }, series: [{ name: 'Visitors', data: Object.values(hours) }], xaxis: { categories: Object.keys(hours).map(h => `${h}:00`), labels: { style: { fontSize: '9px' } } }, colors: ['#0071e3'], fill: { type: 'gradient', gradient: { shadeIntensity: 1, opacityFrom: 0.4, opacityTo: 0.1 } }, stroke: { curve: 'smooth', width: 2 }, dataLabels: { enabled: false }, grid: { borderColor: '#f1f5f9' } };
             if (hourlyChartInstance) hourlyChartInstance.destroy();
-            hourlyChartInstance = new ApexCharts(document.getElementById('hourly-chart'), options);
+            hourlyChartInstance = new ApexCharts(document.getElementById('hourly-chart'), opts);
             hourlyChartInstance.render();
         }
 
-        // ==================== WEEKLY CHART ====================
         function renderWeeklyChart() {
             const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
             const counts = {};
             days.forEach(d => counts[d] = 0);
             allVisitors.forEach(v => { const d = days[new Date(v.created_at).getDay()];
                 counts[d]++; });
-            const options = {
-                chart: { type: 'bar', height: 280, toolbar: { show: false }, animations: { enabled: true, easing: 'easeinout', speed: 800 }, fontFamily: 'Inter, sans-serif' },
-                series: [{ name: 'Visitors', data: Object.values(counts) }],
-                xaxis: { categories: Object.keys(counts), labels: { style: { fontSize: '11px', fontWeight: 'bold' } } },
-                colors: ['#5856d6'],
-                plotOptions: { bar: { borderRadius: 8, columnWidth: '50%' } },
-                dataLabels: { enabled: false },
-                grid: { borderColor: '#f1f5f9' }
-            };
+            const opts = { chart: { type: 'bar', height: 280, toolbar: { show: false }, animations: { enabled: true }, fontFamily: 'Inter, sans-serif' }, series: [{ name: 'Visitors', data: Object.values(counts) }], xaxis: { categories: Object.keys(counts), labels: { style: { fontSize: '11px', fontWeight: 'bold' } } }, colors: ['#5856d6'], plotOptions: { bar: { borderRadius: 8, columnWidth: '50%' } }, dataLabels: { enabled: false }, grid: { borderColor: '#f1f5f9' } };
             if (weeklyChartInstance) weeklyChartInstance.destroy();
-            weeklyChartInstance = new ApexCharts(document.getElementById('weekly-chart'), options);
+            weeklyChartInstance = new ApexCharts(document.getElementById('weekly-chart'), opts);
             weeklyChartInstance.render();
         }
 
-        // ==================== ADVANCED MAP FUNCTIONS ====================
+        // ==================== GOOGLE MAPS LOADER ====================
+        function loadGoogleMapsScript() {
+            return new Promise((resolve) => {
+                if (typeof google !== 'undefined' && google.maps && google.maps.Map) {
+                    googleMapsLoaded = true;
+                    resolve();
+                    return;
+                }
+                if (googleMapsLoading) {
+                    const check = setInterval(() => {
+                        if (googleMapsLoaded) { clearInterval(check);
+                            resolve(); }
+                    }, 200);
+                    setTimeout(() => { clearInterval(check); if (!googleMapsLoaded) resolve(); }, 15000);
+                    return;
+                }
+                if (document.getElementById('google-maps-script')) {
+                    document.getElementById('google-maps-script').remove();
+                }
+                googleMapsLoading = true;
+                const script = document.createElement('script');
+                script.id = 'google-maps-script';
+                script.src = `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_KEY}&libraries=places,geocoding`;
+                script.async = true;
+                script.defer = true;
+                script.onload = () => { googleMapsLoaded = true;
+                    googleMapsLoading = false;
+                    resolve(); };
+                script.onerror = () => { googleMapsLoading = false;
+                    console.warn('Google Maps failed to load');
+                    resolve(); };
+                document.head.appendChild(script);
+            });
+        }
+
+        // Preload on page start
+        loadGoogleMapsScript();
+
+        // ==================== MAP FUNCTIONS ====================
         function openMapModal(visitorData) {
+            if (!visitorData) return;
             currentVisitorData = visitorData;
             document.getElementById('map-modal').classList.remove('hidden');
             document.getElementById('map-ip-display').textContent = `📍 ${visitorData.ip_address || 'Unknown IP'}`;
@@ -1031,13 +777,8 @@
                 <div class="bg-rose-50 dark:bg-rose-900/20 p-3 rounded-xl"><p class="text-[9px] text-gray-400 uppercase font-black">Connection</p><p class="font-black text-xs">${visitorData.connection_type || 'N/A'}</p></div>
             `;
 
-            // Initialize OpenStreetMap immediately
             setTimeout(() => initOpenStreetMap(lat, lng, loc, visitorData), 300);
-
-            // Initialize Google Maps
             initGoogleMapDeferred(lat, lng, loc, visitorData);
-
-            // Default to OpenStreetMap
             switchMapView('openstreet');
         }
 
@@ -1046,16 +787,10 @@
             if (!container) return;
             if (visitorMap) { visitorMap.remove();
                 visitorMap = null; }
-
             visitorMap = L.map('visitor-map').setView([lat, lng], 14);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '© OpenStreetMap contributors',
-                maxZoom: 19
-            }).addTo(visitorMap);
-
-            const popup = `<div style="font-family:Inter,sans-serif;padding:8px"><b style="font-size:14px">${loc.city || 'Visitor'}</b><br><span style="font-size:12px">${loc.country || ''} | ${loc.region || ''}</span><br><code style="font-size:10px;background:#f0f0f0;padding:2px 6px;border-radius:4px">${visitorData.ip_address}</code><br><small style="color:#666">ISP: ${visitorData.isp_info || 'N/A'}</small><br><small style="color:#666">🕐 ${formatDateFull(visitorData.created_at)}</small></div>`;
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap', maxZoom: 19 }).addTo(visitorMap);
+            const popup = `<div style="font-family:Inter,sans-serif;padding:8px"><b style="font-size:14px">${loc.city || 'Visitor'}</b><br><span>${loc.country||''} ${loc.region||''}</span><br><code>${visitorData.ip_address}</code><br><small>ISP: ${visitorData.isp_info||'N/A'}</small></div>`;
             L.marker([lat, lng]).addTo(visitorMap).bindPopup(popup).openPopup();
-
             if (visitorData.location_accuracy) {
                 L.circle([lat, lng], { radius: visitorData.location_accuracy * 1000, color: '#0071e3', fillColor: '#0071e3', fillOpacity: 0.1 }).addTo(visitorMap);
             }
@@ -1064,123 +799,71 @@
         async function initGoogleMapDeferred(lat, lng, loc, visitorData) {
             const container = document.getElementById('google-visitor-map');
             if (!container) return;
-
-            try {
-                await loadGoogleMapsScript();
-            } catch (e) {
-                container.innerHTML = '<div class="flex items-center justify-center h-full bg-gray-100 dark:bg-gray-800 rounded-2xl"><p class="text-sm text-gray-400"><i class="fa-brands fa-google"></i> Google Maps unavailable. Check API key or connection.</p></div>';
+            await loadGoogleMapsScript();
+            if (!googleMapsLoaded || typeof google === 'undefined' || !google.maps) {
+                container.innerHTML = '<div class="flex items-center justify-center h-full bg-gray-100 dark:bg-gray-800 rounded-2xl"><p class="text-sm text-gray-400"><i class="fa-brands fa-google"></i> Google Maps unavailable</p></div>';
                 return;
             }
-
             if (googleMap) { googleMap = null;
                 googleMarker = null; }
             container.innerHTML = '';
-
-            const mapOptions = {
-                center: { lat, lng },
-                zoom: 14,
-                mapTypeControl: true,
-                streetViewControl: true,
-                fullscreenControl: true,
-                zoomControl: true
-            };
-
+            const mapOptions = { center: { lat, lng }, zoom: 14, mapTypeControl: true, streetViewControl: true, fullscreenControl: true, zoomControl: true };
             googleMap = new google.maps.Map(container, mapOptions);
-            googleMarker = new google.maps.Marker({
-                position: { lat, lng },
-                map: googleMap,
-                title: loc.city || 'Visitor',
-                animation: google.maps.Animation.DROP
-            });
-
-            const infoWindow = new google.maps.InfoWindow({
-                content: `<div style="font-family:Inter,sans-serif;padding:8px;min-width:200px"><b style="font-size:14px">${loc.city || 'Visitor Location'}</b><br><span style="font-size:12px">${loc.country || ''} | ${loc.region || ''}</span><br><code style="font-size:10px;background:#f0f0f0;padding:2px 6px;border-radius:4px">${visitorData.ip_address}</code><br><small style="color:#666">Coordinates: ${lat.toFixed(4)}, ${lng.toFixed(4)}</small><br><small style="color:#666">ISP: ${visitorData.isp_info || 'N/A'}</small></div>`
-            });
+            googleMarker = new google.maps.Marker({ position: { lat, lng }, map: googleMap, title: loc.city || 'Visitor', animation: google.maps.Animation.DROP });
+            const infoWindow = new google.maps.InfoWindow({ content: `<div style="font-family:Inter,sans-serif;padding:8px"><b>${loc.city||'Location'}</b><br>${loc.country||''}<br><code>${visitorData.ip_address}</code><br><small>${lat.toFixed(4)}, ${lng.toFixed(4)}</small></div>` });
             googleMarker.addListener('click', () => infoWindow.open(googleMap, googleMarker));
             infoWindow.open(googleMap, googleMarker);
-
             if (visitorData.location_accuracy) {
-                new google.maps.Circle({
-                    map: googleMap,
-                    center: { lat, lng },
-                    radius: visitorData.location_accuracy * 1000,
-                    fillColor: '#0071e3',
-                    fillOpacity: 0.1,
-                    strokeColor: '#0071e3',
-                    strokeOpacity: 0.3,
-                    strokeWeight: 1
-                });
+                new google.maps.Circle({ map: googleMap, center: { lat, lng }, radius: visitorData.location_accuracy * 1000, fillColor: '#0071e3', fillOpacity: 0.1, strokeColor: '#0071e3', strokeOpacity: 0.3, strokeWeight: 1 });
             }
         }
 
         function switchMapView(view) {
             currentMapView = view;
-            const osmContainer = document.getElementById('openstreet-map-container');
-            const googleContainer = document.getElementById('google-map-container');
-            const btnOsm = document.getElementById('btn-osm');
-            const btnGoogle = document.getElementById('btn-google');
-
-            if (view === 'openstreet') {
-                osmContainer.classList.remove('hidden');
-                googleContainer.classList.add('hidden');
-                btnOsm.className = 'px-3 py-1.5 bg-blue-100 text-blue-600 rounded-xl text-[10px] font-black btn-action';
-                btnGoogle.className = 'px-3 py-1.5 bg-gray-100 text-gray-600 rounded-xl text-[10px] font-black btn-action';
-                setTimeout(() => { if (visitorMap) visitorMap.invalidateSize(); }, 200);
-            } else {
-                osmContainer.classList.add('hidden');
-                googleContainer.classList.remove('hidden');
-                btnOsm.className = 'px-3 py-1.5 bg-gray-100 text-gray-600 rounded-xl text-[10px] font-black btn-action';
-                btnGoogle.className = 'px-3 py-1.5 bg-blue-100 text-blue-600 rounded-xl text-[10px] font-black btn-action';
-                setTimeout(() => {
-                    if (googleMap && googleMapsLoaded) {
-                        google.maps.event.trigger(googleMap, 'resize');
-                        googleMap.setCenter(googleMap.getCenter());
-                    }
-                }, 200);
-            }
+            document.getElementById('openstreet-map-container').classList.toggle('hidden', view !== 'openstreet');
+            document.getElementById('google-map-container').classList.toggle('hidden', view !== 'google');
+            document.getElementById('btn-osm').className = view === 'openstreet' ? 'px-3 py-1.5 bg-blue-100 text-blue-600 rounded-xl text-[10px] font-black btn-action' : 'px-3 py-1.5 bg-gray-100 text-gray-600 rounded-xl text-[10px] font-black btn-action';
+            document.getElementById('btn-google').className = view === 'google' ? 'px-3 py-1.5 bg-blue-100 text-blue-600 rounded-xl text-[10px] font-black btn-action' : 'px-3 py-1.5 bg-gray-100 text-gray-600 rounded-xl text-[10px] font-black btn-action';
+            setTimeout(() => {
+                if (view === 'openstreet' && visitorMap) visitorMap.invalidateSize();
+                if (view === 'google' && googleMap && googleMapsLoaded) { google.maps.event.trigger(googleMap, 'resize');
+                    googleMap.setCenter(googleMap.getCenter()); }
+            }, 200);
         }
 
         function openInGoogleMaps() {
             if (!currentVisitorData) return;
             const loc = parseLocationInfo(currentVisitorData);
-            const lat = loc.latitude || loc.lat || 23.6850;
-            const lng = loc.longitude || loc.lon || loc.lng || 90.3563;
-            window.open(`https://www.google.com/maps?q=${lat},${lng}`, '_blank');
+            window.open(`https://www.google.com/maps?q=${loc.latitude||loc.lat||23.685},${loc.longitude||loc.lon||loc.lng||90.356}`, '_blank');
         }
 
         function copyLocationData() {
             if (!currentVisitorData) return;
             const loc = parseLocationInfo(currentVisitorData);
-            const data = `IP: ${currentVisitorData.ip_address}\nCountry: ${loc.country || 'N/A'}\nCity: ${loc.city || 'N/A'}\nRegion: ${loc.region || 'N/A'}\nCoordinates: ${loc.latitude || loc.lat || 'N/A'}, ${loc.longitude || loc.lon || loc.lng || 'N/A'}\nTimezone: ${loc.timezone || 'N/A'}\nISP: ${currentVisitorData.isp_info || 'N/A'}\nVisited: ${formatDateFull(currentVisitorData.created_at)}`;
-            navigator.clipboard.writeText(data).then(() => showToast('📍 Location data copied!', 'success')).catch(() => showToast('Copy failed', 'error'));
+            const text = `IP: ${currentVisitorData.ip_address}\nCountry: ${loc.country||'N/A'}\nCity: ${loc.city||'N/A'}\nRegion: ${loc.region||'N/A'}\nCoordinates: ${loc.latitude||loc.lat}, ${loc.longitude||loc.lon}\nISP: ${currentVisitorData.isp_info||'N/A'}\nVisited: ${formatDateFull(currentVisitorData.created_at)}`;
+            navigator.clipboard.writeText(text).then(() => showToast('📍 Copied!', 'success')).catch(() => showToast('Copy failed', 'error'));
         }
 
         function closeMapModal() {
             document.getElementById('map-modal').classList.add('hidden');
             if (visitorMap) { visitorMap.remove();
                 visitorMap = null; }
-            if (googleMap) { googleMap = null;
-                googleMarker = null; }
+            googleMap = null;
+            googleMarker = null;
             currentVisitorData = null;
         }
 
-        function openMapModalFromString(jsonStr) {
-            try {
-                const data = JSON.parse(jsonStr.replace(/&quot;/g, '"').replace(/&#39;/g, "'"));
-                openMapModal(data);
-            } catch (e) { showToast('Error loading map', 'error'); }
-        }
-
-        // ==================== VISITOR TABLE (Enhanced) ====================
+        // ==================== VISITOR TABLE ====================
         function renderVisitorTable() {
             const start = (currentPage - 1) * itemsPerPage;
             const end = start + itemsPerPage;
             const pageVisitors = filteredVisitors.slice(start, end);
+            const tbody = document.getElementById('visitor-table-body');
 
             if (pageVisitors.length === 0) {
-                document.getElementById('visitor-table-body').innerHTML = '<tr><td colspan="12" class="py-12 text-center"><div class="flex flex-col items-center gap-3"><i class="fa-solid fa-ghost text-4xl text-gray-300"></i><p class="text-xs text-gray-400 font-bold">No visitors found</p></div></td></tr>';
+                tbody.innerHTML = '<tr><td colspan="12" class="py-12 text-center"><div class="flex flex-col items-center gap-3"><i class="fa-solid fa-ghost text-4xl text-gray-300"></i><p class="text-xs text-gray-400 font-bold">No visitors found</p></div></td></tr>';
             } else {
-                document.getElementById('visitor-table-body').innerHTML = pageVisitors.map(v => {
+                tbody.innerHTML = pageVisitors.map((v, idx) => {
                     const loc = parseLocationInfo(v);
                     const country = loc.country || loc.country_name || '?';
                     const city = loc.city || '?';
@@ -1190,7 +873,11 @@
                     const lngStr = typeof lng === 'number' ? lng.toFixed(2) : (lng || '-');
                     const isBot = v.is_bot;
                     const hasConsent = v.consent_given;
-                    const visitorJson = JSON.stringify(v).replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+                    const deviceInfo = v.device_type || v.device_info || '?';
+                    let deviceIcon = 'fa-desktop text-gray-400';
+                    if (/mobile|iphone|android/i.test(deviceInfo)) deviceIcon = 'fa-mobile-screen text-blue-500';
+                    else if (/tablet|ipad/i.test(deviceInfo)) deviceIcon = 'fa-tablet-screen-button text-purple-500';
+
                     const now = new Date();
                     const visitTime = new Date(v.created_at);
                     const diffMins = Math.floor((now - visitTime) / 60000);
@@ -1198,17 +885,15 @@
                     const diffDays = Math.floor(diffHours / 24);
                     let diffText = diffMins < 1 ? 'Now' : diffMins < 60 ? diffMins + 'm' : diffHours < 24 ? diffHours + 'h' : diffDays + 'd';
                     let diffClass = diffMins < 5 ? 'diff-live font-black' : diffHours < 1 ? 'text-blue-500 font-black' : 'text-gray-400';
-                    const deviceInfo = v.device_type || v.device_info || '?';
-                    let deviceIcon = 'fa-desktop text-gray-400';
-                    if (deviceInfo.toLowerCase().includes('mobile') || deviceInfo.toLowerCase().includes('iphone') || deviceInfo.toLowerCase().includes('android'))
-                        deviceIcon = 'fa-mobile-screen text-blue-500';
-                    else if (deviceInfo.toLowerCase().includes('tablet') || deviceInfo.toLowerCase().includes('ipad'))
-                        deviceIcon = 'fa-tablet-screen-button text-purple-500';
+
+                    // Store visitor data as a global variable to avoid inline JSON
+                    const visitorKey = 'visitor_' + idx;
+                    window[visitorKey] = v;
 
                     return `
                     <tr class="border-b border-gray-100 dark:border-gray-800 visitor-row ${isBot ? 'bg-red-50/30 dark:bg-red-900/10' : ''}">
                         <td class="py-3 pr-3">
-                            <button onclick="openMapModalFromString('${visitorJson}')" class="font-black text-xs text-blue-600 hover:underline cursor-pointer flex items-center gap-1.5">
+                            <button onclick="openMapModal(window['${visitorKey}'])" class="font-black text-xs text-blue-600 hover:underline cursor-pointer flex items-center gap-1.5">
                                 <span class="w-7 h-7 rounded-xl bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center"><i class="fa-solid fa-map-pin text-[11px] text-blue-500"></i></span>
                                 <span>${v.ip_address || '?'}</span>
                             </button>
@@ -1218,10 +903,7 @@
                             </div>
                         </td>
                         <td class="py-3 pr-3"><span class="text-[10px] text-gray-500 dark:text-gray-400 font-mono bg-gray-50 dark:bg-gray-800 px-2 py-1 rounded-lg" title="${v.session_id || ''}">${(v.session_id || 'N/A').substring(0,8)}</span></td>
-                        <td class="py-3 pr-3">
-                            <div><span class="text-xs font-bold">${country}</span></div>
-                            <div class="text-[9px] text-gray-400">${city}</div>
-                        </td>
+                        <td class="py-3 pr-3"><div><span class="text-xs font-bold">${country}</span></div><div class="text-[9px] text-gray-400">${city}</div></td>
                         <td class="py-3 pr-3"><span class="text-[9px] text-gray-400 font-mono bg-gray-50 dark:bg-gray-800 px-1.5 py-0.5 rounded">${latStr}, ${lngStr}</span></td>
                         <td class="py-3 pr-3"><span class="text-[10px] flex items-center gap-1"><i class="fa-solid ${deviceIcon} text-xs"></i> <span class="truncate max-w-[80px]" title="${deviceInfo}">${deviceInfo.length > 15 ? deviceInfo.substring(0,13)+'..' : deviceInfo}</span></span></td>
                         <td class="py-3 pr-3"><span class="text-[10px] text-gray-500 dark:text-gray-400 truncate max-w-[90px] block" title="${v.browser_info || ''}">${v.browser_info || '?'}</span></td>
@@ -1230,9 +912,7 @@
                         <td class="py-3 pr-3"><span class="text-[10px] text-gray-400" title="${formatDateFull(v.created_at)}">${formatDateShort(v.created_at)}</span></td>
                         <td class="py-3 pr-3"><span class="text-[10px] ${diffClass}">${diffText}</span></td>
                         <td class="py-3 pr-3 text-center">${hasConsent ? '<i class="fa-solid fa-shield-check text-green-500" title="Consent Given"></i>' : '<i class="fa-solid fa-shield-xmark text-gray-300" title="No Consent"></i>'}</td>
-                        <td class="py-3 text-right">
-                            <button onclick="openDeleteModal(${v.id})" class="p-2 bg-red-50 dark:bg-red-900/20 text-red-500 rounded-lg text-[10px] btn-action hover:bg-red-100 dark:hover:bg-red-900/40"><i class="fa-solid fa-trash"></i></button>
-                        </td>
+                        <td class="py-3 text-right"><button onclick="openDeleteModal(${v.id})" class="p-2 bg-red-50 dark:bg-red-900/20 text-red-500 rounded-lg text-[10px] btn-action hover:bg-red-100 dark:hover:bg-red-900/40"><i class="fa-solid fa-trash"></i></button></td>
                     </tr>`;
                 }).join('');
             }
@@ -1276,8 +956,10 @@
             deleteTargetId = id;
             document.getElementById('delete-modal-message').textContent = `Permanently delete visitor record #${id}?`;
             document.getElementById('delete-modal').classList.remove('hidden');
-            document.getElementById('delete-confirm-btn').onclick = async () => { await deleteVisitorById(deleteTargetId);
-                closeDeleteModal(); };
+            document.getElementById('delete-confirm-btn').onclick = function() {
+                deleteVisitorById(deleteTargetId);
+                closeDeleteModal();
+            };
         }
 
         function closeDeleteModal() { document.getElementById('delete-modal').classList.add('hidden');
@@ -1289,16 +971,16 @@
                 if (error) throw error;
                 showToast(`Record #${id} deleted`, 'success');
                 await loadVisitors();
-            } catch (e) { showToast('Delete failed', 'error'); }
+            } catch (e) { showToast('Delete failed: ' + e.message, 'error'); }
         }
 
         async function deleteAllVisitors() {
             if (!confirm('Delete ALL visitor records permanently?')) return;
             try {
                 showToast('Deleting all...', 'info');
-                const { data, error } = await _supabase.rpc('admin_delete_all_visitors');
+                const { error } = await _supabase.from('visitor_logs').delete().neq('id', 0);
                 if (error) throw error;
-                showToast(data || 'All deleted', 'success');
+                showToast('All deleted', 'success');
                 await loadVisitors();
             } catch (e) { showToast('Failed', 'error'); }
         }
@@ -1307,9 +989,10 @@
             if (!confirm('Delete records older than 30 days?')) return;
             try {
                 showToast('Cleaning...', 'info');
-                const { data, error } = await _supabase.rpc('cleanup_old_visitor_logs', { days_to_keep: 30 });
+                const cutoff = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
+                const { error } = await _supabase.from('visitor_logs').delete().lt('created_at', cutoff);
                 if (error) throw error;
-                showToast(data || 'Cleaned', 'success');
+                showToast('Old records cleaned', 'success');
                 await loadVisitors();
             } catch (e) { showToast('Failed', 'error'); }
         }
@@ -1318,9 +1001,18 @@
             if (!confirm('Remove duplicate records?')) return;
             try {
                 showToast('Deduplicating...', 'info');
-                const { data, error } = await _supabase.rpc('admin_cleanup_duplicate_visitors');
-                if (error) throw error;
-                showToast(data || 'Deduplicated', 'success');
+                const { data: records } = await _supabase.from('visitor_logs').select('*').order('created_at', { ascending: true });
+                const seen = new Map();
+                const toDelete = [];
+                (records || []).forEach(r => {
+                    const key = `${r.ip_address}_${r.session_id}_${r.page_visited}`;
+                    if (seen.has(key)) toDelete.push(r.id);
+                    else seen.set(key, r.id);
+                });
+                for (const id of toDelete) {
+                    await _supabase.from('visitor_logs').delete().eq('id', id);
+                }
+                showToast(`${toDelete.length} duplicates removed`, 'success');
                 await loadVisitors();
             } catch (e) { showToast('Failed', 'error'); }
         }
@@ -1331,17 +1023,10 @@
             if (!session || session.user.email !== ADMIN_EMAIL) { window.location.href = LOGIN_URL; return; }
             document.getElementById('global-loader').style.display = 'none';
             document.getElementById('main-layout').classList.remove('hidden');
-            if (localStorage.getItem('darkMode') === 'true') { isDarkMode = true;
-                document.body.classList.add('dark'); }
+            if (localStorage.getItem('darkMode') === 'true') document.body.classList.add('dark');
             if (window.innerWidth < 769) document.querySelector('.bottom-nav').classList.remove('hidden');
             await loadVisitors();
             setInterval(() => loadVisitors(), 30000);
-            try {
-                _supabase.channel('visitor-changes').on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'visitor_logs' }, payload => {
-                    showToast('🔔 New visitor: ' + (payload.new.ip_address || 'Unknown'), 'info');
-                    loadVisitors();
-                }).subscribe();
-            } catch (e) { console.log('Realtime unavailable'); }
         }
 
         document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeDeleteModal();

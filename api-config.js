@@ -7,5 +7,3 @@ const SUPABASE_URL = "https://tvqnanpfwzzvjmhdxkfz.supabase.co";
 const HOME_URL = "/home";
 const LOGIN_URL = "/login";
 
-// Initialize Supabase Client
-const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
